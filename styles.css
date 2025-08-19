@@ -256,10 +256,11 @@ h3 { font-size: clamp(1.75rem, 3.5vw, 2.5rem); }
     position: relative;
 }
 
-/* Box wrapper */
+/* Box wrapper with overflow hidden to contain shine */
 .box-wrapper {
     position: relative;
     display: inline-block;
+    overflow: hidden;
 }
 
 /* Hero box with drop shadow */
@@ -285,14 +286,14 @@ h3 { font-size: clamp(1.75rem, 3.5vw, 2.5rem); }
     pointer-events: none;
     z-index: 2;
     /* Apply mask to constrain to box shape */
-    -webkit-mask-image: url('assets/3D%20box_v2_mask.png');
-    -webkit-mask-size: contain;
+    -webkit-mask-image: url('assets/3D_box_v2_mask.png');
+    -webkit-mask-size: 100% 100%;
     -webkit-mask-repeat: no-repeat;
-    -webkit-mask-position: center;
-    mask-image: url('assets/3D%20box_v2_mask.png');
-    mask-size: contain;
+    -webkit-mask-position: center center;
+    mask-image: url('assets/3D_box_v2_mask.png');
+    mask-size: 100% 100%;
     mask-repeat: no-repeat;
-    mask-position: center;
+    mask-position: center center;
 }
 
 @keyframes shimmerRealistic {
