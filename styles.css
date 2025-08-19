@@ -216,7 +216,7 @@ h3 { font-size: clamp(1.75rem, 3.5vw, 2.5rem); }
     padding-top: 100px;
     position: relative;
     overflow: hidden;
-    background: url('assets/Artifact_color.png') center/cover no-repeat;
+    background: url('assets/Temporal_v3.png') center 30%/cover no-repeat;
 }
 
 .hero::before {
@@ -254,6 +254,13 @@ h3 { font-size: clamp(1.75rem, 3.5vw, 2.5rem); }
     max-width: 100%;
     height: auto;
     filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.5));
+    position: relative;
+}
+
+/* Box wrapper for proper positioning */
+.box-wrapper {
+    position: relative;
+    display: inline-block;
 }
 
 /* Floating Animation */
@@ -285,11 +292,29 @@ h3 { font-size: clamp(1.75rem, 3.5vw, 2.5rem); }
     50% { opacity: 0.5; transform: translate(-50%, -50%) scale(1.05); }
 }
 
+
 .hero-title {
-    color: var(--magical-gold);
     margin-bottom: var(--spacing-sm);
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
     font-size: clamp(2.5rem, 5vw, 3.5rem);
+    /* Metallic gold gradient with vertical shine per character */
+    background: linear-gradient(
+        to bottom,
+        #b8860b 0%,
+        #d4af37 25%,
+        #fff5b0 45%,
+        #ffe66d 50%,
+        #fff5b0 55%,
+        #d4af37 75%,
+        #b8860b 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    position: relative;
+    display: inline-block;
+    /* Use filter for depth instead of text-shadow */
+    filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.5)) 
+            drop-shadow(0 0 8px rgba(212, 175, 55, 0.3));
 }
 
 .hero-subtitle {
@@ -385,10 +410,26 @@ h3 { font-size: clamp(1.75rem, 3.5vw, 2.5rem); }
 }
 
 .section-title {
-    color: var(--magical-gold);
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
     position: relative;
     display: inline-block;
+    /* Metallic gold gradient with vertical shine per character */
+    background: linear-gradient(
+        to bottom,
+        #b8860b 0%,
+        #d4af37 25%,
+        #fff5b0 45%,
+        #ffe66d 50%,
+        #fff5b0 55%,
+        #d4af37 75%,
+        #b8860b 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: 0.05em;
+    /* Use filter for depth */
+    filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.5)) 
+            drop-shadow(0 0 8px rgba(212, 175, 55, 0.3));
 }
 
 .section-title::after {
@@ -784,7 +825,7 @@ h3 { font-size: clamp(1.75rem, 3.5vw, 2.5rem); }
     padding: var(--spacing-2xl) 0;
     position: relative;
     overflow: hidden;
-    background: url('assets/Temporal_v3.png') center 25%/cover no-repeat;
+    background: url('assets/Demonic_v3.png') center 25%/cover no-repeat;
     background-attachment: fixed;
 }
 
@@ -795,7 +836,7 @@ h3 { font-size: clamp(1.75rem, 3.5vw, 2.5rem); }
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(135deg, rgba(26, 26, 46, 0.89), rgba(139, 74, 156, 0.85));
+    background: linear-gradient(135deg, rgba(44, 24, 16, 0.92), rgba(139, 74, 156, 0.88));
     z-index: 1;
 }
 
