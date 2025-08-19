@@ -295,17 +295,17 @@ h3 { font-size: clamp(1.75rem, 3.5vw, 2.5rem); }
 
 .hero-title {
     margin-bottom: var(--spacing-sm);
-    font-size: clamp(2.5rem, 5vw, 3.5rem);
-    /* Metallic gold gradient with vertical shine per character */
+    font-size: clamp(3.5rem, 7vw, 4.9rem);
+    /* Balanced metallic gold gradient */
     background: linear-gradient(
         to bottom,
-        #b8860b 0%,
+        #a8860b 0%,
         #d4af37 25%,
-        #fff5b0 45%,
-        #ffe66d 50%,
-        #fff5b0 55%,
+        #f6e27a 45%,
+        #ffd700 50%,
+        #f6e27a 55%,
         #d4af37 75%,
-        #b8860b 100%
+        #a8860b 100%
     );
     -webkit-background-clip: text;
     background-clip: text;
@@ -412,16 +412,16 @@ h3 { font-size: clamp(1.75rem, 3.5vw, 2.5rem); }
 .section-title {
     position: relative;
     display: inline-block;
-    /* Metallic gold gradient with vertical shine per character */
+    /* Balanced metallic gold gradient */
     background: linear-gradient(
         to bottom,
-        #b8860b 0%,
+        #a8860b 0%,
         #d4af37 25%,
-        #fff5b0 45%,
-        #ffe66d 50%,
-        #fff5b0 55%,
+        #f6e27a 45%,
+        #ffd700 50%,
+        #f6e27a 55%,
         #d4af37 75%,
-        #b8860b 100%
+        #a8860b 100%
     );
     -webkit-background-clip: text;
     background-clip: text;
@@ -995,9 +995,24 @@ h3 { font-size: clamp(1.75rem, 3.5vw, 2.5rem); }
 }
 
 .cta-title {
-    color: var(--bright-gold);
     margin-bottom: var(--spacing-sm);
-    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8);
+    /* Same balanced metallic gold gradient as other headers */
+    background: linear-gradient(
+        to bottom,
+        #a8860b 0%,
+        #d4af37 25%,
+        #f6e27a 45%,
+        #ffd700 50%,
+        #f6e27a 55%,
+        #d4af37 75%,
+        #a8860b 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    /* Use filter for depth */
+    filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.5)) 
+            drop-shadow(0 0 8px rgba(212, 175, 55, 0.3));
 }
 
 .cta-subtitle {
