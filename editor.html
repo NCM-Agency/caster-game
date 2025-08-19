@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Caster Visual Editor - Designer Mode</title>
+    
+    <!-- GrapesJS core CSS -->
+    <link rel="stylesheet" href="node_modules/grapesjs/dist/css/grapes.min.css">
+    
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+        }
+        
+        /* Customize GrapesJS theme to match Caster */
+        .gjs-one-bg {
+            background-color: #1a1a2e !important;
+        }
+        
+        .gjs-two-color {
+            color: #d4af37 !important;
+        }
+        
+        .gjs-three-bg {
+            background-color: #8b4a9c !important;
+        }
+        
+        .gjs-four-color-h:hover {
+            color: #d4af37 !important;
+        }
+        
+        /* Custom toolbar */
+        #custom-toolbar {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 9999;
+            background: #1a1a2e;
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: 2px solid #d4af37;
+            display: flex;
+            gap: 15px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        }
+        
+        .toolbar-btn {
+            background: #8b4a9c;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .toolbar-btn:hover {
+            background: #d4af37;
+            color: #1a1a2e;
+            transform: translateY(-2px);
+        }
+        
+        .toolbar-btn.save {
+            background: #d4af37;
+            color: #1a1a2e;
+        }
+        
+        .toolbar-btn.save:hover {
+            background: #b8941f;
+        }
+        
+        /* Panel customization */
+        .gjs-pn-panel {
+            background: #1a1a2e !important;
+        }
+        
+        .gjs-block {
+            background: #2a2a4e !important;
+            border: 1px solid #8b4a9c !important;
+            color: #d4af37 !important;
+        }
+        
+        .gjs-block:hover {
+            background: #3a3a5e !important;
+            border-color: #d4af37 !important;
+        }
+        
+        .gjs-title {
+            color: #d4af37 !important;
+        }
+        
+        /* Loading overlay */
+        #loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #1a1a2e;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .loading-text {
+            color: #d4af37;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid #8b4a9c;
+            border-top-color: #d4af37;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Notification styles */
+        .notification {
+            position: fixed;
+            top: 70px;
+            right: 20px;
+            padding: 15px 25px;
+            background: #d4af37;
+            color: #1a1a2e;
+            border-radius: 8px;
+            font-weight: bold;
+            z-index: 10000;
+            animation: slideIn 0.3s ease;
+        }
+        
+        .notification.error {
+            background: #e74c3c;
+            color: white;
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loading">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">Loading Visual Editor...</div>
+    </div>
+    
+    <!-- Custom Toolbar -->
+    <div id="custom-toolbar" style="display: none;">
+        <button class="toolbar-btn" onclick="clearCanvas()">🗑️ Clear</button>
+        <button class="toolbar-btn" onclick="showCode()">👁️ View Code</button>
+        <button class="toolbar-btn" onclick="toggleFullscreen()">⛶ Fullscreen</button>
+        <button class="toolbar-btn" onclick="undoChange()">↶ Undo</button>
+        <button class="toolbar-btn" onclick="redoChange()">↷ Redo</button>
+        <button class="toolbar-btn save" onclick="saveToGitHub()">💾 Save to GitHub</button>
+    </div>
+    
+    <!-- GrapesJS Editor Container -->
+    <div id="gjs"></div>
+    
+    <!-- Load GrapesJS -->
+    <script src="node_modules/grapesjs/dist/grapes.min.js"></script>
+    <script src="node_modules/grapesjs-preset-webpage/dist/index.js"></script>
+    <script src="node_modules/grapesjs-blocks-basic/dist/index.js"></script>
+    
+    <script>
+        // Initialize GrapesJS
+        const editor = grapesjs.init({
+            container: '#gjs',
+            height: '100vh',
+            width: 'auto',
+            fromElement: false,
+            showOffsets: true,
+            assetManager: {
+                embedAsBase64: false,
+                assets: [
+                    // Preload all Caster assets
+                    'assets/3D box_v2.png',
+                    'assets/Artifact_color.png',
+                    'assets/Banner_1.png',
+                    'assets/Caster_Logo TM.png',
+                    'assets/Demonic_v3.png',
+                    'assets/Divine_v3.png',
+                    'assets/Elemental_v3.png',
+                    'assets/Enchantment_v3.png',
+                    'assets/Naming_v3.png',
+                    'assets/Necromancy_v3.png',
+                    'assets/Temporal_v3.png',
+                    'assets/Zok Kashto_Card.png',
+                    'assets/Tobias_Card.png',
+                    'assets/Ravaress_Card.png',
+                    'assets/Nomi_Card.png',
+                    'assets/Lin Min_Card.png',
+                    'assets/Killian_Card.png',
+                    'assets/Devaedra_Card.png',
+                    'assets/Play_Setup_transparent.PNG',
+                    'assets/IMG_5741.JPG',
+                    'assets/IMG_5773.JPG',
+                    'assets/IMG_5783.JPG',
+                ]
+            },
+            storageManager: {
+                type: 'local',
+                autoload: true,
+                autosave: true,
+                stepsBeforeSave: 1,
+            },
+            styleManager: {
+                sectors: [
+                    {
+                        name: 'Dimension',
+                        open: false,
+                        buildProps: ['width', 'min-height', 'padding'],
+                    },
+                    {
+                        name: 'Typography',
+                        open: false,
+                        buildProps: ['font-family', 'font-size', 'font-weight', 'letter-spacing', 'color', 'line-height', 'text-align'],
+                        properties: [
+                            {
+                                name: 'Font Family',
+                                property: 'font-family',
+                                type: 'select',
+                                defaults: 'Crimson Text',
+                                options: [
+                                    {value: 'Cinzel', name: 'Cinzel (Fantasy)'},
+                                    {value: 'Crimson Text', name: 'Crimson Text (Body)'},
+                                    {value: 'Orbitron', name: 'Orbitron (Tech)'},
+                                    {value: 'inherit', name: 'Inherit'},
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        name: 'Decorations',
+                        open: false,
+                        buildProps: ['background', 'border-radius', 'border', 'box-shadow'],
+                    },
+                    {
+                        name: 'Extra',
+                        open: false,
+                        buildProps: ['opacity', 'transition', 'transform'],
+                    }
+                ]
+            },
+            plugins: [
+                'grapesjs-preset-webpage',
+                'grapesjs-blocks-basic',
+            ],
+            pluginsOpts: {
+                'grapesjs-preset-webpage': {
+                    blocks: ['column1', 'column2', 'column3', 'column3-7', 'text', 'link', 'image', 'video'],
+                    modalImportTitle: 'Import Caster Site',
+                    modalImportButton: 'Import',
+                    modalImportContent: '',
+                }
+            },
+            canvas: {
+                styles: [
+                    'https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Crimson+Text:ital,wght@0,400;1,400&family=Orbitron:wght@500;700&display=swap',
+                    'styles.css'
+                ],
+            }
+        });
+        
+        // Load the current site
+        loadCurrentSite();
+        
+        // Add custom blocks for Caster components
+        addCasterBlocks();
+        
+        // Show interface when ready
+        editor.on('load', () => {
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('custom-toolbar').style.display = 'flex';
+            showNotification('Visual Editor Ready! Start designing...', false);
+        });
+        
+        // Functions for toolbar
+        function clearCanvas() {
+            if (confirm('Are you sure you want to clear everything?')) {
+                editor.DomComponents.clear();
+                editor.CssComposer.clear();
+            }
+        }
+        
+        function showCode() {
+            const html = editor.getHtml();
+            const css = editor.getCss();
+            const modal = editor.Modal;
+            modal.setTitle('Generated Code');
+            modal.setContent(`
+                <div style="padding: 20px;">
+                    <h3 style="color: #d4af37;">HTML:</h3>
+                    <textarea style="width: 100%; height: 200px; background: #2a2a4e; color: #fff; border: 1px solid #d4af37; padding: 10px;">${html}</textarea>
+                    <h3 style="color: #d4af37; margin-top: 20px;">CSS:</h3>
+                    <textarea style="width: 100%; height: 200px; background: #2a2a4e; color: #fff; border: 1px solid #d4af37; padding: 10px;">${css}</textarea>
+                </div>
+            `);
+            modal.open();
+        }
+        
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen();
+            } else {
+                document.exitFullscreen();
+            }
+        }
+        
+        function undoChange() {
+            editor.UndoManager.undo();
+        }
+        
+        function redoChange() {
+            editor.UndoManager.redo();
+        }
+        
+        async function saveToGitHub() {
+            showNotification('Saving to GitHub...', false);
+            
+            // Get the complete HTML structure
+            const bodyContent = editor.getHtml();
+            const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Caster - Award-Winning Fantasy Board Game | Coming to Kickstarter</title>
+    <meta name="description" content="Harness arcane powers in Caster, an award-winning fast-paced set collection card game. Get VIP access for exclusive Kickstarter benefits!">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Crimson+Text:ital,wght@0,400;1,400&family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="styles.css">
+    
+    <!-- Netlify Identity -->
+    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"><\/script>
+</head>
+<body>
+    ` + bodyContent + `
+    
+    <!-- Scripts -->
+    <script src="script.js"><\/script>
+    
+    <!-- Netlify Identity Redirect -->
+    <script>
+      if (window.netlifyIdentity) {
+        window.netlifyIdentity.on("init", user => {
+          if (!user) {
+            window.netlifyIdentity.on("login", () => {
+              document.location.href = "/admin/";
+            });
+          }
+        });
+      }
+    <\/script>
+</body>
+</html>`;
+            
+            // Save to localStorage for now (you'll connect to GitHub API)
+            localStorage.setItem('caster-site-html', html);
+            localStorage.setItem('caster-site-css', editor.getCss());
+            
+            showNotification('Saved successfully! (Currently to local storage - GitHub integration coming)', false);
+        }
+        
+        function showNotification(message, isError = false) {
+            const notif = document.createElement('div');
+            notif.className = 'notification' + (isError ? ' error' : '');
+            notif.textContent = message;
+            document.body.appendChild(notif);
+            
+            setTimeout(() => {
+                notif.remove();
+            }, 3000);
+        }
+        
+        async function loadCurrentSite() {
+            try {
+                // Load the current index.html
+                const response = await fetch('index.html');
+                const html = await response.text();
+                
+                // Extract body content
+                const bodyMatch = html.match(/<body[^>]*>([\s\S]*?)<\/body>/i);
+                if (bodyMatch) {
+                    // Remove script tags to avoid conflicts
+                    let bodyContent = bodyMatch[1];
+                    bodyContent = bodyContent.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '');
+                    
+                    // Load into editor
+                    editor.setComponents(bodyContent);
+                }
+                
+                // Load CSS
+                const cssResponse = await fetch('styles.css');
+                const css = await cssResponse.text();
+                editor.setStyle(css);
+                
+            } catch (error) {
+                console.error('Error loading site:', error);
+                showNotification('Error loading current site', true);
+            }
+        }
+        
+        function addCasterBlocks() {
+            const blockManager = editor.BlockManager;
+            
+            // Hero Section Block
+            blockManager.add('hero-section', {
+                label: 'Hero Section',
+                category: 'Caster Components',
+                content: `
+                    <section class="hero" style="min-height: 100vh; position: relative; background: url('assets/Artifact_color.png') center/cover;">
+                        <div class="container">
+                            <h1 style="color: #d4af37; font-family: Cinzel; font-size: 3rem;">Your Hero Title</h1>
+                            <p style="color: #fff; font-size: 1.5rem;">Your hero description text here</p>
+                            <button style="background: #d4af37; color: #1a1a2e; padding: 15px 30px; border: none; border-radius: 5px; font-weight: bold;">Get VIP Access</button>
+                        </div>
+                    </section>
+                `,
+                attributes: { class: 'gjs-block-section' }
+            });
+            
+            // Caster Card Block
+            blockManager.add('caster-card', {
+                label: 'Caster Card',
+                category: 'Caster Components',
+                content: `
+                    <div class="caster-card" style="width: 300px; height: 400px; position: relative; cursor: pointer;">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <img src="assets/Zok Kashto_Card.png" alt="Caster" style="width: 100%; height: 100%; object-fit: cover;">
+                            </div>
+                            <div class="card-back" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #1a1a2e; padding: 20px; display: none;">
+                                <h3 style="color: #d4af37;">Character Name</h3>
+                                <p style="color: #8b4a9c;">Character Title</p>
+                                <p style="color: #fff;">Character lore text goes here...</p>
+                            </div>
+                        </div>
+                    </div>
+                `,
+                attributes: { class: 'gjs-block-section' }
+            });
+            
+            // VIP Benefits Block
+            blockManager.add('vip-benefits', {
+                label: 'VIP Benefits',
+                category: 'Caster Components',
+                content: `
+                    <div class="vip-benefits" style="background: linear-gradient(135deg, rgba(139, 74, 156, 0.1), rgba(212, 175, 55, 0.1)); padding: 60px 20px;">
+                        <h2 style="color: #d4af37; text-align: center; font-family: Cinzel; font-size: 2.5rem;">VIP Benefits</h2>
+                        <ul style="color: #fff; font-size: 1.2rem; max-width: 600px; margin: 0 auto;">
+                            <li>Early Bird Pricing</li>
+                            <li>Exclusive Caster Card</li>
+                            <li>Behind-the-Scenes Access</li>
+                            <li>Name in Credits</li>
+                        </ul>
+                    </div>
+                `,
+                attributes: { class: 'gjs-block-section' }
+            });
+            
+            // Spell Background Block
+            blockManager.add('spell-bg', {
+                label: 'Spell Background',
+                category: 'Caster Components',
+                content: `
+                    <div style="position: relative; min-height: 400px; background: url('assets/Naming_v3.png') center/cover; padding: 60px 20px;">
+                        <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(26, 26, 46, 0.85);"></div>
+                        <div style="position: relative; z-index: 2;">
+                            <h2 style="color: #d4af37; text-align: center;">Your Content Here</h2>
+                            <p style="color: #fff; text-align: center;">This section has a spell card background</p>
+                        </div>
+                    </div>
+                `,
+                attributes: { class: 'gjs-block-section' }
+            });
+            
+            // Golden Button Block
+            blockManager.add('golden-button', {
+                label: 'Golden Button',
+                category: 'Caster Components',
+                content: `<button style="background: linear-gradient(135deg, #d4af37, #b8941f); color: #1a1a2e; padding: 15px 40px; border: none; border-radius: 50px; font-weight: bold; font-size: 1.2rem; cursor: pointer; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3); transition: all 0.3s ease;">Click Me</button>`,
+                attributes: { class: 'gjs-block-button' }
+            });
+        }
+    </script>
+</body>
+</html>

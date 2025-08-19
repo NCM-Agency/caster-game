@@ -1,0 +1,30 @@
+{
+  "name": "caster-website",
+  "version": "1.0.0",
+  "description": "Caster game landing page with visual editor",
+  "main": "script.js",
+  "scripts": {
+    "editor": "npx http-server . -p 8080 -o editor.html",
+    "dev": "npx http-server . -p 3000",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NCM-Agency/caster-game.git"
+  },
+  "keywords": ["caster", "board-game", "landing-page", "grapesjs"],
+  "author": "NCM Agency",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/NCM-Agency/caster-game/issues"
+  },
+  "homepage": "https://github.com/NCM-Agency/caster-game#readme",
+  "dependencies": {
+    "grapesjs": "^0.22.12",
+    "grapesjs-blocks-basic": "^1.0.2",
+    "grapesjs-preset-webpage": "^1.0.3"
+  },
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  }
+}

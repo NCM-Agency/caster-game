@@ -14,7 +14,13 @@ Thumbs.db
 # Logs
 *.log
 
-# Node (if we add it later)
+# Node
 node_modules/
 dist/
 .env
+
+# Editor config with tokens
+editor-config.js
+
+# Package lock files
+package-lock.json
