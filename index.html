@@ -283,9 +283,14 @@
         <div class="components-hero">
             <div class="components-showcase">
                 <img src="assets/Play_Setup_transparent.PNG" alt="Caster Game Setup" class="setup-image-large">
-                <div class="components-overlay">
-                    <h3 style="color: var(--magical-gold); font-family: var(--font-cinzel); margin-bottom: 1rem; font-size: 1.5rem;">Game Components</h3>
-                    <ul class="components-grid">
+                <div class="components-overlay" id="componentsOverlay">
+                    <button class="overlay-toggle" onclick="toggleComponentsOverlay()" aria-label="Toggle components list">
+                        <span class="toggle-icon">▼</span>
+                        <span class="toggle-text">Hide List</span>
+                    </button>
+                    <div class="overlay-content">
+                        <h3 style="color: var(--magical-gold); font-family: var(--font-cinzel); margin-bottom: 1rem; font-size: 1.5rem;">Game Components</h3>
+                        <ul class="components-grid">
                         <li class="component-item">Game Board</li>
                         <li class="component-item">Rulebook</li>
                         <li class="component-item">4 Scoring Meeples</li>
@@ -296,6 +301,7 @@
                         <li class="component-item">4 Quick Reference Cards</li>
                         <li class="component-item">6 "50 points" Tokens</li>
                     </ul>
+                    </div>
                 </div>
             </div>
         </div>

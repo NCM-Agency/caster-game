@@ -212,4 +212,18 @@ style.textContent = `
 `;
 document.head.appendChild(style);
 
+// Toggle components overlay
+function toggleComponentsOverlay() {
+    const overlay = document.getElementById('componentsOverlay');
+    const toggleText = overlay.querySelector('.toggle-text');
+    
+    overlay.classList.toggle('collapsed');
+    
+    if (overlay.classList.contains('collapsed')) {
+        toggleText.textContent = 'Show List';
+    } else {
+        toggleText.textContent = 'Hide List';
+    }
+}
+
 console.log('🎮 Welcome to Caster! May your magic be powerful and your victories legendary!');
