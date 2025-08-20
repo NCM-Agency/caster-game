@@ -160,23 +160,62 @@ if (window.innerWidth > 768) {
     });
 }
 
-// Mobile card flip on tap
+// Mobile card flip on tap - Fixed double flip bug
 if (window.innerWidth <= 768) {
     document.querySelectorAll('.caster-card').forEach(card => {
+        let isFlipping = false;
         card.addEventListener('click', function(e) {
             e.preventDefault();
             e.stopPropagation();
+            
+            // Prevent double flip
+            if (isFlipping) return;
+            isFlipping = true;
+            
             this.classList.toggle('flipped');
+            
+            // Reset flag after animation
+            setTimeout(() => {
+                isFlipping = false;
+            }, 600);
         });
     });
     
-    // Center the game setup image on load
-    const showcase = document.querySelector('.components-showcase');
-    if (showcase) {
-        setTimeout(() => {
-            showcase.scrollLeft = (showcase.scrollWidth - showcase.clientWidth) / 2;
-        }, 100);
-    }
+    // Center scrollable sections on load
+    window.addEventListener('load', () => {
+        // Center arena image
+        const arenaWrapper = document.querySelector('.arena-image-wrapper');
+        const arenaContent = document.querySelector('.arena-content');
+        if (arenaWrapper) {
+            setTimeout(() => {
+                arenaWrapper.scrollLeft = (arenaWrapper.scrollWidth - arenaWrapper.clientWidth) / 2;
+            }, 100);
+        }
+        if (arenaContent) {
+            setTimeout(() => {
+                arenaContent.scrollLeft = (arenaContent.scrollWidth - arenaContent.clientWidth) / 2;
+            }, 100);
+        }
+        
+        // Center game setup image
+        const showcase = document.querySelector('.components-showcase');
+        if (showcase) {
+            setTimeout(() => {
+                showcase.scrollLeft = (showcase.scrollWidth - showcase.clientWidth) / 2;
+            }, 100);
+        }
+        
+        // Center first caster card
+        const castersGrid = document.querySelector('.casters-grid');
+        if (castersGrid) {
+            setTimeout(() => {
+                const firstCard = castersGrid.querySelector('.caster-card');
+                if (firstCard) {
+                    firstCard.scrollIntoView({ behavior: 'auto', inline: 'center', block: 'nearest' });
+                }
+            }, 100);
+        }
+    });
 }
 
 // Initialize premium particle effect
@@ -247,13 +286,18 @@ function toggleComponentsOverlay() {
     }
 }
 
-// Image modal for Who We Are section
+// Image modal for Who We Are section - Works on both desktop and mobile
 document.addEventListener('DOMContentLoaded', function() {
-    const aboutImages = document.querySelectorAll('.about-visual img, .creator-photo');
+    const aboutImages = document.querySelectorAll('.about-visual img, .creator-photo, .about-images img');
     
     aboutImages.forEach(img => {
         img.style.cursor = 'pointer';
-        img.addEventListener('click', function() {
+        img.setAttribute('title', 'Click to enlarge');
+        
+        img.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
             // Create modal
             const modal = document.createElement('div');
             modal.className = 'image-modal';
@@ -270,25 +314,70 @@ document.addEventListener('DOMContentLoaded', function() {
                 z-index: 10000;
                 cursor: pointer;
                 animation: fadeIn 0.3s ease;
+                padding: 20px;
             `;
             
             const modalImg = document.createElement('img');
             modalImg.src = this.src;
+            modalImg.alt = this.alt || 'Enlarged image';
             modalImg.style.cssText = `
                 max-width: 90%;
                 max-height: 90%;
+                width: auto;
+                height: auto;
                 object-fit: contain;
                 animation: zoomIn 0.3s ease;
+                border-radius: 10px;
+                box-shadow: 0 0 50px rgba(212, 175, 55, 0.3);
             `;
             
+            // Add close button
+            const closeBtn = document.createElement('span');
+            closeBtn.innerHTML = '&times;';
+            closeBtn.style.cssText = `
+                position: absolute;
+                top: 20px;
+                right: 30px;
+                font-size: 40px;
+                color: #d4af37;
+                cursor: pointer;
+                z-index: 10001;
+                transition: transform 0.3s ease;
+            `;
+            
+            closeBtn.addEventListener('mouseenter', function() {
+                this.style.transform = 'scale(1.2)';
+            });
+            
+            closeBtn.addEventListener('mouseleave', function() {
+                this.style.transform = 'scale(1)';
+            });
+            
             modal.appendChild(modalImg);
+            modal.appendChild(closeBtn);
             document.body.appendChild(modal);
             
+            // Prevent body scroll when modal is open
+            document.body.style.overflow = 'hidden';
+            
             // Close on click
-            modal.addEventListener('click', function() {
+            const closeModal = function() {
                 modal.style.animation = 'fadeOut 0.3s ease';
+                document.body.style.overflow = '';
                 setTimeout(() => modal.remove(), 300);
-            });
+            };
+            
+            modal.addEventListener('click', closeModal);
+            closeBtn.addEventListener('click', closeModal);
+            
+            // Close on escape key
+            const escapeHandler = function(e) {
+                if (e.key === 'Escape') {
+                    closeModal();
+                    document.removeEventListener('keydown', escapeHandler);
+                }
+            };
+            document.addEventListener('keydown', escapeHandler);
         });
     });
 });

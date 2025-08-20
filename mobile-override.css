@@ -1,51 +1,74 @@
-/* MOBILE OVERRIDE CSS - WORKING SOLUTIONS */
+/* MOBILE OVERRIDE CSS - COMPREHENSIVE FIXES */
 @media only screen and (max-width: 768px) {
     
-    /* ARENA SECTION FIX */
+    /* ARENA SECTION - SCROLLABLE & CENTERED */
     .arena-content {
         position: relative !important;
         width: 100vw !important;
-        margin-left: -5% !important;
-        overflow: visible !important;
+        margin-left: calc(-50vw + 50%) !important;
+        overflow-x: auto !important;
+        overflow-y: hidden !important;
+        -webkit-overflow-scrolling: touch !important;
+        scroll-behavior: smooth !important;
     }
     
     .arena-content img.arena-banner {
-        width: 100vw !important;
-        height: 300px !important;
+        width: 150% !important;
+        min-width: 600px !important;
+        height: 350px !important;
         object-fit: cover !important;
+        object-position: center !important;
         margin: 0 !important;
         display: block !important;
     }
     
-    /* Make arena image scrollable wrapper */
+    /* Center arena image on load */
     .arena-image-wrapper {
-        overflow-x: scroll !important;
+        overflow-x: auto !important;
         overflow-y: hidden !important;
         -webkit-overflow-scrolling: touch !important;
         width: 100vw !important;
         margin-left: calc(-50vw + 50%) !important;
+        scroll-behavior: smooth !important;
     }
     
     .arena-image-wrapper img {
         width: 150% !important;
-        height: 300px !important;
+        min-width: 600px !important;
+        height: 350px !important;
         max-width: none !important;
+        object-fit: cover !important;
+        object-position: center !important;
     }
     
-    /* CASTER CARDS FIX - Horizontal Scroll */
+    /* CASTER CARDS - Horizontal Scroll with Indicators */
     .casters-grid {
-        display: block !important;
-        white-space: nowrap !important;
+        position: relative !important;
+        display: flex !important;
         overflow-x: auto !important;
         overflow-y: hidden !important;
         -webkit-overflow-scrolling: touch !important;
-        padding: 20px 0 !important;
+        padding: 20px 0 40px !important;
         scroll-snap-type: x mandatory !important;
+        scroll-padding-left: calc(50vw - 150px) !important;
+    }
+    
+    /* Add swipe indicator */
+    .casters-grid::after {
+        content: '← Swipe to see more →' !important;
+        position: absolute !important;
+        bottom: 10px !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        color: #d4af37 !important;
+        font-size: 14px !important;
+        text-align: center !important;
+        opacity: 0.8 !important;
+        animation: pulse 2s infinite !important;
     }
     
     .casters-row {
-        display: inline-flex !important;
-        white-space: normal !important;
+        display: contents !important;
     }
     
     .casters-row.bottom {
@@ -54,30 +77,78 @@
     
     .caster-card {
         display: inline-block !important;
-        width: 80vw !important;
-        max-width: 300px !important;
+        width: 300px !important;
+        min-width: 300px !important;
         height: 420px !important;
         margin: 0 10px !important;
         scroll-snap-align: center !important;
         flex-shrink: 0 !important;
         vertical-align: top !important;
+        -webkit-tap-highlight-color: transparent !important;
     }
     
-    /* WHAT'S IN THE BOX FIX */
+    /* Center first card */
+    .caster-card:first-child {
+        margin-left: calc(50vw - 150px) !important;
+    }
+    
+    .caster-card:last-child {
+        margin-right: calc(50vw - 150px) !important;
+    }
+    
+    /* Fix double flip bug */
+    .caster-card.flipped {
+        pointer-events: none !important;
+    }
+    
+    .caster-card.flipped .card-back {
+        pointer-events: auto !important;
+    }
+    
+    @keyframes pulse {
+        0%, 100% { opacity: 0.8; }
+        50% { opacity: 0.4; }
+    }
+    
+    /* WHAT'S IN THE BOX - Complete Fix */
+    #components {
+        padding-top: 40px !important;
+        background-image: url('assets/cards/spell-cards-bg.jpg') !important;
+        background-size: 200% auto !important;
+        background-position: center !important;
+        background-attachment: fixed !important;
+    }
+    
+    #components h2 {
+        margin-bottom: 20px !important;
+        padding-bottom: 0 !important;
+    }
+    
     .components-hero {
         display: flex !important;
         flex-direction: column !important;
+        gap: 20px !important;
+        margin-top: 0 !important;
+        padding-top: 0 !important;
     }
     
     .components-overlay {
         position: static !important;
-        margin: 20px auto !important;
+        margin: 0 auto 20px !important;
         width: 90% !important;
         max-width: none !important;
         background: rgba(26, 26, 46, 0.95) !important;
         border-radius: 10px !important;
-        padding: 15px !important;
+        padding: 20px !important;
         order: 1 !important;
+        transform: none !important;
+        top: auto !important;
+        left: auto !important;
+    }
+    
+    .components-overlay h3 {
+        margin-top: 0 !important;
+        margin-bottom: 15px !important;
     }
     
     .components-overlay .overlay-content {
@@ -93,13 +164,16 @@
         width: 100vw !important;
         margin-left: calc(-50vw + 50%) !important;
         padding: 20px 0 !important;
+        scroll-behavior: smooth !important;
     }
     
     .setup-image-large {
-        width: 200% !important;
+        width: 150% !important;
+        min-width: 600px !important;
         height: auto !important;
         max-width: none !important;
         display: block !important;
+        margin: 0 auto !important;
     }
     
     /* VIP BENEFITS - Center artifact */
@@ -119,5 +193,17 @@
     .artifact-card {
         max-width: 250px !important;
         margin: 0 auto !important;
+    }
+    
+    /* WHO WE ARE - Clickable Images */
+    .about-visual img, 
+    .creator-photo {
+        cursor: pointer !important;
+        transition: transform 0.3s ease !important;
+    }
+    
+    .about-visual img:hover,
+    .creator-photo:hover {
+        transform: scale(1.05) !important;
     }
 }
