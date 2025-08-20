@@ -1,0 +1,123 @@
+/* MOBILE OVERRIDE CSS - WORKING SOLUTIONS */
+@media only screen and (max-width: 768px) {
+    
+    /* ARENA SECTION FIX */
+    .arena-content {
+        position: relative !important;
+        width: 100vw !important;
+        margin-left: -5% !important;
+        overflow: visible !important;
+    }
+    
+    .arena-content img.arena-banner {
+        width: 100vw !important;
+        height: 300px !important;
+        object-fit: cover !important;
+        margin: 0 !important;
+        display: block !important;
+    }
+    
+    /* Make arena image scrollable wrapper */
+    .arena-image-wrapper {
+        overflow-x: scroll !important;
+        overflow-y: hidden !important;
+        -webkit-overflow-scrolling: touch !important;
+        width: 100vw !important;
+        margin-left: calc(-50vw + 50%) !important;
+    }
+    
+    .arena-image-wrapper img {
+        width: 150% !important;
+        height: 300px !important;
+        max-width: none !important;
+    }
+    
+    /* CASTER CARDS FIX - Horizontal Scroll */
+    .casters-grid {
+        display: block !important;
+        white-space: nowrap !important;
+        overflow-x: auto !important;
+        overflow-y: hidden !important;
+        -webkit-overflow-scrolling: touch !important;
+        padding: 20px 0 !important;
+        scroll-snap-type: x mandatory !important;
+    }
+    
+    .casters-row {
+        display: inline-flex !important;
+        white-space: normal !important;
+    }
+    
+    .casters-row.bottom {
+        margin-left: 0 !important;
+    }
+    
+    .caster-card {
+        display: inline-block !important;
+        width: 80vw !important;
+        max-width: 300px !important;
+        height: 420px !important;
+        margin: 0 10px !important;
+        scroll-snap-align: center !important;
+        flex-shrink: 0 !important;
+        vertical-align: top !important;
+    }
+    
+    /* WHAT'S IN THE BOX FIX */
+    .components-hero {
+        display: flex !important;
+        flex-direction: column !important;
+    }
+    
+    .components-overlay {
+        position: static !important;
+        margin: 20px auto !important;
+        width: 90% !important;
+        max-width: none !important;
+        background: rgba(26, 26, 46, 0.95) !important;
+        border-radius: 10px !important;
+        padding: 15px !important;
+        order: 1 !important;
+    }
+    
+    .components-overlay .overlay-content {
+        max-height: none !important;
+        overflow: visible !important;
+    }
+    
+    .components-showcase {
+        order: 2 !important;
+        overflow-x: auto !important;
+        overflow-y: hidden !important;
+        -webkit-overflow-scrolling: touch !important;
+        width: 100vw !important;
+        margin-left: calc(-50vw + 50%) !important;
+        padding: 20px 0 !important;
+    }
+    
+    .setup-image-large {
+        width: 200% !important;
+        height: auto !important;
+        max-width: none !important;
+        display: block !important;
+    }
+    
+    /* VIP BENEFITS - Center artifact */
+    .vip-content {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+    }
+    
+    .vip-left {
+        width: 100% !important;
+        display: flex !important;
+        justify-content: center !important;
+        margin-bottom: 30px !important;
+    }
+    
+    .artifact-card {
+        max-width: 250px !important;
+        margin: 0 auto !important;
+    }
+}
