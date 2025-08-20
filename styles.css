@@ -1284,7 +1284,7 @@ h3 { font-size: clamp(1.75rem, 3.5vw, 2.5rem); }
     
     .btn-hero {
         margin-bottom: 80px !important; /* Large space before section divider */
-        margin-top: 30px;
+        margin-top: 10px !important; /* Less space from subtext */
     }
     
     /* Fix all spell card backgrounds */
@@ -1298,7 +1298,7 @@ h3 { font-size: clamp(1.75rem, 3.5vw, 2.5rem); }
         background-attachment: scroll !important;
     }
     
-    /* 4. Fix Golden Gradient Text for all headers */
+    /* 4. Fix Golden Gradient Text for all headers - like hero */
     .section-title {
         background: linear-gradient(
             to bottom,
@@ -1310,54 +1310,69 @@ h3 { font-size: clamp(1.75rem, 3.5vw, 2.5rem); }
             #d4af37 75%,
             #a8860b 100%
         ) !important;
-        background-size: 100% 200% !important;
+        background-size: 100% 1.4em !important; /* Repeat gradient per line like hero */
         -webkit-background-clip: text !important;
         background-clip: text !important;
         -webkit-text-fill-color: transparent !important;
         line-height: 1.4 !important;
     }
     
-    /* 5. Arena Section Mobile Optimization */
+    /* 5. Arena Section Mobile Optimization - with draggable */
+    .arena-content {
+        overflow-x: auto;
+        overflow-y: hidden;
+        -webkit-overflow-scrolling: touch;
+        margin: 0 -20px;
+        cursor: grab;
+    }
+    
+    .arena-content:active {
+        cursor: grabbing;
+    }
+    
     img.arena-banner {
-        height: 350px !important; /* Much taller */
-        width: calc(100vw) !important; /* Full viewport width */
-        margin-left: calc(-50vw + 50%) !important; /* Center and exceed boundaries */
-        margin-right: calc(-50vw + 50%) !important;
+        height: 350px !important;
+        width: 150% !important; /* Wider for scrolling */
+        max-width: none !important;
         object-fit: cover !important;
         object-position: center center !important;
         border-radius: 0 !important;
-        max-width: none !important;
+        display: block;
+        touch-action: pan-x;
     }
     
-    /* 6. Caster Cards Mobile Layout - Complete Restructure */
+    /* 6. Caster Cards Mobile Layout - Carousel with flip */
     .casters-grid {
-        display: block !important;
+        display: flex !important;
         overflow-x: auto !important;
         overflow-y: hidden !important;
         -webkit-overflow-scrolling: touch !important;
-        white-space: nowrap !important;
-        padding: 20px 0 !important;
+        scroll-snap-type: x mandatory !important;
+        gap: 15px !important;
+        padding: 20px !important;
         margin: 0 -20px !important;
     }
     
     .casters-row {
-        display: inline-flex !important;
-        flex-wrap: nowrap !important;
-        gap: 15px !important;
-        padding: 0 20px !important;
-        white-space: normal !important;
-    }
-    
-    .casters-row.bottom {
-        margin-left: 0 !important; /* Remove offset */
+        display: contents !important; /* Flatten the rows */
     }
     
     .caster-card {
-        flex: 0 0 250px !important;
-        width: 250px !important;
+        flex: 0 0 280px !important;
+        width: 280px !important;
+        height: 400px !important; /* Fixed height for all */
         scroll-snap-align: center !important;
-        display: inline-block !important;
-        vertical-align: top !important;
+        cursor: pointer !important;
+        transform-style: preserve-3d !important;
+        transition: transform 0.6s !important;
+    }
+    
+    .caster-card.flipped {
+        transform: rotateY(180deg) !important;
+    }
+    
+    .caster-card .card-back {
+        transform: rotateY(180deg) !important;
     }
     
     /* Add scroll indicators */
@@ -1381,38 +1396,64 @@ h3 { font-size: clamp(1.75rem, 3.5vw, 2.5rem); }
     }
     
     .product-section .section-title {
-        margin-bottom: 0 !important;
+        margin-bottom: 20px !important;
+    }
+    
+    /* Move components list above image and fix it */
+    .components-showcase {
+        display: flex;
+        flex-direction: column;
     }
     
     .components-overlay {
-        position: relative !important;
-        top: -20px !important;
-        margin-bottom: -100px !important;
-        z-index: 10 !important;
+        position: static !important;
+        order: -1 !important; /* Move before image */
+        margin: 20px auto 30px !important;
         max-width: 90%;
+        z-index: 10 !important;
+    }
+    
+    .components-overlay.collapsed .overlay-content {
+        display: none;
+    }
+    
+    .components-overlay.collapsed .toggle-text {
+        display: inline;
+    }
+    
+    /* Scrollable centered image */
+    .setup-image-large {
+        width: 250% !important; /* Even larger */
+        max-width: none !important;
+        height: auto !important;
+        display: block;
+        margin-left: -75%; /* Center the enlarged image */
+        touch-action: pan-x;
     }
     
     .components-showcase {
-        position: relative;
         overflow-x: auto;
         overflow-y: hidden;
         -webkit-overflow-scrolling: touch;
         margin: 0 -20px;
-    }
-    
-    .setup-image-large {
-        width: 200% !important; /* Double the width */
-        max-width: none !important;
-        height: auto !important;
-        display: block;
-        touch-action: pan-x;
+        padding: 0 20px;
     }
     
     /* 8. Who We Are Section - Already good, just background fix from #3 */
     
-    /* Additional Mobile Typography Fixes */
+    /* Additional Mobile Fixes */
     h2 {
         word-spacing: 0.1em; /* Help with gradient text */
+    }
+    
+    /* Center artifact card in VIP benefits */
+    .vip-content {
+        justify-content: center !important;
+        align-items: center !important;
+    }
+    
+    .artifact-card {
+        margin: 0 auto !important;
     }
     
     /* Fix components list cutoff */
