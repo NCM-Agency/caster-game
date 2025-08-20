@@ -1194,14 +1194,15 @@ h3 { font-size: clamp(1.75rem, 3.5vw, 2.5rem); }
         background: rgba(26, 26, 46, 0.98);
         width: 100%;
         text-align: center;
-        transition: transform 0.4s ease-in-out, opacity 0.3s ease;
+        transition: all 0.4s ease-in-out;
         padding: var(--spacing-md);
-        transform: translateY(-100%);
+        max-height: 0;
+        overflow: hidden;
         opacity: 0;
     }
     
     .nav-menu.active {
-        transform: translateY(0);
+        max-height: 400px; /* Enough for all menu items */
         opacity: 1;
     }
     
