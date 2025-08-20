@@ -82,6 +82,15 @@
         margin: 0 !important;
     }
     
+    /* Ensure cards aren't clipped */
+    #casters {
+        overflow: visible !important;
+    }
+    
+    .casters-section {
+        overflow: visible !important;
+    }
+    
     .caster-card,
     .caster-card.small,
     .caster-card.large {
