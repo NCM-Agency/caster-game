@@ -1188,18 +1188,20 @@ h3 { font-size: clamp(1.75rem, 3.5vw, 2.5rem); }
     
     .nav-menu {
         position: fixed;
-        left: -100%;
-        top: 70px;
+        left: 0;
+        top: -100%;
         flex-direction: column;
         background: rgba(26, 26, 46, 0.98);
         width: 100%;
         text-align: center;
-        transition: 0.3s;
+        transition: all 0.4s ease-in-out;
         padding: var(--spacing-md);
+        transform: translateY(-100%);
     }
     
     .nav-menu.active {
-        left: 0;
+        top: 70px;
+        transform: translateY(0);
     }
     
     .nav-toggle {
@@ -1269,7 +1271,7 @@ h3 { font-size: clamp(1.75rem, 3.5vw, 2.5rem); }
     
     .box-wrapper {
         margin-top: 20px; /* Space from nav */
-        margin-bottom: 40px; /* More space before title */
+        margin-bottom: 10px; /* Less space before title */
     }
     
     .hero-content h1 {
@@ -1277,7 +1279,7 @@ h3 { font-size: clamp(1.75rem, 3.5vw, 2.5rem); }
     }
     
     .hero .btn-primary {
-        margin-bottom: 40px; /* Space before section divider */
+        margin-bottom: 60px; /* More space before section divider */
     }
     
     /* 3. Fix Spell Card Background - Zoom in to show only art */
@@ -1288,8 +1290,8 @@ h3 { font-size: clamp(1.75rem, 3.5vw, 2.5rem); }
     section[style*="Elemental_v3.png"],
     section[style*="Naming_v3.png"],
     section[style*="Demonic_v3.png"] {
-        background-size: 200% auto !important; /* Zoom in on card art */
-        background-position: center 20% !important; /* Focus on art area */
+        background-size: 400% auto !important; /* Zoom in significantly on card art */
+        background-position: center 15% !important; /* Focus on art area only */
     }
     
     /* 4. Fix Golden Gradient Text Breaking */
@@ -1315,27 +1317,42 @@ h3 { font-size: clamp(1.75rem, 3.5vw, 2.5rem); }
     
     /* 5. Arena Section Mobile Optimization */
     .arena-banner {
-        height: 250px; /* Larger on mobile */
-        margin: 30px 0;
+        height: 300px; /* Much larger on mobile */
+        margin: 30px -20px; /* Negative margin to exceed boundaries */
+        width: calc(100% + 40px); /* Full width plus overflow */
+        border-radius: 0; /* Remove any border radius */
+        overflow: visible;
     }
     
     .arena-banner img {
         object-position: center center; /* Better framing */
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
     }
     
     /* 6. Caster Cards Mobile Layout - Scrollable Carousel */
     .casters-grid {
-        display: flex;
-        overflow-x: auto;
-        scroll-snap-type: x mandatory;
-        gap: 20px;
-        padding: 20px;
-        -webkit-overflow-scrolling: touch;
+        display: flex !important;
+        flex-wrap: nowrap !important;
+        overflow-x: auto !important;
+        overflow-y: hidden !important;
+        scroll-snap-type: x mandatory !important;
+        gap: 20px !important;
+        padding: 20px !important;
+        -webkit-overflow-scrolling: touch !important;
+        margin-left: -20px;
+        margin-right: -20px;
+        padding-left: 20px;
+        padding-right: 20px;
+        width: calc(100% + 40px);
     }
     
     .caster-card {
-        flex: 0 0 280px; /* Fixed width for cards */
-        scroll-snap-align: center;
+        flex: 0 0 280px !important; /* Fixed width for cards */
+        scroll-snap-align: center !important;
+        max-width: 280px !important;
+        height: auto !important;
     }
     
     /* Add scroll indicators */
@@ -1363,46 +1380,32 @@ h3 { font-size: clamp(1.75rem, 3.5vw, 2.5rem); }
     }
     
     .components-overlay {
-        top: -180px; /* Move higher up */
+        top: -250px; /* Move much higher up */
         max-width: 90%; /* Slightly narrower on mobile */
     }
     
     .product-visual {
-        margin-top: -100px; /* Pull image up */
+        margin-top: -150px; /* Pull image up more */
+        margin-left: -20px;
+        margin-right: -20px;
+        width: calc(100% + 40px);
+        overflow-x: auto;
+        overflow-y: hidden;
+        -webkit-overflow-scrolling: touch;
     }
     
     .product-image {
-        width: 100%;
+        width: 200%; /* Make image much larger */
         height: auto;
-        max-height: 400px;
+        max-height: none;
         object-fit: contain;
-        object-position: center center;
-    }
-    
-    /* Make product image interactive/zoomable */
-    .product-visual {
-        position: relative;
-        overflow: hidden;
-        touch-action: pan-x pan-y;
-    }
-    
-    .product-image {
-        transition: transform 0.3s ease;
-    }
-    
-    .product-visual:active .product-image {
-        transform: scale(1.5); /* Pinch to zoom effect */
+        object-position: left center;
     }
     
     /* 8. Who We Are Section - Already good, just background fix from #3 */
     
     /* Additional Mobile Typography Fixes */
-    h1 {
-        font-size: 2.5rem; /* Slightly smaller on mobile */
-    }
-    
     h2 {
-        font-size: 2rem;
         word-spacing: 0.1em; /* Help with gradient text */
     }
     
