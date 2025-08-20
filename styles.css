@@ -1184,6 +1184,8 @@ h3 { font-size: clamp(1.75rem, 3.5vw, 2.5rem); }
 @media (max-width: 768px) {
     body {
         font-size: 16px;
+        /* TEST CHANGE - REMOVE THIS */
+        background: red !important;
     }
     
     .nav-menu {
