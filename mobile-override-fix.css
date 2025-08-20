@@ -49,7 +49,8 @@
     }
     
     .casters-grid .caster-card:last-child {
-        margin-right: 5vw !important;
+        /* Need enough margin to allow centering when scrolled to */
+        margin-right: calc(50vw - 45vw) !important;
     }
     
     /* Fix card flip mechanism */
@@ -113,13 +114,21 @@
         object-position: center center !important;
     }
     
-    /* Center arena image on load */
+    /* Center arena image */
+    .arena-content {
+        display: flex !important;
+        justify-content: center !important;
+    }
+    
     .arena-image-wrapper {
         scroll-behavior: auto !important;
+        display: flex !important;
+        justify-content: center !important;
     }
     
     .arena-banner {
         object-position: center center !important;
+        margin: 0 auto !important;
     }
     
     /* Add swipe indicator closer to cards */

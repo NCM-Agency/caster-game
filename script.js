@@ -319,24 +319,42 @@ style.textContent = `
 `;
 document.head.appendChild(style);
 
-// Toggle components overlay - Make globally accessible
-window.toggleComponentsOverlay = function() {
+// Toggle components overlay - Make globally accessible and debug
+function toggleComponentsOverlay() {
     const overlay = document.getElementById('componentsOverlay');
-    if (!overlay) return;
+    if (!overlay) {
+        console.error('Components overlay not found');
+        return;
+    }
     
     const toggleText = overlay.querySelector('.toggle-text');
     const toggleIcon = overlay.querySelector('.toggle-icon');
     
-    overlay.classList.toggle('collapsed');
-    
+    // Toggle the collapsed class
     if (overlay.classList.contains('collapsed')) {
-        if (toggleText) toggleText.textContent = 'Show List';
-        if (toggleIcon) toggleIcon.textContent = '▶';
-    } else {
+        overlay.classList.remove('collapsed');
         if (toggleText) toggleText.textContent = 'Hide List';
         if (toggleIcon) toggleIcon.textContent = '▼';
+    } else {
+        overlay.classList.add('collapsed');
+        if (toggleText) toggleText.textContent = 'Show List';
+        if (toggleIcon) toggleIcon.textContent = '▶';
     }
 }
+
+// Make it globally accessible
+window.toggleComponentsOverlay = toggleComponentsOverlay;
+
+// Also ensure it's available when DOM loads
+document.addEventListener('DOMContentLoaded', function() {
+    // Re-attach in case inline onclick doesn't work
+    const toggleBtn = document.querySelector('.overlay-toggle');
+    if (toggleBtn) {
+        toggleBtn.onclick = function() {
+            toggleComponentsOverlay();
+        };
+    }
+});
 
 // Image modal for Who We Are section - Works on both desktop and mobile
 document.addEventListener('DOMContentLoaded', function() {
