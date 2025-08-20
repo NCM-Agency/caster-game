@@ -1,6 +1,16 @@
 /* MOBILE FIXES THAT ACTUALLY WORK */
 @media only screen and (max-width: 768px) {
     
+    /* KILL THE GRID LAYOUT COMPLETELY */
+    #casters .casters-grid,
+    .casters-section .casters-grid {
+        display: flex !important;
+        grid-template-columns: none !important;
+        grid-template-rows: none !important;
+        grid-gap: 0 !important;
+        gap: 15px !important;
+    }
+    
     /* FORCE CASTER CARDS TO HORIZONTAL SCROLL */
     #casters .casters-grid {
         display: flex !important;
@@ -59,12 +69,13 @@
         pointer-events: none !important;
     }
     
-    /* FIX WHAT'S IN THE BOX BACKGROUND */
+    /* FIX WHAT'S IN THE BOX BACKGROUND - USE A DIFFERENT SPELL CARD */
     .components-section {
         background: none !important;
         position: relative !important;
     }
     
+    /* Use the purple spell card that's already zoomed in on art */
     .components-section::before {
         content: '' !important;
         position: absolute !important;
@@ -72,12 +83,10 @@
         left: 0 !important;
         width: 100% !important;
         height: 100% !important;
-        background-image: url('assets/cards/spell-cards-bg.jpg') !important;
-        background-size: cover !important;
-        background-position: top center !important;
-        filter: blur(8px) !important;
-        transform: scale(3) !important;
-        opacity: 0.3 !important;
+        background-image: url('assets/cards/purple-spell.jpg') !important;
+        background-size: 300% 300% !important;
+        background-position: center center !important;
+        opacity: 0.2 !important;
         z-index: -1 !important;
     }
     
