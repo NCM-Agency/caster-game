@@ -160,40 +160,50 @@ if (window.innerWidth > 768) {
     });
 }
 
-// Mobile card flip on tap - Fixed double flip bug with proper debouncing
-if (window.innerWidth <= 768) {
-    document.querySelectorAll('.caster-card').forEach(card => {
-        let touchStartTime = 0;
-        let isProcessing = false;
+// Card flip mechanism - Fixed for both mobile and desktop
+document.querySelectorAll('.caster-card').forEach(card => {
+    let touchHandled = false;
+    let isProcessing = false;
+    
+    // Handle touch events for mobile
+    card.addEventListener('touchstart', function(e) {
+        touchHandled = false;
+    }, { passive: true });
+    
+    card.addEventListener('touchend', function(e) {
+        if (isProcessing) return;
         
-        // Use touchstart and touchend for better mobile control
-        card.addEventListener('touchstart', function(e) {
-            touchStartTime = Date.now();
-        }, { passive: true });
+        e.preventDefault();
+        touchHandled = true;
+        isProcessing = true;
         
-        card.addEventListener('touchend', function(e) {
-            e.preventDefault();
-            
-            // Ignore if already processing or if it was a long press
-            if (isProcessing || (Date.now() - touchStartTime) > 500) return;
-            
-            isProcessing = true;
-            this.classList.toggle('flipped');
-            
-            // Reset after animation completes
-            setTimeout(() => {
-                isProcessing = false;
-            }, 700);
-        }, { passive: false });
+        this.classList.toggle('flipped');
         
-        // Fallback for click events (desktop)
-        card.addEventListener('click', function(e) {
-            if (window.innerWidth > 768) {
-                e.preventDefault();
-                this.classList.toggle('flipped');
-            }
-        });
+        // Reset after animation
+        setTimeout(() => {
+            isProcessing = false;
+        }, 600);
+    }, { passive: false });
+    
+    // Handle click events (for desktop or as fallback)
+    card.addEventListener('click', function(e) {
+        // Skip if touch was already handled or still processing
+        if (touchHandled || isProcessing) {
+            touchHandled = false;
+            return;
+        }
+        
+        e.preventDefault();
+        isProcessing = true;
+        
+        this.classList.toggle('flipped');
+        
+        // Reset after animation
+        setTimeout(() => {
+            isProcessing = false;
+        }, 600);
     });
+});
     
     // Center scrollable sections on load
     window.addEventListener('load', () => {
