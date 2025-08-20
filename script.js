@@ -169,6 +169,32 @@ if (window.innerWidth <= 768) {
             this.classList.toggle('flipped');
         });
     });
+    
+    // Center the game setup image on load
+    const showcase = document.querySelector('.components-showcase');
+    if (showcase) {
+        setTimeout(() => {
+            showcase.scrollLeft = (showcase.scrollWidth - showcase.clientWidth) / 2;
+        }, 100);
+    }
+    
+    // Make arena image properly draggable
+    const arenaImg = document.querySelector('.arena-banner');
+    if (arenaImg && arenaImg.parentElement) {
+        // Wrap image in scrollable container
+        const wrapper = document.createElement('div');
+        wrapper.style.overflowX = 'auto';
+        wrapper.style.overflowY = 'hidden';
+        wrapper.style.webkitOverflowScrolling = 'touch';
+        wrapper.style.margin = '0 -20px';
+        
+        arenaImg.parentElement.insertBefore(wrapper, arenaImg);
+        wrapper.appendChild(arenaImg);
+        
+        // Make image wider for scrolling
+        arenaImg.style.width = '150%';
+        arenaImg.style.maxWidth = 'none';
+    }
 }
 
 // Initialize premium particle effect

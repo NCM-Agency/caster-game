@@ -1318,40 +1318,42 @@ h3 { font-size: clamp(1.75rem, 3.5vw, 2.5rem); }
         line-height: 1.4 !important;
     }
     
-    /* 5. Arena Section Mobile Optimization - with draggable */
+    /* 5. Arena Section Mobile Optimization - only image scrollable */
     .arena-content {
-        overflow-x: auto;
-        overflow-y: hidden;
-        -webkit-overflow-scrolling: touch;
-        margin: 0 -20px;
-        cursor: grab;
+        position: relative;
     }
     
-    .arena-content:active {
-        cursor: grabbing;
-    }
-    
+    /* Create scrollable container just for image */
     img.arena-banner {
         height: 350px !important;
-        width: 150% !important; /* Wider for scrolling */
+        width: 100vw !important;
         max-width: none !important;
         object-fit: cover !important;
         object-position: center center !important;
         border-radius: 0 !important;
         display: block;
-        touch-action: pan-x;
+        margin-left: calc(-50vw + 50%);
+        margin-right: calc(-50vw + 50%);
     }
     
-    /* 6. Caster Cards Mobile Layout - Carousel with flip */
+    /* Wrap arena image in scrollable div via JS or keep static */
+    .arena-text {
+        padding: 20px !important;
+        position: relative !important;
+        z-index: 1;
+    }
+    
+    /* 6. Caster Cards Mobile Layout - Centered Carousel with flip */
     .casters-grid {
         display: flex !important;
         overflow-x: auto !important;
         overflow-y: hidden !important;
         -webkit-overflow-scrolling: touch !important;
         scroll-snap-type: x mandatory !important;
-        gap: 15px !important;
-        padding: 20px !important;
+        gap: 20px !important;
+        padding: 20px 40px !important; /* More padding for centering */
         margin: 0 -20px !important;
+        scroll-padding: 40px;
     }
     
     .casters-row {
@@ -1359,13 +1361,14 @@ h3 { font-size: clamp(1.75rem, 3.5vw, 2.5rem); }
     }
     
     .caster-card {
-        flex: 0 0 280px !important;
-        width: 280px !important;
-        height: 400px !important; /* Fixed height for all */
+        flex: 0 0 320px !important; /* Larger cards */
+        width: 320px !important;
+        height: 450px !important; /* Taller for text */
         scroll-snap-align: center !important;
         cursor: pointer !important;
         transform-style: preserve-3d !important;
         transition: transform 0.6s !important;
+        position: relative !important;
     }
     
     .caster-card.flipped {
@@ -1374,6 +1377,21 @@ h3 { font-size: clamp(1.75rem, 3.5vw, 2.5rem); }
     
     .caster-card .card-back {
         transform: rotateY(180deg) !important;
+        font-size: 0.9rem !important; /* Smaller text to fit */
+        padding: 15px !important;
+    }
+    
+    /* Center first card on load */
+    .casters-grid:before {
+        content: '';
+        width: 40px;
+        flex-shrink: 0;
+    }
+    
+    .casters-grid:after {
+        content: '';
+        width: 40px;
+        flex-shrink: 0;
     }
     
     /* Add scroll indicators */
@@ -1394,10 +1412,12 @@ h3 { font-size: clamp(1.75rem, 3.5vw, 2.5rem); }
     /* 7. What's in the Box Section Fixes */
     .product-section {
         padding-top: 20px !important;
+        background-size: 500% auto !important;
+        background-position: center 10% !important;
     }
     
     .product-section .section-title {
-        margin-bottom: 20px !important;
+        margin-bottom: 10px !important; /* Much less gap */
     }
     
     /* Move components list above image and fix it */
@@ -1409,27 +1429,32 @@ h3 { font-size: clamp(1.75rem, 3.5vw, 2.5rem); }
     .components-overlay {
         position: static !important;
         order: -1 !important; /* Move before image */
-        margin: 20px auto 30px !important;
+        margin: 10px auto 20px !important; /* Less gap */
         max-width: 90%;
         z-index: 10 !important;
+    }
+    
+    .components-overlay .overlay-content {
+        max-height: none !important; /* Remove height limit */
+        overflow: visible !important;
     }
     
     .components-overlay.collapsed .overlay-content {
         display: none;
     }
     
-    .components-overlay.collapsed .toggle-text {
-        display: inline;
+    .components-overlay.collapsed .overlay-toggle {
+        margin-bottom: 20px;
     }
     
-    /* Scrollable centered image */
+    /* Scrollable centered image - start centered */
     .setup-image-large {
-        width: 250% !important; /* Even larger */
+        width: 300% !important; /* Triple width */
         max-width: none !important;
         height: auto !important;
         display: block;
-        margin-left: -75%; /* Center the enlarged image */
-        touch-action: pan-x;
+        position: relative;
+        left: -100%; /* Position for centering */
     }
     
     .components-showcase {
@@ -1438,6 +1463,7 @@ h3 { font-size: clamp(1.75rem, 3.5vw, 2.5rem); }
         -webkit-overflow-scrolling: touch;
         margin: 0 -20px;
         padding: 0 20px;
+        scroll-behavior: smooth;
     }
     
     /* 8. Who We Are Section - Already good, just background fix from #3 */
@@ -1449,12 +1475,18 @@ h3 { font-size: clamp(1.75rem, 3.5vw, 2.5rem); }
     
     /* Center artifact card in VIP benefits */
     .vip-content {
+        grid-template-columns: 1fr !important;
+    }
+    
+    .vip-left {
+        display: flex !important;
         justify-content: center !important;
         align-items: center !important;
     }
     
     .artifact-card {
         margin: 0 auto !important;
+        display: block !important;
     }
     
     /* Fix components list cutoff */
