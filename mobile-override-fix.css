@@ -83,9 +83,9 @@
         left: 0 !important;
         width: 100% !important;
         height: 100% !important;
-        background-image: url('assets/cards/purple-spell.jpg') !important;
-        background-size: 300% 300% !important;
-        background-position: center center !important;
+        background-image: url('assets/Divine_v3.png') !important;
+        background-size: 800% !important;
+        background-position: center 75% !important;
         opacity: 0.2 !important;
         z-index: -1 !important;
     }
