@@ -45,12 +45,14 @@
     .casters-grid {
         position: relative !important;
         display: flex !important;
+        flex-wrap: nowrap !important;
         overflow-x: auto !important;
         overflow-y: hidden !important;
         -webkit-overflow-scrolling: touch !important;
         padding: 20px 0 40px !important;
         scroll-snap-type: x mandatory !important;
         scroll-padding-left: calc(50vw - 150px) !important;
+        gap: 20px !important;
     }
     
     /* Add swipe indicator */
@@ -65,10 +67,13 @@
         text-align: center !important;
         opacity: 0.8 !important;
         animation: pulse 2s infinite !important;
+        pointer-events: none !important;
     }
     
     .casters-row {
-        display: contents !important;
+        display: flex !important;
+        flex-wrap: nowrap !important;
+        gap: 20px !important;
     }
     
     .casters-row.bottom {
@@ -79,30 +84,29 @@
         display: inline-block !important;
         width: 300px !important;
         min-width: 300px !important;
+        max-width: 300px !important;
         height: 420px !important;
-        margin: 0 10px !important;
+        margin: 0 !important;
         scroll-snap-align: center !important;
-        flex-shrink: 0 !important;
+        flex: 0 0 300px !important;
         vertical-align: top !important;
         -webkit-tap-highlight-color: transparent !important;
     }
     
     /* Center first card */
-    .caster-card:first-child {
+    .casters-grid > .caster-card:first-child,
+    .casters-row:first-child .caster-card:first-child {
         margin-left: calc(50vw - 150px) !important;
     }
     
-    .caster-card:last-child {
+    .casters-grid > .caster-card:last-child,
+    .casters-row:last-child .caster-card:last-child {
         margin-right: calc(50vw - 150px) !important;
     }
     
-    /* Fix double flip bug */
-    .caster-card.flipped {
-        pointer-events: none !important;
-    }
-    
-    .caster-card.flipped .card-back {
-        pointer-events: auto !important;
+    /* Fix double flip bug with touch-action */
+    .caster-card {
+        touch-action: manipulation !important;
     }
     
     @keyframes pulse {
@@ -114,14 +118,20 @@
     #components {
         padding-top: 40px !important;
         background-image: url('assets/cards/spell-cards-bg.jpg') !important;
-        background-size: 200% auto !important;
-        background-position: center !important;
+        background-size: 400% auto !important;
+        background-position: center 20% !important;
         background-attachment: fixed !important;
     }
     
     #components h2 {
         margin-bottom: 20px !important;
         padding-bottom: 0 !important;
+    }
+    
+    /* Fix gap when collapsed */
+    .components-overlay.collapsed {
+        margin-bottom: 10px !important;
+        padding: 10px 20px !important;
     }
     
     .components-hero {
@@ -168,12 +178,14 @@
     }
     
     .setup-image-large {
-        width: 150% !important;
-        min-width: 600px !important;
+        width: 250% !important;
+        min-width: 800px !important;
         height: auto !important;
         max-width: none !important;
         display: block !important;
         margin: 0 auto !important;
+        transform: scale(1.2) !important;
+        transform-origin: center center !important;
     }
     
     /* VIP BENEFITS - Center artifact */

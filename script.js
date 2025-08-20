@@ -160,24 +160,38 @@ if (window.innerWidth > 768) {
     });
 }
 
-// Mobile card flip on tap - Fixed double flip bug
+// Mobile card flip on tap - Fixed double flip bug with proper debouncing
 if (window.innerWidth <= 768) {
     document.querySelectorAll('.caster-card').forEach(card => {
-        let isFlipping = false;
-        card.addEventListener('click', function(e) {
+        let touchStartTime = 0;
+        let isProcessing = false;
+        
+        // Use touchstart and touchend for better mobile control
+        card.addEventListener('touchstart', function(e) {
+            touchStartTime = Date.now();
+        }, { passive: true });
+        
+        card.addEventListener('touchend', function(e) {
             e.preventDefault();
-            e.stopPropagation();
             
-            // Prevent double flip
-            if (isFlipping) return;
-            isFlipping = true;
+            // Ignore if already processing or if it was a long press
+            if (isProcessing || (Date.now() - touchStartTime) > 500) return;
             
+            isProcessing = true;
             this.classList.toggle('flipped');
             
-            // Reset flag after animation
+            // Reset after animation completes
             setTimeout(() => {
-                isFlipping = false;
-            }, 600);
+                isProcessing = false;
+            }, 700);
+        }, { passive: false });
+        
+        // Fallback for click events (desktop)
+        card.addEventListener('click', function(e) {
+            if (window.innerWidth > 768) {
+                e.preventDefault();
+                this.classList.toggle('flipped');
+            }
         });
     });
     
@@ -288,7 +302,7 @@ function toggleComponentsOverlay() {
 
 // Image modal for Who We Are section - Works on both desktop and mobile
 document.addEventListener('DOMContentLoaded', function() {
-    const aboutImages = document.querySelectorAll('.about-visual img, .creator-photo, .about-images img');
+    const aboutImages = document.querySelectorAll('.gallery-image, .about-visual img, .creator-photo');
     
     aboutImages.forEach(img => {
         img.style.cursor = 'pointer';
