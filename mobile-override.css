@@ -94,25 +94,25 @@
     .caster-card,
     .caster-card.small,
     .caster-card.large {
-        display: inline-block !important;
-        width: 280px !important;
-        min-width: 280px !important;
-        max-width: 280px !important;
-        height: 400px !important;
-        margin: 0 10px !important;
+        flex: 0 0 85vw !important;
+        width: 85vw !important;
+        min-width: 85vw !important;
+        max-width: 85vw !important;
+        height: auto !important;
+        aspect-ratio: 3/4 !important;
+        margin: 0 2.5vw !important;
         scroll-snap-align: center !important;
         -webkit-tap-highlight-color: transparent !important;
-        vertical-align: top !important;
-        white-space: normal !important;
+        display: block !important;
     }
     
-    /* Add padding to first and last for centering */
-    .caster-card:first-of-type {
-        margin-left: calc(50vw - 140px) !important;
+    /* Center first and last cards */
+    .casters-grid .caster-card:first-child {
+        margin-left: 7.5vw !important;
     }
     
-    .caster-card:last-of-type {
-        margin-right: calc(50vw - 140px) !important;
+    .casters-grid .caster-card:last-child {
+        margin-right: 7.5vw !important;
     }
     
     /* Fix double flip bug with touch-action */
