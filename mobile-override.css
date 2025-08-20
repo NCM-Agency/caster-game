@@ -54,22 +54,6 @@
         white-space: nowrap !important;
     }
     
-    /* Add swipe indicator */
-    .casters-grid::after {
-        content: '← Swipe to see more →' !important;
-        position: absolute !important;
-        bottom: 15px !important;
-        left: 50% !important;
-        transform: translateX(-50%) !important;
-        color: #d4af37 !important;
-        font-size: 14px !important;
-        text-align: center !important;
-        opacity: 0.8 !important;
-        animation: pulse 2s infinite !important;
-        pointer-events: none !important;
-        white-space: nowrap !important;
-        z-index: 10 !important;
-    }
     
     /* Make rows inline */
     .casters-row {

@@ -45,11 +45,11 @@
     
     /* First and last card padding for centering */
     .casters-grid .caster-card:first-child {
-        margin-left: calc(50vw - 45vw) !important;
+        margin-left: 5vw !important;
     }
     
     .casters-grid .caster-card:last-child {
-        margin-right: calc(50vw - 45vw) !important;
+        margin-right: 5vw !important;
     }
     
     /* Fix card flip mechanism */
@@ -59,10 +59,10 @@
         pointer-events: auto !important;
     }
     
-    /* Fix text on back of card */
+    /* Fix text on back of card - LARGER SIZES */
     .caster-card .card-back {
         padding: 20px !important;
-        font-size: 14px !important;
+        font-size: 16px !important;
         line-height: 1.5 !important;
         overflow-y: auto !important;
         overflow-x: hidden !important;
@@ -74,9 +74,18 @@
     }
     
     .caster-card .card-back h3 {
-        font-size: 20px !important;
-        margin-bottom: 12px !important;
+        font-size: 28px !important;
+        margin-bottom: 8px !important;
         word-wrap: break-word !important;
+        color: #d4af37 !important;
+    }
+    
+    .caster-card .card-back h4 {
+        font-size: 20px !important;
+        margin-bottom: 15px !important;
+        color: #a8c5ff !important;
+        text-transform: uppercase !important;
+        letter-spacing: 1px !important;
     }
     
     .caster-card .card-back p {
@@ -113,15 +122,15 @@
         object-position: center center !important;
     }
     
-    /* Add swipe indicators */
-    .casters-section {
+    /* Add swipe indicator closer to cards */
+    .casters-grid {
         position: relative !important;
     }
     
-    .casters-section::after {
-        content: '← Swipe for more cards →' !important;
+    .casters-grid::after {
+        content: '← Swipe for more →' !important;
         position: absolute !important;
-        bottom: 20px !important;
+        bottom: 10px !important;
         left: 50% !important;
         transform: translateX(-50%) !important;
         color: #d4af37 !important;
@@ -131,10 +140,20 @@
         z-index: 10 !important;
         animation: pulse 2s infinite !important;
         pointer-events: none !important;
+        white-space: nowrap !important;
     }
     
     @keyframes pulse {
         0%, 100% { opacity: 0.8; }
         50% { opacity: 0.4; }
+    }
+    
+    /* Fix Show/Hide List functionality */
+    .components-overlay {
+        transition: all 0.3s ease !important;
+    }
+    
+    .components-overlay.collapsed .overlay-content {
+        display: none !important;
     }
 }
