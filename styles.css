@@ -285,15 +285,18 @@ h3 { font-size: clamp(1.75rem, 3.5vw, 2.5rem); }
     animation: shimmerRealistic 6s linear infinite;
     pointer-events: none;
     z-index: 2;
-    /* Apply mask to constrain to box shape */
+    /* Apply mask to constrain to box shape - using luminance mode for black/white mask */
     -webkit-mask-image: url('assets/3D_box_v2_mask.png');
     -webkit-mask-size: 100% 100%;
     -webkit-mask-repeat: no-repeat;
     -webkit-mask-position: center center;
+    -webkit-mask-mode: luminance;
     mask-image: url('assets/3D_box_v2_mask.png');
     mask-size: 100% 100%;
     mask-repeat: no-repeat;
     mask-position: center center;
+    mask-mode: luminance;
+    mask-type: luminance;
 }
 
 @keyframes shimmerRealistic {
