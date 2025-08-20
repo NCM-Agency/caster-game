@@ -177,24 +177,6 @@ if (window.innerWidth <= 768) {
             showcase.scrollLeft = (showcase.scrollWidth - showcase.clientWidth) / 2;
         }, 100);
     }
-    
-    // Make arena image properly draggable
-    const arenaImg = document.querySelector('.arena-banner');
-    if (arenaImg && arenaImg.parentElement) {
-        // Wrap image in scrollable container
-        const wrapper = document.createElement('div');
-        wrapper.style.overflowX = 'auto';
-        wrapper.style.overflowY = 'hidden';
-        wrapper.style.webkitOverflowScrolling = 'touch';
-        wrapper.style.margin = '0 -20px';
-        
-        arenaImg.parentElement.insertBefore(wrapper, arenaImg);
-        wrapper.appendChild(arenaImg);
-        
-        // Make image wider for scrolling
-        arenaImg.style.width = '150%';
-        arenaImg.style.maxWidth = 'none';
-    }
 }
 
 // Initialize premium particle effect
@@ -263,6 +245,73 @@ function toggleComponentsOverlay() {
     } else {
         toggleText.textContent = 'Hide List';
     }
+}
+
+// Image modal for Who We Are section
+document.addEventListener('DOMContentLoaded', function() {
+    const aboutImages = document.querySelectorAll('.about-visual img, .creator-photo');
+    
+    aboutImages.forEach(img => {
+        img.style.cursor = 'pointer';
+        img.addEventListener('click', function() {
+            // Create modal
+            const modal = document.createElement('div');
+            modal.className = 'image-modal';
+            modal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.95);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 10000;
+                cursor: pointer;
+                animation: fadeIn 0.3s ease;
+            `;
+            
+            const modalImg = document.createElement('img');
+            modalImg.src = this.src;
+            modalImg.style.cssText = `
+                max-width: 90%;
+                max-height: 90%;
+                object-fit: contain;
+                animation: zoomIn 0.3s ease;
+            `;
+            
+            modal.appendChild(modalImg);
+            document.body.appendChild(modal);
+            
+            // Close on click
+            modal.addEventListener('click', function() {
+                modal.style.animation = 'fadeOut 0.3s ease';
+                setTimeout(() => modal.remove(), 300);
+            });
+        });
+    });
+});
+
+// Add animations for modal
+if (!document.querySelector('#modalAnimations')) {
+    const style = document.createElement('style');
+    style.id = 'modalAnimations';
+    style.textContent = `
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+        @keyframes zoomIn {
+            from { transform: scale(0.8); }
+            to { transform: scale(1); }
+        }
+    `;
+    document.head.appendChild(style);
 }
 
 console.log('🎮 Welcome to Caster! May your magic be powerful and your victories legendary!');

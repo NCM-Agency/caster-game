@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Caster - Award-Winning Fantasy Board Game | Coming to Kickstarter</title>
+    <title>Caster - Award-Winning Fantasy Set Collection Card Game | Coming to Kickstarter</title>
     <meta name="description" content="Harness arcane powers in Caster, an award-winning fast-paced set collection card game. Get VIP access for exclusive Kickstarter benefits!">
     
     <!-- Google Fonts -->
@@ -281,16 +281,15 @@
             <h2 class="section-title">What's in the Box</h2>
         </div>
         <div class="components-hero">
-            <div class="components-showcase">
-                <img src="assets/Play_Setup_transparent.PNG" alt="Caster Game Setup" class="setup-image-large">
-                <div class="components-overlay" id="componentsOverlay">
-                    <button class="overlay-toggle" onclick="toggleComponentsOverlay()" aria-label="Toggle components list">
-                        <span class="toggle-icon">▼</span>
-                        <span class="toggle-text">Hide List</span>
-                    </button>
-                    <div class="overlay-content">
-                        <h3 style="color: var(--magical-gold); font-family: var(--font-cinzel); margin-bottom: 1rem; font-size: 1.5rem;">Game Components</h3>
-                        <ul class="components-grid">
+            <!-- Components list moved outside and above -->
+            <div class="components-overlay" id="componentsOverlay">
+                <button class="overlay-toggle" onclick="toggleComponentsOverlay()" aria-label="Toggle components list">
+                    <span class="toggle-icon">▼</span>
+                    <span class="toggle-text">Hide List</span>
+                </button>
+                <div class="overlay-content">
+                    <h3 style="color: var(--magical-gold); font-family: var(--font-cinzel); margin-bottom: 1rem; font-size: 1.5rem;">Game Components</h3>
+                    <ul class="components-grid">
                         <li class="component-item">Game Board</li>
                         <li class="component-item">Rulebook</li>
                         <li class="component-item">4 Scoring Meeples</li>
@@ -301,8 +300,11 @@
                         <li class="component-item">4 Quick Reference Cards</li>
                         <li class="component-item">6 "50 points" Tokens</li>
                     </ul>
-                    </div>
                 </div>
+            </div>
+            <!-- Image in its own scrollable container -->
+            <div class="components-showcase">
+                <img src="assets/Play_Setup_transparent.PNG" alt="Caster Game Setup" class="setup-image-large">
             </div>
         </div>
     </section>

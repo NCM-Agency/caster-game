@@ -1318,32 +1318,38 @@ h3 { font-size: clamp(1.75rem, 3.5vw, 2.5rem); }
         line-height: 1.4 !important;
     }
     
-    /* 5. Arena Section Mobile Optimization - only image scrollable */
+    /* 5. Arena Section - Image scrollable, text static */
     .arena-content {
         position: relative;
+        overflow-x: auto;
+        overflow-y: hidden;
+        -webkit-overflow-scrolling: touch;
+        margin: 0 -20px;
+        padding: 0;
     }
     
-    /* Create scrollable container just for image */
     img.arena-banner {
         height: 350px !important;
-        width: 100vw !important;
+        width: 150% !important; /* Wider than viewport */
+        min-width: 600px !important;
         max-width: none !important;
         object-fit: cover !important;
         object-position: center center !important;
         border-radius: 0 !important;
         display: block;
-        margin-left: calc(-50vw + 50%);
-        margin-right: calc(-50vw + 50%);
     }
     
-    /* Wrap arena image in scrollable div via JS or keep static */
     .arena-text {
         padding: 20px !important;
-        position: relative !important;
-        z-index: 1;
+        margin: 0 20px !important;
     }
     
-    /* 6. Caster Cards Mobile Layout - Centered Carousel with flip */
+    /* 6. Caster Cards - Single horizontal row */
+    .casters-section {
+        background-size: 500% auto !important;
+        background-position: center 10% !important;
+    }
+    
     .casters-grid {
         display: flex !important;
         overflow-x: auto !important;
@@ -1351,24 +1357,30 @@ h3 { font-size: clamp(1.75rem, 3.5vw, 2.5rem); }
         -webkit-overflow-scrolling: touch !important;
         scroll-snap-type: x mandatory !important;
         gap: 20px !important;
-        padding: 20px 40px !important; /* More padding for centering */
+        padding: 20px 30px !important;
         margin: 0 -20px !important;
-        scroll-padding: 40px;
+        scroll-padding: 30px;
     }
     
     .casters-row {
-        display: contents !important; /* Flatten the rows */
+        display: contents !important; /* Flatten rows into single line */
     }
     
     .caster-card {
-        flex: 0 0 320px !important; /* Larger cards */
-        width: 320px !important;
-        height: 450px !important; /* Taller for text */
-        scroll-snap-align: center !important;
+        flex: 0 0 85vw !important; /* Most of viewport width */
+        width: 85vw !important;
+        max-width: 350px !important;
+        height: 480px !important;
+        scroll-snap-align: start !important;
         cursor: pointer !important;
         transform-style: preserve-3d !important;
         transition: transform 0.6s !important;
         position: relative !important;
+    }
+    
+    /* Show partial next card */
+    .casters-grid .caster-card:first-child {
+        margin-left: 5vw;
     }
     
     .caster-card.flipped {
@@ -1377,21 +1389,9 @@ h3 { font-size: clamp(1.75rem, 3.5vw, 2.5rem); }
     
     .caster-card .card-back {
         transform: rotateY(180deg) !important;
-        font-size: 0.9rem !important; /* Smaller text to fit */
+        font-size: 0.85rem !important;
         padding: 15px !important;
-    }
-    
-    /* Center first card on load */
-    .casters-grid:before {
-        content: '';
-        width: 40px;
-        flex-shrink: 0;
-    }
-    
-    .casters-grid:after {
-        content: '';
-        width: 40px;
-        flex-shrink: 0;
+        overflow-y: auto !important;
     }
     
     /* Add scroll indicators */
@@ -1409,7 +1409,7 @@ h3 { font-size: clamp(1.75rem, 3.5vw, 2.5rem); }
         border-radius: 4px;
     }
     
-    /* 7. What's in the Box Section Fixes */
+    /* 7. What's in the Box - Fixed layout */
     .product-section {
         padding-top: 20px !important;
         background-size: 500% auto !important;
@@ -1417,25 +1417,21 @@ h3 { font-size: clamp(1.75rem, 3.5vw, 2.5rem); }
     }
     
     .product-section .section-title {
-        margin-bottom: 10px !important; /* Much less gap */
+        margin-bottom: 20px !important;
     }
     
-    /* Move components list above image and fix it */
-    .components-showcase {
-        display: flex;
-        flex-direction: column;
-    }
-    
+    /* Components list centered and separate */
     .components-overlay {
-        position: static !important;
-        order: -1 !important; /* Move before image */
-        margin: 10px auto 20px !important; /* Less gap */
+        position: relative !important;
+        margin: 0 auto 30px !important;
         max-width: 90%;
-        z-index: 10 !important;
+        background: rgba(26, 26, 46, 0.95);
+        border-radius: 10px;
+        padding: 10px;
     }
     
     .components-overlay .overlay-content {
-        max-height: none !important; /* Remove height limit */
+        max-height: none !important;
         overflow: visible !important;
     }
     
@@ -1443,27 +1439,21 @@ h3 { font-size: clamp(1.75rem, 3.5vw, 2.5rem); }
         display: none;
     }
     
-    .components-overlay.collapsed .overlay-toggle {
-        margin-bottom: 20px;
-    }
-    
-    /* Scrollable centered image - start centered */
-    .setup-image-large {
-        width: 300% !important; /* Triple width */
-        max-width: none !important;
-        height: auto !important;
-        display: block;
-        position: relative;
-        left: -100%; /* Position for centering */
-    }
-    
+    /* Scrollable image container */
     .components-showcase {
         overflow-x: auto;
         overflow-y: hidden;
         -webkit-overflow-scrolling: touch;
         margin: 0 -20px;
-        padding: 0 20px;
-        scroll-behavior: smooth;
+        padding: 0;
+    }
+    
+    .setup-image-large {
+        width: 250% !important;
+        max-width: none !important;
+        height: auto !important;
+        display: block;
+        margin-left: -50%; /* Start more centered */
     }
     
     /* 8. Who We Are Section - Already good, just background fix from #3 */
