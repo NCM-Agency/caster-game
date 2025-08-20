@@ -15,13 +15,14 @@
         -webkit-overflow-scrolling: touch !important;
         scroll-snap-type: x mandatory !important;
         gap: 15px !important;
-        padding: 20px 0 !important;
+        padding: 20px 0 50px !important;
         /* Full width to allow cards to scroll off-screen */
         width: 100vw !important;
         margin-left: calc(-50vw + 50%) !important;
         /* Remove any grid styling */
         grid-template-columns: unset !important;
         grid-template-rows: unset !important;
+        position: relative !important;
     }
     
     /* Flatten the two-row structure into single row */
@@ -60,19 +61,57 @@
     
     /* Fix text on back of card */
     .caster-card .card-back {
-        padding: 20px !important;
-        font-size: 14px !important;
-        line-height: 1.4 !important;
+        padding: 15px !important;
+        font-size: 12px !important;
+        line-height: 1.3 !important;
         overflow-y: auto !important;
         -webkit-overflow-scrolling: touch !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: flex-start !important;
+    }
+    
+    .caster-card .card-back h3 {
+        font-size: 18px !important;
+        margin-bottom: 10px !important;
+    }
+    
+    .caster-card .card-back p {
+        margin-bottom: 8px !important;
     }
     
     /* FIX WHAT'S IN THE BOX BACKGROUND - CORRECT SELECTOR */
     .components-section {
         background-image: url('assets/Divine_v3.png') !important;
-        background-size: 1000% !important;
-        background-position: center 85% !important;
+        background-size: 500% auto !important;
+        background-position: center 10% !important;
         background-repeat: no-repeat !important;
         background-attachment: scroll !important;
+    }
+    
+    /* Fix game components image */
+    .components-overlay img {
+        width: 100% !important;
+        height: auto !important;
+        object-fit: contain !important;
+        max-height: 300px !important;
+    }
+    
+    /* Add swipe indicators */
+    .casters-grid::after {
+        content: '← Swipe for more →' !important;
+        position: absolute !important;
+        bottom: -30px !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        color: #d4af37 !important;
+        font-size: 14px !important;
+        opacity: 0.8 !important;
+        animation: pulse 2s infinite !important;
+    }
+    
+    @keyframes pulse {
+        0%, 100% { opacity: 0.8; }
+        50% { opacity: 0.4; }
     }
 }

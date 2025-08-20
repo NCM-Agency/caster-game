@@ -162,47 +162,30 @@ if (window.innerWidth > 768) {
 
 // Card flip mechanism - Fixed for both mobile and desktop
 document.querySelectorAll('.caster-card').forEach(card => {
-    let touchHandled = false;
-    let isProcessing = false;
+    let isFlipping = false;
     
-    // Handle touch events for mobile
-    card.addEventListener('touchstart', function(e) {
-        touchHandled = false;
-    }, { passive: true });
-    
-    card.addEventListener('touchend', function(e) {
-        if (isProcessing) return;
+    // Single event handler for both touch and click
+    const flipCard = (e) => {
+        if (isFlipping) return;
         
         e.preventDefault();
-        touchHandled = true;
-        isProcessing = true;
+        e.stopPropagation();
         
-        this.classList.toggle('flipped');
+        isFlipping = true;
+        card.classList.toggle('flipped');
         
-        // Reset after animation
+        // Reset flag after animation completes
         setTimeout(() => {
-            isProcessing = false;
+            isFlipping = false;
         }, 600);
-    }, { passive: false });
+    };
     
-    // Handle click events (for desktop or as fallback)
-    card.addEventListener('click', function(e) {
-        // Skip if touch was already handled or still processing
-        if (touchHandled || isProcessing) {
-            touchHandled = false;
-            return;
-        }
-        
-        e.preventDefault();
-        isProcessing = true;
-        
-        this.classList.toggle('flipped');
-        
-        // Reset after animation
-        setTimeout(() => {
-            isProcessing = false;
-        }, 600);
-    });
+    // Use click for desktop and touch for mobile
+    if ('ontouchstart' in window) {
+        card.addEventListener('touchend', flipCard, { passive: false });
+    } else {
+        card.addEventListener('click', flipCard);
+    }
 });
     
     // Center scrollable sections on load
