@@ -119,9 +119,10 @@
     #components {
         padding-top: 40px !important;
         background-image: url('assets/cards/spell-cards-bg.jpg') !important;
-        background-size: 400% auto !important;
-        background-position: center 20% !important;
+        background-size: 800% 800% !important;
+        background-position: 30% 30% !important;
         background-attachment: fixed !important;
+        background-repeat: no-repeat !important;
     }
     
     #components h2 {
