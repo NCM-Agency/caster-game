@@ -1,0 +1,89 @@
+/* MOBILE FIXES THAT ACTUALLY WORK */
+@media only screen and (max-width: 768px) {
+    
+    /* FORCE CASTER CARDS TO HORIZONTAL SCROLL */
+    #casters .casters-grid {
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
+        overflow-x: auto !important;
+        overflow-y: hidden !important;
+        -webkit-overflow-scrolling: touch !important;
+        width: 100vw !important;
+        margin-left: -5% !important;
+        padding: 20px 0 60px !important;
+        gap: 15px !important;
+    }
+    
+    /* Remove the two-row structure */
+    #casters .casters-row,
+    #casters .casters-row.bottom {
+        display: contents !important;
+        margin: 0 !important;
+    }
+    
+    /* Make all cards the same size and inline */
+    #casters .caster-card {
+        flex: 0 0 300px !important;
+        width: 300px !important;
+        height: 420px !important;
+        display: block !important;
+        margin: 0 !important;
+    }
+    
+    #casters .caster-card.small,
+    #casters .caster-card.large {
+        width: 300px !important;
+        height: 420px !important;
+    }
+    
+    /* Add padding to first and last card */
+    #casters .casters-grid .caster-card:first-child {
+        margin-left: calc(50vw - 150px) !important;
+    }
+    
+    #casters .casters-grid .caster-card:last-child {
+        margin-right: calc(50vw - 150px) !important;
+    }
+    
+    /* Swipe indicator */
+    #casters .casters-grid::after {
+        content: '← Swipe for more →' !important;
+        position: absolute !important;
+        bottom: 20px !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        color: #d4af37 !important;
+        font-size: 14px !important;
+        opacity: 0.8 !important;
+        pointer-events: none !important;
+    }
+    
+    /* FIX WHAT'S IN THE BOX BACKGROUND */
+    .components-section {
+        background: none !important;
+        position: relative !important;
+    }
+    
+    .components-section::before {
+        content: '' !important;
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+        background-image: url('assets/cards/spell-cards-bg.jpg') !important;
+        background-size: cover !important;
+        background-position: top center !important;
+        filter: blur(8px) !important;
+        transform: scale(3) !important;
+        opacity: 0.3 !important;
+        z-index: -1 !important;
+    }
+    
+    /* Ensure components content is above the background */
+    .components-section .container {
+        position: relative !important;
+        z-index: 1 !important;
+    }
+}
