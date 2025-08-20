@@ -190,25 +190,44 @@ document.querySelectorAll('.caster-card').forEach(card => {
     
     // Center scrollable sections on load
     window.addEventListener('load', () => {
-        // Center arena image
+        // Center arena image - focus on the actual arena, not the left side
         const arenaWrapper = document.querySelector('.arena-image-wrapper');
         const arenaContent = document.querySelector('.arena-content');
         if (arenaWrapper) {
             setTimeout(() => {
-                arenaWrapper.scrollLeft = (arenaWrapper.scrollWidth - arenaWrapper.clientWidth) / 2;
+                // On mobile, center more to the right to show the arena
+                if (window.innerWidth <= 768) {
+                    arenaWrapper.scrollLeft = (arenaWrapper.scrollWidth - arenaWrapper.clientWidth) * 0.6;
+                } else {
+                    arenaWrapper.scrollLeft = (arenaWrapper.scrollWidth - arenaWrapper.clientWidth) / 2;
+                }
             }, 100);
         }
         if (arenaContent) {
             setTimeout(() => {
-                arenaContent.scrollLeft = (arenaContent.scrollWidth - arenaContent.clientWidth) / 2;
+                if (window.innerWidth <= 768) {
+                    arenaContent.scrollLeft = (arenaContent.scrollWidth - arenaContent.clientWidth) * 0.6;
+                } else {
+                    arenaContent.scrollLeft = (arenaContent.scrollWidth - arenaContent.clientWidth) / 2;
+                }
             }, 100);
         }
         
-        // Center game setup image
+        // Center game setup image - focus on the center, not left edge
         const showcase = document.querySelector('.components-showcase');
+        const componentsOverlay = document.querySelector('.components-overlay');
         if (showcase) {
             setTimeout(() => {
-                showcase.scrollLeft = (showcase.scrollWidth - showcase.clientWidth) / 2;
+                if (window.innerWidth <= 768) {
+                    showcase.scrollLeft = (showcase.scrollWidth - showcase.clientWidth) * 0.4;
+                } else {
+                    showcase.scrollLeft = (showcase.scrollWidth - showcase.clientWidth) / 2;
+                }
+            }, 100);
+        }
+        if (componentsOverlay && componentsOverlay.scrollWidth > componentsOverlay.clientWidth) {
+            setTimeout(() => {
+                componentsOverlay.scrollLeft = (componentsOverlay.scrollWidth - componentsOverlay.clientWidth) * 0.4;
             }, 100);
         }
         
@@ -279,17 +298,22 @@ style.textContent = `
 `;
 document.head.appendChild(style);
 
-// Toggle components overlay
-function toggleComponentsOverlay() {
+// Toggle components overlay - Make globally accessible
+window.toggleComponentsOverlay = function() {
     const overlay = document.getElementById('componentsOverlay');
+    if (!overlay) return;
+    
     const toggleText = overlay.querySelector('.toggle-text');
+    const toggleIcon = overlay.querySelector('.toggle-icon');
     
     overlay.classList.toggle('collapsed');
     
     if (overlay.classList.contains('collapsed')) {
-        toggleText.textContent = 'Show List';
+        if (toggleText) toggleText.textContent = 'Show List';
+        if (toggleIcon) toggleIcon.textContent = '▶';
     } else {
-        toggleText.textContent = 'Hide List';
+        if (toggleText) toggleText.textContent = 'Hide List';
+        if (toggleIcon) toggleIcon.textContent = '▼';
     }
 }
 
