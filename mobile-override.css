@@ -1,7 +1,7 @@
 /* MOBILE OVERRIDE CSS - COMPREHENSIVE FIXES */
 @media only screen and (max-width: 768px) {
     
-    /* ARENA SECTION - SCROLLABLE & CENTERED */
+    /* ARENA SECTION - SCROLLABLE WITHOUT CROPPING */
     .arena-content {
         position: relative !important;
         width: 100vw !important;
@@ -13,16 +13,16 @@
     }
     
     .arena-content img.arena-banner {
-        width: 150% !important;
-        min-width: 600px !important;
-        height: 350px !important;
-        object-fit: cover !important;
+        width: auto !important;
+        min-width: 100% !important;
+        height: 300px !important;
+        object-fit: contain !important;
         object-position: center !important;
         margin: 0 !important;
         display: block !important;
     }
     
-    /* Center arena image on load */
+    /* Arena wrapper for proper scrolling */
     .arena-image-wrapper {
         overflow-x: auto !important;
         overflow-y: hidden !important;
@@ -33,33 +33,34 @@
     }
     
     .arena-image-wrapper img {
-        width: 150% !important;
-        min-width: 600px !important;
-        height: 350px !important;
+        width: auto !important;
+        min-width: 100% !important;
+        height: 300px !important;
         max-width: none !important;
-        object-fit: cover !important;
+        object-fit: contain !important;
         object-position: center !important;
     }
     
-    /* CASTER CARDS - Horizontal Scroll with Indicators */
+    /* CASTER CARDS - Single Horizontal Row */
     .casters-grid {
         position: relative !important;
         display: flex !important;
+        flex-direction: row !important;
         flex-wrap: nowrap !important;
         overflow-x: auto !important;
         overflow-y: hidden !important;
         -webkit-overflow-scrolling: touch !important;
-        padding: 20px 0 40px !important;
+        padding: 20px 0 50px !important;
         scroll-snap-type: x mandatory !important;
-        scroll-padding-left: calc(50vw - 150px) !important;
-        gap: 20px !important;
+        gap: 15px !important;
+        width: 100% !important;
     }
     
     /* Add swipe indicator */
     .casters-grid::after {
         content: '← Swipe to see more →' !important;
         position: absolute !important;
-        bottom: 10px !important;
+        bottom: 15px !important;
         left: 50% !important;
         transform: translateX(-50%) !important;
         color: #d4af37 !important;
@@ -68,40 +69,40 @@
         opacity: 0.8 !important;
         animation: pulse 2s infinite !important;
         pointer-events: none !important;
+        white-space: nowrap !important;
     }
     
+    /* Flatten both rows into single row */
     .casters-row {
-        display: flex !important;
-        flex-wrap: nowrap !important;
-        gap: 20px !important;
+        display: contents !important;
     }
     
     .casters-row.bottom {
-        margin-left: 0 !important;
+        display: contents !important;
+        margin: 0 !important;
     }
     
-    .caster-card {
-        display: inline-block !important;
-        width: 300px !important;
-        min-width: 300px !important;
-        max-width: 300px !important;
-        height: 420px !important;
+    .caster-card,
+    .caster-card.small,
+    .caster-card.large {
+        display: block !important;
+        width: 280px !important;
+        min-width: 280px !important;
+        max-width: 280px !important;
+        height: 400px !important;
         margin: 0 !important;
         scroll-snap-align: center !important;
-        flex: 0 0 300px !important;
-        vertical-align: top !important;
+        flex: 0 0 280px !important;
         -webkit-tap-highlight-color: transparent !important;
     }
     
-    /* Center first card */
-    .casters-grid > .caster-card:first-child,
-    .casters-row:first-child .caster-card:first-child {
-        margin-left: calc(50vw - 150px) !important;
+    /* Add padding to first and last for centering */
+    .caster-card:first-of-type {
+        margin-left: calc(50vw - 140px) !important;
     }
     
-    .casters-grid > .caster-card:last-child,
-    .casters-row:last-child .caster-card:last-child {
-        margin-right: calc(50vw - 150px) !important;
+    .caster-card:last-of-type {
+        margin-right: calc(50vw - 140px) !important;
     }
     
     /* Fix double flip bug with touch-action */
@@ -178,13 +179,13 @@
     }
     
     .setup-image-large {
-        width: 250% !important;
-        min-width: 800px !important;
+        width: auto !important;
+        min-width: 100% !important;
         height: auto !important;
         max-width: none !important;
         display: block !important;
-        margin: 0 auto !important;
-        transform: scale(1.2) !important;
+        margin: 0 !important;
+        transform: scale(1.5) !important;
         transform-origin: center center !important;
     }
     
