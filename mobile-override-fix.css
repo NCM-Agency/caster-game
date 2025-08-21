@@ -115,6 +115,12 @@
     }
     
     
+    /* Arena image - smaller and centered on load */
+    .arena-content img.arena-banner {
+        height: 280px !important;  /* 20% smaller than 350px */
+        width: 130% !important;     /* Slightly less wide to fit coliseum better */
+    }
+    
     /* Add swipe indicator closer to cards */
     .casters-grid {
         position: relative !important;

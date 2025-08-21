@@ -216,18 +216,16 @@ document.querySelectorAll('.caster-card').forEach(card => {
         const arenaContent = document.querySelector('.arena-content');
         if (arenaWrapper) {
             setTimeout(() => {
-                // On mobile, center more to the right to show the arena
-                if (window.innerWidth <= 768) {
-                    arenaWrapper.scrollLeft = (arenaWrapper.scrollWidth - arenaWrapper.clientWidth) * 0.6;
-                } else {
-                    arenaWrapper.scrollLeft = (arenaWrapper.scrollWidth - arenaWrapper.clientWidth) / 2;
-                }
+                // Center the arena image 
+                arenaWrapper.scrollLeft = (arenaWrapper.scrollWidth - arenaWrapper.clientWidth) / 2;
             }, 100);
         }
         if (arenaContent) {
             setTimeout(() => {
+                // Center the arena image to show the coliseum
                 if (window.innerWidth <= 768) {
-                    arenaContent.scrollLeft = (arenaContent.scrollWidth - arenaContent.clientWidth) * 0.6;
+                    // Center perfectly on mobile
+                    arenaContent.scrollLeft = (arenaContent.scrollWidth - arenaContent.clientWidth) / 2;
                 } else {
                     arenaContent.scrollLeft = (arenaContent.scrollWidth - arenaContent.clientWidth) / 2;
                 }
