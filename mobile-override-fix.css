@@ -121,13 +121,15 @@
     }
     
     .arena-section .section-title {
-        margin-bottom: 15px !important;  /* Less space after ARENA title */
+        margin-bottom: 10px !important;  /* Less space after ARENA title */
     }
     
     .arena-content {
         margin-bottom: 0 !important;  /* Remove space after image */
         border: none !important;  /* Remove any border */
         box-shadow: none !important;  /* Remove any shadow */
+        height: auto !important;  /* Remove fixed height causing huge gap */
+        min-height: unset !important;  /* Remove any min-height */
     }
     
     /* Remove any pseudo-elements that might add lines */
@@ -150,9 +152,11 @@
         box-shadow: none !important;
     }
     
-    /* Arena text spacing */
+    /* Arena text spacing and centering */
     .arena-text {
-        margin-top: 20px !important;  /* Add space between image and text */
+        margin-top: 15px !important;  /* Add space between image and text */
+        text-align: center !important;  /* Center the text */
+        padding: 0 20px !important;  /* Consistent padding */
     }
     
     /* Add swipe indicator closer to cards */
