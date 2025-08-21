@@ -512,3 +512,214 @@ if (!document.querySelector('#modalAnimations')) {
 }
 
 console.log('🎮 Welcome to Caster! May your magic be powerful and your victories legendary!');
+
+// ===== VIP MODAL FUNCTIONALITY =====
+
+// Global variable to store the JSONP callback
+window.mailchimpCallback = function(data) {
+    const modal = document.getElementById('vip-modal');
+    const successMessage = modal.querySelector('.success-message');
+    const errorMessage = modal.querySelector('.error-message');
+    const submitBtn = modal.querySelector('.btn-submit');
+    
+    // Hide loading state
+    submitBtn.disabled = false;
+    submitBtn.innerHTML = '<span>Get VIP Access</span>';
+    
+    if (data.result === 'success') {
+        // Show success message
+        successMessage.classList.add('show');
+        errorMessage.classList.remove('show');
+        
+        // Reset form
+        document.getElementById('vip-form').reset();
+        
+        // Auto-close modal after 3 seconds
+        setTimeout(() => {
+            closeModal();
+            // Reset messages for next time
+            successMessage.classList.remove('show');
+        }, 3000);
+        
+        console.log('✅ Successfully subscribed to VIP list!');
+    } else {
+        // Show error message
+        errorMessage.classList.add('show');
+        successMessage.classList.remove('show');
+        
+        // More specific error handling
+        if (data.msg) {
+            const errorText = errorMessage.querySelector('p');
+            if (data.msg.includes('already subscribed')) {
+                errorText.textContent = 'This email is already on our VIP list!';
+            } else if (data.msg.includes('invalid email')) {
+                errorText.textContent = 'Please enter a valid email address.';
+            } else {
+                errorText.textContent = data.msg.replace(/\d+ - /, ''); // Remove Mailchimp error codes
+            }
+        }
+        
+        console.error('❌ Subscription failed:', data.msg);
+    }
+};
+
+// Function to submit form to Mailchimp using JSONP
+function submitToMailchimp(formData) {
+    const baseUrl = 'https://media.us15.list-manage.com/subscribe/post-json';
+    const params = new URLSearchParams({
+        u: '227c9d3aa3744fbf2443ef518',
+        id: 'b8c91d7fd8',
+        c: 'mailchimpCallback',
+        ...formData
+    });
+    
+    // Create script element for JSONP
+    const script = document.createElement('script');
+    script.src = `${baseUrl}?${params}`;
+    script.onerror = function() {
+        // Handle network errors
+        const modal = document.getElementById('vip-modal');
+        const errorMessage = modal.querySelector('.error-message');
+        const submitBtn = modal.querySelector('.btn-submit');
+        
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<span>Get VIP Access</span>';
+        
+        errorMessage.classList.add('show');
+        console.error('❌ Network error during subscription');
+    };
+    
+    document.body.appendChild(script);
+    
+    // Cleanup script after use
+    setTimeout(() => {
+        if (script.parentNode) {
+            script.parentNode.removeChild(script);
+        }
+    }, 5000);
+}
+
+// Function to show modal
+function showModal() {
+    const modal = document.getElementById('vip-modal');
+    const body = document.body;
+    
+    modal.classList.add('active');
+    body.style.overflow = 'hidden'; // Prevent background scroll
+    
+    // Focus on first input for accessibility
+    setTimeout(() => {
+        const firstInput = modal.querySelector('input[name="FNAME"]');
+        if (firstInput) {
+            firstInput.focus();
+        }
+    }, 300);
+    
+    console.log('📧 VIP Modal opened');
+}
+
+// Function to close modal
+function closeModal() {
+    const modal = document.getElementById('vip-modal');
+    const body = document.body;
+    
+    modal.classList.remove('active');
+    body.style.overflow = ''; // Restore body scroll
+    
+    // Reset form and messages
+    setTimeout(() => {
+        const form = document.getElementById('vip-form');
+        const messages = modal.querySelectorAll('.success-message, .error-message');
+        
+        if (form) form.reset();
+        messages.forEach(msg => msg.classList.remove('show'));
+    }, 300);
+    
+    console.log('📧 VIP Modal closed');
+}
+
+// Initialize modal functionality when DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+    const modal = document.getElementById('vip-modal');
+    const closeBtn = modal.querySelector('.modal-close');
+    const form = document.getElementById('vip-form');
+    
+    // Get all VIP buttons except the footer form
+    const vipButtons = document.querySelectorAll('a[href="#vip"], .nav-cta, .btn-hero');
+    
+    // Add click handlers to VIP buttons
+    vipButtons.forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            showModal();
+        });
+    });
+    
+    // Close modal when clicking X button
+    closeBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        closeModal();
+    });
+    
+    // Close modal when clicking overlay (but not modal content)
+    modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+            closeModal();
+        }
+    });
+    
+    // Close modal with Escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && modal.classList.contains('active')) {
+            closeModal();
+        }
+    });
+    
+    // Handle form submission
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const submitBtn = this.querySelector('.btn-submit');
+        const formData = new FormData(this);
+        
+        // Convert FormData to regular object
+        const data = {};
+        for (let [key, value] of formData.entries()) {
+            data[key] = value;
+        }
+        
+        // Basic validation
+        if (!data.FNAME || !data.LNAME || !data.EMAIL) {
+            const errorMessage = modal.querySelector('.error-message');
+            const errorText = errorMessage.querySelector('p');
+            errorText.textContent = 'Please fill in all fields.';
+            errorMessage.classList.add('show');
+            return;
+        }
+        
+        // Email validation
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailPattern.test(data.EMAIL)) {
+            const errorMessage = modal.querySelector('.error-message');
+            const errorText = errorMessage.querySelector('p');
+            errorText.textContent = 'Please enter a valid email address.';
+            errorMessage.classList.add('show');
+            return;
+        }
+        
+        // Hide any existing messages
+        const messages = modal.querySelectorAll('.success-message, .error-message');
+        messages.forEach(msg => msg.classList.remove('show'));
+        
+        // Show loading state
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<span>Submitting...</span>';
+        
+        // Submit to Mailchimp
+        submitToMailchimp(data);
+        
+        console.log('📧 Submitting VIP form:', { firstName: data.FNAME, lastName: data.LNAME, email: data.EMAIL.substring(0, 3) + '***' });
+    });
+    
+    console.log('📧 VIP Modal initialized successfully');
+});

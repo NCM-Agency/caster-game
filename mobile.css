@@ -332,4 +332,61 @@
         0%, 100% { opacity: 0.8; }
         50% { opacity: 0.4; }
     }
+    
+    /* ===== VIP MODAL MOBILE STYLES ===== */
+    .modal-content {
+        padding: 2rem 1.5rem !important;
+        max-width: 95% !important;
+        margin: 0 auto;
+    }
+    
+    .modal-title {
+        font-size: 1.8rem !important;
+        margin-bottom: 0.8rem !important;
+    }
+    
+    .modal-subtitle {
+        font-size: 1rem !important;
+        margin-bottom: 2rem !important;
+    }
+    
+    .form-row {
+        grid-template-columns: 1fr !important;
+        gap: 1rem !important;
+    }
+    
+    .form-input {
+        padding: 0.9rem 1rem !important;
+        font-size: 1rem !important;
+    }
+    
+    .btn-submit {
+        padding: 1rem !important;
+        font-size: 1rem !important;
+        margin-top: 0.5rem !important;
+    }
+    
+    .success-message,
+    .error-message {
+        padding: 1rem !important;
+        gap: 0.8rem !important;
+    }
+    
+    .success-text h3,
+    .error-text h3 {
+        font-size: 1.1rem !important;
+    }
+    
+    .success-text p,
+    .error-text p {
+        font-size: 0.95rem !important;
+    }
+    
+    .modal-close {
+        top: 0.5rem !important;
+        right: 0.5rem !important;
+        width: 35px !important;
+        height: 35px !important;
+        font-size: 1.5rem !important;
+    }
 }
