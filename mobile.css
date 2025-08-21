@@ -40,17 +40,15 @@
     .arena-banner {
         width: auto !important;
         min-width: 100% !important;
-        height: 250px !important;
+        height: 300px !important;
         object-fit: contain !important;
         object-position: center !important;
         margin: 0 !important;
-        margin-bottom: 2rem !important;
         padding: 0 !important;
         box-shadow: none !important;
         display: block !important;
         position: relative !important;
         top: 0 !important;
-        vertical-align: top !important;
     }
     
     /* Arena wrapper for proper scrolling */
@@ -77,7 +75,7 @@
     /* Arena text - PROPERLY SEPARATED */
     .arena-text,
     p.arena-text {
-        margin: 10px 20px 0 20px !important;
+        margin: 20px 20px 0 20px !important;
         text-align: center !important;
         padding: 0 !important;
         display: block !important;
@@ -230,8 +228,6 @@
         padding-top: 0 !important;
     }
     
-    /* Gap reduction handled by JavaScript for better control */
-    
     .components-overlay {
         position: static !important;
         margin: 0 auto 20px !important;
@@ -257,10 +253,10 @@
         overflow: visible !important;
     }
     
-    /* Fix gap when collapsed - minimize spacing */
+    /* Fix gap when collapsed */
     .components-overlay.collapsed {
-        margin: 0 auto 5px !important;
-        padding: 8px 20px !important;
+        margin-bottom: 10px !important;
+        padding: 10px 20px !important;
     }
     
     .components-overlay.collapsed .overlay-content {
@@ -280,14 +276,13 @@
     
     .setup-image-large {
         width: auto !important;
-        min-width: 200% !important;
-        height: 350px !important;
+        min-width: 100% !important;
+        height: auto !important;
         max-width: none !important;
         display: block !important;
         margin: 0 !important;
-        transform: none !important;
-        object-fit: contain !important;
-        object-position: center !important;
+        transform: scale(1.5) !important;
+        transform-origin: center center !important;
     }
     
     /* Fix game components image */
@@ -335,147 +330,5 @@
     @keyframes pulse {
         0%, 100% { opacity: 0.8; }
         50% { opacity: 0.4; }
-    }
-    
-    /* ===== VIP MODAL MOBILE STYLES ===== */
-    .modal-content {
-        padding: 2rem 1.5rem !important;
-        max-width: 95% !important;
-        margin: 0 auto;
-    }
-    
-    .modal-title {
-        font-size: 1.8rem !important;
-        margin-bottom: 0.8rem !important;
-    }
-    
-    .modal-subtitle {
-        font-size: 1rem !important;
-        margin-bottom: 2rem !important;
-    }
-    
-    .form-row {
-        grid-template-columns: 1fr !important;
-        gap: 1rem !important;
-    }
-    
-    /* Only show modal fields when modal is active */
-    .modal-overlay.active .modal-content .form-input,
-    .modal-overlay.active #vip-modal .form-input,
-    .modal-overlay.active .modal-form input {
-        display: block !important;
-        visibility: visible !important;
-        opacity: 1 !important;
-        padding: 0.9rem 1rem !important;
-        font-size: 1rem !important;
-        background: #ffffff !important;
-        color: #000000 !important;
-        border: 2px solid var(--magical-gold) !important;
-        height: auto !important;
-        min-height: 45px !important;
-        width: 100% !important;
-        -webkit-appearance: none !important;
-        appearance: none !important;
-        box-sizing: border-box !important;
-    }
-    
-    /* Ensure fields are hidden when modal is closed */
-    .modal-overlay:not(.active) .form-input,
-    .modal-overlay:not(.active) #vip-modal .form-input {
-        display: none !important;
-        visibility: hidden !important;
-        pointer-events: none !important;
-    }
-    
-    .modal-form .form-input::placeholder {
-        color: rgba(0, 0, 0, 0.5) !important;
-        opacity: 1 !important;
-    }
-    
-    .btn-submit {
-        padding: 1rem !important;
-        font-size: 1rem !important;
-        margin-top: 0.5rem !important;
-    }
-    
-    .success-message,
-    .error-message {
-        padding: 1rem !important;
-        gap: 0.8rem !important;
-    }
-    
-    .success-text h3,
-    .error-text h3 {
-        font-size: 1.1rem !important;
-    }
-    
-    .success-text p,
-    .error-text p {
-        font-size: 0.95rem !important;
-    }
-    
-    .modal-close {
-        top: 0.5rem !important;
-        right: 0.5rem !important;
-        width: 35px !important;
-        height: 35px !important;
-        font-size: 1.5rem !important;
-    }
-    
-    /* ===== FOOTER FORM MOBILE STYLES ===== */
-    .vip-form .form-group {
-        flex-direction: column !important;
-        gap: 1rem !important;
-    }
-    
-    .footer-form-group {
-        display: flex !important;
-        flex-direction: column !important;
-        grid-template-columns: none !important;
-        grid-template-rows: none !important;
-    }
-    
-    .footer-form-group .form-input,
-    .footer-form-group .footer-submit-btn {
-        grid-column: auto !important;
-        grid-row: auto !important;
-        width: 100% !important;
-    }
-    
-    .vip-form .form-input {
-        width: 100% !important;
-        min-width: unset !important;
-        flex: none !important;
-    }
-    
-    .footer-form-messages {
-        margin-top: 1rem !important;
-    }
-    
-    .footer-success-message,
-    .footer-error-message {
-        padding: 1rem !important;
-        gap: 0.8rem !important;
-        flex-direction: column !important;
-        text-align: center !important;
-    }
-    
-    .footer-success-message .success-icon,
-    .footer-error-message .error-icon {
-        width: 35px !important;
-        height: 35px !important;
-        font-size: 1.3rem !important;
-        margin: 0 auto !important;
-    }
-    
-    .footer-success-message .success-text h3,
-    .footer-error-message .error-text h3 {
-        font-size: 1.1rem !important;
-        margin-bottom: 0.3rem !important;
-    }
-    
-    .footer-success-message .success-text p,
-    .footer-error-message .error-text p {
-        font-size: 0.95rem !important;
     }
 }
