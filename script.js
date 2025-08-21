@@ -375,14 +375,24 @@ function toggleComponentsOverlay() {
     const toggleIcon = overlay.querySelector('.toggle-icon');
     
     // Toggle the collapsed class
+    const componentsHero = overlay.closest('.components-hero');
+    
     if (overlay.classList.contains('collapsed')) {
         overlay.classList.remove('collapsed');
         if (toggleText) toggleText.textContent = 'Hide List';
         if (toggleIcon) toggleIcon.textContent = '▼';
+        // Restore normal gap when expanded
+        if (window.innerWidth <= 768 && componentsHero) {
+            componentsHero.style.gap = '20px';
+        }
     } else {
         overlay.classList.add('collapsed');
         if (toggleText) toggleText.textContent = 'Show List';
         if (toggleIcon) toggleIcon.textContent = '▶';
+        // Reduce gap in mobile view when collapsed
+        if (window.innerWidth <= 768 && componentsHero) {
+            componentsHero.style.gap = '5px';
+        }
     }
 }
 
@@ -627,6 +637,7 @@ function submitToMailchimp(formData) {
         u: '227c9d3aa3744fbf2443ef518',
         id: 'b8c91d7fd8',
         c: 'mailchimpCallback',
+        tags: '715',
         ...formData
     });
     
@@ -663,6 +674,7 @@ function submitFooterToMailchimp(formData) {
         u: '227c9d3aa3744fbf2443ef518',
         id: 'b8c91d7fd8',
         c: 'footerMailchimpCallback',
+        tags: '715',
         ...formData
     });
     

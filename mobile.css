@@ -230,6 +230,8 @@
         padding-top: 0 !important;
     }
     
+    /* Gap reduction handled by JavaScript for better control */
+    
     .components-overlay {
         position: static !important;
         margin: 0 auto 20px !important;
@@ -255,10 +257,10 @@
         overflow: visible !important;
     }
     
-    /* Fix gap when collapsed */
+    /* Fix gap when collapsed - minimize spacing */
     .components-overlay.collapsed {
-        margin-bottom: 10px !important;
-        padding: 10px 20px !important;
+        margin: 0 auto 5px !important;
+        padding: 8px 20px !important;
     }
     
     .components-overlay.collapsed .overlay-content {
@@ -283,8 +285,9 @@
         max-width: none !important;
         display: block !important;
         margin: 0 !important;
-        transform: scale(1.5) !important;
-        transform-origin: center center !important;
+        transform: none !important;
+        object-fit: contain !important;
+        object-position: center center !important;
     }
     
     /* Fix game components image */
@@ -356,16 +359,28 @@
         gap: 1rem !important;
     }
     
-    .form-input {
+    .modal-content .form-input,
+    #vip-modal .form-input,
+    .modal-form input {
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
         padding: 0.9rem 1rem !important;
         font-size: 1rem !important;
-        background: rgba(244, 241, 235, 0.95) !important;
-        color: var(--deep-navy) !important;
+        background: #ffffff !important;
+        color: #000000 !important;
         border: 2px solid var(--magical-gold) !important;
+        height: auto !important;
+        min-height: 45px !important;
+        width: 100% !important;
+        -webkit-appearance: none !important;
+        appearance: none !important;
+        box-sizing: border-box !important;
     }
     
     .modal-form .form-input::placeholder {
-        color: rgba(26, 26, 46, 0.6) !important;
+        color: rgba(0, 0, 0, 0.5) !important;
+        opacity: 1 !important;
     }
     
     .btn-submit {
