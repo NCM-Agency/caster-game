@@ -577,6 +577,8 @@ h3 { font-size: clamp(1.75rem, 3.5vw, 2.5rem); }
     max-width: 900px;
     margin: var(--spacing-md) auto 0;
     color: var(--parchment) !important; /* Fixed: was showing blue, now using parchment */
+    position: relative !important; /* Ensure it participates in z-index stacking */
+    z-index: 3 !important; /* Place above the blue overlay (z-index: 1) and content (z-index: 2) */
 }
 
 /* Casters Section */
