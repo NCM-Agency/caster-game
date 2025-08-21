@@ -115,21 +115,26 @@
     }
     
     
-    /* Arena section - tighter spacing */
+    /* Arena section - FORCE tighter spacing */
     .arena-section {
-        padding: 20px 0 20px !important;  /* Less top padding */
+        padding: 10px 0 20px !important;  /* Much less top padding */
     }
     
     .arena-section .section-title {
         margin-bottom: 10px !important;  /* Less space after ARENA title */
+        margin-top: 0 !important;  /* Remove any top margin */
     }
     
     .arena-content {
         margin-bottom: 0 !important;  /* Remove space after image */
+        margin-top: 0 !important;  /* Remove top margin */
         border: none !important;  /* Remove any border */
         box-shadow: none !important;  /* Remove any shadow */
         height: auto !important;  /* Remove fixed height causing huge gap */
-        min-height: unset !important;  /* Remove any min-height */
+        min-height: 0 !important;  /* Remove any min-height */
+        max-height: none !important;  /* Remove any max-height */
+        padding-top: 0 !important;  /* Remove top padding */
+        padding-bottom: 0 !important;  /* Remove bottom padding */
     }
     
     /* Remove any pseudo-elements that might add lines */

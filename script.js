@@ -160,19 +160,22 @@ if (window.innerWidth > 768) {
     });
 }
 
-// Card flip mechanism - PROPERLY FIXED for mobile and desktop
+// Card flip mechanism - FIXED double-flip issue
 document.querySelectorAll('.caster-card').forEach(card => {
     let isFlipping = false;
-    let touchHandled = false;
+    let lastFlipTime = 0;
     
     // Handle flip for both touch and click
     const flipCard = (e) => {
-        if (isFlipping) return;
+        const now = Date.now();
+        // Prevent double-flip within 300ms
+        if (isFlipping || (now - lastFlipTime) < 300) return;
         
         e.preventDefault();
         e.stopPropagation();
         
         isFlipping = true;
+        lastFlipTime = now;
         
         // Toggle the flipped class - this WILL flip back and forth
         if (card.classList.contains('flipped')) {
@@ -184,29 +187,17 @@ document.querySelectorAll('.caster-card').forEach(card => {
         // Reset flag after animation
         setTimeout(() => {
             isFlipping = false;
-            touchHandled = false;
         }, 600);
     };
     
-    // Mobile touch handling
+    // Unified event handling - use click for both mobile and desktop
+    // Modern mobile browsers fire click events properly
+    card.addEventListener('click', flipCard);
+    
+    // Prevent default touch behavior that might cause issues
     card.addEventListener('touchstart', (e) => {
-        touchHandled = false;
+        e.stopPropagation();
     }, { passive: true });
-    
-    card.addEventListener('touchend', (e) => {
-        if (!touchHandled) {
-            touchHandled = true;
-            flipCard(e);
-        }
-    }, { passive: false });
-    
-    // Desktop click handling (only if touch wasn't handled)
-    card.addEventListener('click', (e) => {
-        if (!touchHandled) {
-            flipCard(e);
-        }
-        touchHandled = false;
-    });
 });
     
     // Center scrollable sections on load

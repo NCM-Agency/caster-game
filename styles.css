@@ -560,6 +560,15 @@ h3 { font-size: clamp(1.75rem, 3.5vw, 2.5rem); }
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
     object-fit: contain;
     position: relative;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Arena hover effect on desktop */
+@media (min-width: 769px) {
+    .arena-banner:hover {
+        transform: translateY(-5px) scale(1.02);
+        box-shadow: 0 30px 60px rgba(212, 175, 55, 0.3);
+    }
 }
 
 .arena-text {
