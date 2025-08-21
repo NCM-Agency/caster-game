@@ -1,9 +1,9 @@
 /* CONSOLIDATED MOBILE STYLES - COMPREHENSIVE FIXES */
 @media only screen and (max-width: 768px) {
     
-    /* ARENA SECTION - SCROLLABLE WITHOUT CROPPING */
+    /* ARENA SECTION - STANDARDIZED SPACING */
     .arena-section {
-        padding: 40px 0 20px !important;
+        padding: 96px 0 96px !important;
         margin-top: 0 !important;
     }
     
@@ -204,7 +204,7 @@
         white-space: nowrap !important;
     }
     
-    /* WHAT'S IN THE BOX - Complete Fix */
+    /* WHAT'S IN THE BOX - STANDARDIZED SPACING */
     .components-section,
     #components {
         background-image: url('assets/Divine_v3.png') !important;
@@ -212,7 +212,7 @@
         background-position: center 10% !important;
         background-repeat: no-repeat !important;
         background-attachment: scroll !important;
-        padding-top: 40px !important;
+        padding: 96px 0 96px !important;
     }
     
     .components-section h2,
