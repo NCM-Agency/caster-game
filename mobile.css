@@ -40,10 +40,11 @@
     .arena-banner {
         width: auto !important;
         min-width: 100% !important;
-        height: 300px !important;
+        height: auto !important;
         object-fit: contain !important;
         object-position: center !important;
         margin: 0 !important;
+        margin-bottom: 0 !important;
         padding: 0 !important;
         box-shadow: none !important;
         display: block !important;
@@ -76,7 +77,7 @@
     /* Arena text - PROPERLY SEPARATED */
     .arena-text,
     p.arena-text {
-        margin: 20px 20px 0 20px !important;
+        margin: 10px 20px 0 20px !important;
         text-align: center !important;
         padding: 0 !important;
         display: block !important;
