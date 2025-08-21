@@ -576,7 +576,7 @@ h3 { font-size: clamp(1.75rem, 3.5vw, 2.5rem); }
     line-height: 1.8;
     max-width: 900px;
     margin: var(--spacing-md) auto 0;
-    color: var(--parchment);
+    color: var(--parchment) !important; /* Fixed: was showing blue, now using parchment */
 }
 
 /* Casters Section */
