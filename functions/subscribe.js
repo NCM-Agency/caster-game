@@ -1,44 +1,61 @@
+const https = require('https');
+
 // Netlify Function to handle Mailchimp subscriptions
 exports.handler = async (event, context) => {
   // Only allow POST
   if (event.httpMethod !== 'POST') {
-    return { statusCode: 405, body: 'Method Not Allowed' };
+    return { 
+      statusCode: 405, 
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Headers': 'Content-Type'
+      },
+      body: 'Method Not Allowed' 
+    };
+  }
+
+  // Handle CORS preflight
+  if (event.httpMethod === 'OPTIONS') {
+    return {
+      statusCode: 200,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Headers': 'Content-Type',
+        'Access-Control-Allow-Methods': 'POST, OPTIONS'
+      },
+      body: ''
+    };
   }
 
   try {
     const data = JSON.parse(event.body);
     
-    // Prepare Mailchimp submission
-    const mailchimpUrl = 'https://media.us15.list-manage.com/subscribe/post';
-    const params = new URLSearchParams({
-      u: '227c9d3aa3744fbf2443ef518',
-      id: 'b8c91d7fd8',
-      FNAME: data.FNAME,
-      LNAME: data.LNAME,
-      EMAIL: data.EMAIL,
-      tags: '715',
-      b_227c9d3aa3744fbf2443ef518_b8c91d7fd8: '' // honeypot field
-    });
-
-    // Submit to Mailchimp
-    const response = await fetch(mailchimpUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: params.toString()
-    });
-
-    // Return success regardless (Mailchimp doesn't return useful status)
+    // For now, just return success
+    // We'll add actual Mailchimp submission once we confirm the function works
     return {
       statusCode: 200,
-      body: JSON.stringify({ success: true, message: 'Subscribed successfully' })
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ 
+        success: true, 
+        message: 'Test successful',
+        received: data 
+      })
     };
     
   } catch (error) {
     return {
       statusCode: 500,
-      body: JSON.stringify({ success: false, error: error.message })
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ 
+        success: false, 
+        error: error.message 
+      })
     };
   }
 };

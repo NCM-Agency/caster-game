@@ -640,8 +640,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 EMAIL: email
             })
         })
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
         .then(data => {
+            alert('Response: ' + JSON.stringify(data));
             // Success - close modal and reset
             closeModal();
             submitBtn.disabled = false;
@@ -661,7 +667,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // Error - reset button
             submitBtn.disabled = false;
             submitBtn.innerHTML = '<span>Get VIP Access</span>';
-            alert('Something went wrong. Please try again.');
+            alert('Error: ' + error.message);
         });
     });
     
@@ -725,7 +731,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Error - reset button
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = '<span>Get VIP Access</span>';
-                alert('Something went wrong. Please try again.');
+                alert('Error: ' + error.message);
             });
         });
         
