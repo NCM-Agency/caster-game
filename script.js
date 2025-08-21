@@ -607,31 +607,42 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    // Handle form submission - uses hidden iframe to stay on page
+    // Handle form submission - let it submit normally but close modal
     form.addEventListener('submit', function(e) {
+        // Don't prevent default - let form submit
+        
         const submitBtn = this.querySelector('.btn-submit');
         const theForm = this;
         
-        // Check if all fields have values (mobile sometimes doesn't validate)
+        // Get form values
         const fname = theForm.querySelector('input[name="FNAME"]').value;
         const lname = theForm.querySelector('input[name="LNAME"]').value;
         const email = theForm.querySelector('input[name="EMAIL"]').value;
         
         if (!fname || !lname || !email) {
             alert('Please fill in all fields');
-            e.preventDefault();
             return;
         }
-        
-        // Debug alert to confirm submission
-        alert(`Submitting: ${fname} ${lname} - ${email}`);
         
         // Show loading state
         submitBtn.disabled = true;
         submitBtn.innerHTML = '<span>Submitting...</span>';
         
-        // After delay, assume success and close modal
-        setTimeout(() => {
+        // Submit via Netlify Function
+        fetch('/.netlify/functions/subscribe', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                FNAME: fname,
+                LNAME: lname,
+                EMAIL: email
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Success - close modal and reset
             closeModal();
             submitBtn.disabled = false;
             submitBtn.innerHTML = '<span>Get VIP Access</span>';
@@ -645,7 +656,13 @@ document.addEventListener('DOMContentLoaded', function() {
                     successMessage.classList.remove('show');
                 }, 3000);
             }
-        }, 2000);
+        })
+        .catch(error => {
+            // Error - reset button
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<span>Get VIP Access</span>';
+            alert('Something went wrong. Please try again.');
+        });
     });
     
     console.log('📧 VIP Modal initialized successfully');
@@ -657,28 +674,59 @@ document.addEventListener('DOMContentLoaded', function() {
     
     if (footerForm) {
         footerForm.addEventListener('submit', function(e) {
-            // Don't prevent default - let it submit to iframe
+            e.preventDefault(); // Prevent default submission
+            
             const submitBtn = this.querySelector('.btn-submit');
+            const theForm = this;
+            
+            // Get form values
+            const fname = theForm.querySelector('input[name="FNAME"]').value;
+            const lname = theForm.querySelector('input[name="LNAME"]').value;
+            const email = theForm.querySelector('input[name="EMAIL"]').value;
+            
+            if (!fname || !lname || !email) {
+                alert('Please fill in all fields');
+                return;
+            }
             
             // Show loading state
             submitBtn.disabled = true;
             submitBtn.innerHTML = '<span>Submitting...</span>';
             
-            // After delay, assume success and reset
-            setTimeout(() => {
+            // Submit via Netlify Function
+            fetch('/.netlify/functions/subscribe', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    FNAME: fname,
+                    LNAME: lname,
+                    EMAIL: email
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Success - reset form
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = '<span>Get VIP Access</span>';
-                footerForm.reset();
+                theForm.reset();
                 
                 // Show success message if exists
-                const successMessage = footerForm.querySelector('.footer-success-message');
+                const successMessage = theForm.querySelector('.footer-success-message');
                 if (successMessage) {
                     successMessage.classList.add('show');
                     setTimeout(() => {
                         successMessage.classList.remove('show');
                     }, 5000);
                 }
-            }, 2000);
+            })
+            .catch(error => {
+                // Error - reset button
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<span>Get VIP Access</span>';
+                alert('Something went wrong. Please try again.');
+            });
         });
         
         console.log('📧 Footer VIP form initialized successfully');
