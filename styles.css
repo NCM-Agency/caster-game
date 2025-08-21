@@ -642,8 +642,11 @@ h3 { font-size: clamp(1.75rem, 3.5vw, 2.5rem); }
     transform-style: preserve-3d;
 }
 
-.caster-card:hover .card-inner {
-    transform: rotateY(180deg);
+/* Disable hover effects on touch devices to prevent iOS double-flip */
+@media (hover: hover) and (pointer: fine) {
+    .caster-card:hover .card-inner {
+        transform: rotateY(180deg);
+    }
 }
 
 .card-front, .card-back {

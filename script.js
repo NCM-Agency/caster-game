@@ -160,16 +160,25 @@ if (window.innerWidth > 768) {
     });
 }
 
-// Card flip mechanism - FIXED double-flip issue
+// Card flip mechanism - iOS double-flip fix
 document.querySelectorAll('.caster-card').forEach(card => {
     let isFlipping = false;
     let lastFlipTime = 0;
+    let touchStartTime = 0;
+    
+    // Detect touch device
+    const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
     
     // Handle flip for both touch and click
     const flipCard = (e) => {
         const now = Date.now();
-        // Prevent double-flip within 300ms
-        if (isFlipping || (now - lastFlipTime) < 300) return;
+        
+        // More aggressive debouncing for iOS - 500ms cooldown
+        if (isFlipping || (now - lastFlipTime) < 500) {
+            e.preventDefault();
+            e.stopPropagation();
+            return;
+        }
         
         e.preventDefault();
         e.stopPropagation();
@@ -177,27 +186,47 @@ document.querySelectorAll('.caster-card').forEach(card => {
         isFlipping = true;
         lastFlipTime = now;
         
-        // Toggle the flipped class - this WILL flip back and forth
+        // Disable pointer events during animation to prevent double-triggers
+        card.style.pointerEvents = 'none';
+        
+        // Toggle the flipped class
         if (card.classList.contains('flipped')) {
             card.classList.remove('flipped');
         } else {
             card.classList.add('flipped');
         }
         
-        // Reset flag after animation
+        // Reset flags after animation completes
         setTimeout(() => {
             isFlipping = false;
-        }, 600);
+            card.style.pointerEvents = 'auto';
+        }, 650); // Slightly longer than CSS animation (600ms)
     };
     
-    // Unified event handling - use click for both mobile and desktop
-    // Modern mobile browsers fire click events properly
-    card.addEventListener('click', flipCard);
-    
-    // Prevent default touch behavior that might cause issues
-    card.addEventListener('touchstart', (e) => {
-        e.stopPropagation();
-    }, { passive: true });
+    if (isTouchDevice) {
+        // For touch devices, use touchend with validation
+        card.addEventListener('touchstart', (e) => {
+            touchStartTime = Date.now();
+            e.stopPropagation();
+        }, { passive: false });
+        
+        card.addEventListener('touchend', (e) => {
+            const touchDuration = Date.now() - touchStartTime;
+            // Only flip on quick taps, not long presses or swipes
+            if (touchDuration < 300) {
+                flipCard(e);
+            }
+        }, { passive: false });
+        
+        // Prevent click event on touch devices to avoid double firing
+        card.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+        });
+    } else {
+        // For desktop, use click event
+        card.addEventListener('click', flipCard);
+    }
 });
     
     // Center scrollable sections on load

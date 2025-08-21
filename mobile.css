@@ -102,6 +102,7 @@
         overflow-y: hidden !important;
         -webkit-overflow-scrolling: touch !important;
         scroll-snap-type: x mandatory !important;
+        scroll-padding-right: 42.5vw !important; /* Ensure proper snap alignment for last card */
         padding: 20px 0 50px !important;
         width: 100vw !important;
         margin-left: calc(-50vw + 50%) !important;
@@ -142,7 +143,7 @@
     }
     
     .casters-grid .caster-card:last-child {
-        margin-right: 7.5vw !important;
+        margin-right: 42.5vw !important; /* Provide enough space to center last card */
     }
     
     /* Fix text on back of card - LARGER SIZES */
