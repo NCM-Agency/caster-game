@@ -678,8 +678,23 @@ function submitToMailchimp(formData) {
     // Create script element for JSONP
     const script = document.createElement('script');
     script.src = `${baseUrl}?${params}`;
-    script.onerror = function() {
-        showDebugInfo('ERROR: Script failed to load');
+    script.async = true;
+    script.type = 'text/javascript';
+    
+    // Add more detailed error handling
+    script.onerror = function(e) {
+        showDebugInfo(`ERROR: Script failed - ${e.type || 'unknown error'}`);
+        showDebugInfo(`Attempted URL length: ${script.src.length} chars`);
+        showDebugInfo(`User Agent: ${navigator.userAgent}`);
+        
+        // Try alternative submission method for mobile
+        if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+            showDebugInfo('Mobile detected - attempting form redirect method');
+            // For mobile, try opening in new tab as fallback
+            const fallbackUrl = `https://media.us15.list-manage.com/subscribe/post?u=227c9d3aa3744fbf2443ef518&id=b8c91d7fd8&FNAME=${encodeURIComponent(formData.FNAME)}&LNAME=${encodeURIComponent(formData.LNAME)}&EMAIL=${encodeURIComponent(formData.EMAIL)}`;
+            showDebugInfo(`Fallback URL: ${fallbackUrl.substring(0, 50)}...`);
+        }
+        
         // Handle network errors
         const modal = document.getElementById('vip-modal');
         const errorMessage = modal.querySelector('.error-message');

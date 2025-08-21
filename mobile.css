@@ -279,15 +279,14 @@
     }
     
     .setup-image-large {
-        width: auto !important;
-        min-width: 200% !important;
-        height: 400px !important;
+        width: 200% !important;
+        height: auto !important;
         max-width: none !important;
         display: block !important;
         margin: 0 !important;
         transform: none !important;
-        object-fit: contain !important;
-        object-position: center center !important;
+        object-fit: cover !important;
+        object-position: left center !important;
     }
     
     /* Fix game components image */
@@ -426,6 +425,20 @@
     .vip-form .form-group {
         flex-direction: column !important;
         gap: 1rem !important;
+    }
+    
+    .footer-form-group {
+        display: flex !important;
+        flex-direction: column !important;
+        grid-template-columns: none !important;
+        grid-template-rows: none !important;
+    }
+    
+    .footer-form-group .form-input,
+    .footer-form-group .footer-submit-btn {
+        grid-column: auto !important;
+        grid-row: auto !important;
+        width: 100% !important;
     }
     
     .vip-form .form-input {
