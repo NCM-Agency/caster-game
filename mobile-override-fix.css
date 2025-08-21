@@ -115,26 +115,39 @@
     }
     
     
-    /* Arena section - FORCE tighter spacing */
+    /* Arena section - AGGRESSIVE spacing fixes */
     .arena-section {
-        padding: 10px 0 20px !important;  /* Much less top padding */
+        padding: 30px 0 20px !important;  /* Add proper top padding from separator */
+        margin-top: 0 !important;
+    }
+    
+    /* Target the section separator above arena */
+    .arena-section .section-separator {
+        margin-bottom: 0 !important;
     }
     
     .arena-section .section-title {
-        margin-bottom: 10px !important;  /* Less space after ARENA title */
+        margin-bottom: 15px !important;  /* Minimal space after ARENA title */
         margin-top: 0 !important;  /* Remove any top margin */
+        padding-top: 0 !important;
     }
     
+    /* Force arena content to behave */
     .arena-content {
-        margin-bottom: 0 !important;  /* Remove space after image */
-        margin-top: 0 !important;  /* Remove top margin */
-        border: none !important;  /* Remove any border */
-        box-shadow: none !important;  /* Remove any shadow */
-        height: auto !important;  /* Remove fixed height causing huge gap */
-        min-height: 0 !important;  /* Remove any min-height */
-        max-height: none !important;  /* Remove any max-height */
-        padding-top: 0 !important;  /* Remove top padding */
-        padding-bottom: 0 !important;  /* Remove bottom padding */
+        margin: 0 -20px !important;  /* Only horizontal margins for overflow */
+        border: none !important;
+        box-shadow: none !important;
+        height: auto !important;  /* Remove fixed height */
+        min-height: 0 !important;
+        max-height: none !important;
+        padding: 0 !important;  /* Remove ALL padding */
+        display: block !important;  /* Ensure it's not flex */
+    }
+    
+    /* Ensure the wrapper div doesn't add height */
+    .arena-content > * {
+        margin-top: 0 !important;
+        margin-bottom: 0 !important;
     }
     
     /* Remove any pseudo-elements that might add lines */
@@ -143,12 +156,18 @@
         display: none !important;
     }
     
-    /* Arena image - 10% smaller and centered on load */
-    .arena-content img.arena-banner {
+    /* Arena image - properly sized with NO gaps */
+    .arena-content img.arena-banner,
+    .arena-banner {
         height: 315px !important;  /* 10% smaller than 350px */
         width: 140% !important;     /* Slightly less wide than original 150% */
-        margin: 0 !important;       /* Remove any default margins */
+        margin: 0 !important;       /* Remove ALL margins */
+        padding: 0 !important;      /* Remove ALL padding */
         box-shadow: none !important;  /* Remove shadow from image */
+        display: block !important;  /* Ensure block display */
+        position: relative !important;
+        top: 0 !important;
+        vertical-align: top !important;  /* Prevent inline gaps */
     }
     
     /* Remove wrapper if it exists */
@@ -157,11 +176,19 @@
         box-shadow: none !important;
     }
     
-    /* Arena text spacing and centering */
+    /* Arena text spacing and centering - FIXED */
     .arena-text {
-        margin-top: 15px !important;  /* Add space between image and text */
+        margin: 20px auto 0 !important;  /* Proper spacing and centering */
         text-align: center !important;  /* Center the text */
-        padding: 0 20px !important;  /* Consistent padding */
+        padding: 0 20px !important;  /* Side padding */
+        max-width: 100% !important;
+        display: block !important;
+    }
+    
+    .arena-text p {
+        text-align: center !important;  /* Ensure paragraph is centered */
+        margin: 0 auto !important;
+        padding: 0 !important;
     }
     
     /* Add swipe indicator closer to cards */
