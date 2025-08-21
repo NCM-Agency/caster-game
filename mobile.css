@@ -28,6 +28,7 @@
         max-height: none !important;
         padding: 0 !important;
         display: block !important;
+        margin-bottom: 3rem;
     }
     
     /* Remove any pseudo-elements that might add lines */
@@ -330,5 +331,26 @@
     @keyframes pulse {
         0%, 100% { opacity: 0.8; }
         50% { opacity: 0.4; }
+    }
+    
+    .modal-overlay.active .form-input {
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+    }
+    
+    .footer-form-group {
+        display: flex !important;
+        flex-direction: column !important;
+        grid-template-columns: none !important;
+        grid-template-rows: none !important;
+        gap: 1rem !important;
+    }
+    
+    .footer-form-group .form-input,
+    .footer-form-group .footer-submit-btn {
+        width: 100% !important;
+        grid-column: auto !important;
+        grid-row: auto !important;
     }
 }
