@@ -219,22 +219,43 @@ document.querySelectorAll('.caster-card').forEach(card => {
             // Function to center the arena
             const centerArena = () => {
                 if (window.innerWidth <= 768) {
+                    // Force a reflow to ensure dimensions are correct
+                    arenaContent.style.display = 'block';
+                    
                     // Calculate center position
-                    const scrollAmount = (arenaContent.scrollWidth - arenaContent.clientWidth) / 2;
+                    const totalWidth = arenaContent.scrollWidth;
+                    const viewWidth = arenaContent.clientWidth;
+                    const scrollAmount = (totalWidth - viewWidth) / 2;
+                    
+                    // Apply the scroll
                     arenaContent.scrollLeft = scrollAmount;
-                    console.log('Centered arena at:', scrollAmount);
+                    
+                    console.log('Arena centering:', {
+                        totalWidth,
+                        viewWidth,
+                        scrollAmount,
+                        applied: arenaContent.scrollLeft
+                    });
                 }
             };
             
-            // If image is already loaded, center immediately
-            if (arenaImage.complete) {
-                setTimeout(centerArena, 200);
+            // Wait for everything to be ready
+            if (arenaImage.complete && arenaImage.naturalWidth > 0) {
+                // Image is loaded, center after a delay
+                setTimeout(centerArena, 500);
             } else {
-                // Wait for image to load, then center
+                // Wait for image to load
                 arenaImage.addEventListener('load', () => {
-                    setTimeout(centerArena, 200);
+                    setTimeout(centerArena, 500);
                 });
             }
+            
+            // Also try on window resize (orientation change)
+            window.addEventListener('resize', () => {
+                if (window.innerWidth <= 768) {
+                    setTimeout(centerArena, 100);
+                }
+            });
         }
         
         // Center game setup image - focus on the center, not left edge

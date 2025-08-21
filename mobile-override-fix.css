@@ -115,10 +115,25 @@
     }
     
     
+    /* Arena section - reduce spacing and center image */
+    .arena-section {
+        padding: 40px 0 20px !important;  /* Reduce top/bottom padding */
+    }
+    
+    .arena-content {
+        margin-bottom: 20px !important;  /* Reduce space before text */
+    }
+    
     /* Arena image - 10% smaller and centered on load */
     .arena-content img.arena-banner {
         height: 315px !important;  /* 10% smaller than 350px */
         width: 140% !important;     /* Slightly less wide than original 150% */
+        margin: 0 !important;       /* Remove any default margins */
+    }
+    
+    /* Remove wrapper if it exists */
+    .arena-image-wrapper {
+        display: contents !important;
     }
     
     /* Add swipe indicator closer to cards */
