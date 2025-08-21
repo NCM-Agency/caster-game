@@ -211,25 +211,30 @@ document.querySelectorAll('.caster-card').forEach(card => {
     
     // Center scrollable sections on load
     window.addEventListener('load', () => {
-        // Center arena image - focus on the actual arena, not the left side
-        const arenaWrapper = document.querySelector('.arena-image-wrapper');
+        // Center arena image after it loads
         const arenaContent = document.querySelector('.arena-content');
-        if (arenaWrapper) {
-            setTimeout(() => {
-                // Center the arena image 
-                arenaWrapper.scrollLeft = (arenaWrapper.scrollWidth - arenaWrapper.clientWidth) / 2;
-            }, 100);
-        }
-        if (arenaContent) {
-            setTimeout(() => {
-                // Center the arena image to show the coliseum
+        const arenaImage = document.querySelector('.arena-banner');
+        
+        if (arenaContent && arenaImage) {
+            // Function to center the arena
+            const centerArena = () => {
                 if (window.innerWidth <= 768) {
-                    // Center perfectly on mobile
-                    arenaContent.scrollLeft = (arenaContent.scrollWidth - arenaContent.clientWidth) / 2;
-                } else {
-                    arenaContent.scrollLeft = (arenaContent.scrollWidth - arenaContent.clientWidth) / 2;
+                    // Calculate center position
+                    const scrollAmount = (arenaContent.scrollWidth - arenaContent.clientWidth) / 2;
+                    arenaContent.scrollLeft = scrollAmount;
+                    console.log('Centered arena at:', scrollAmount);
                 }
-            }, 100);
+            };
+            
+            // If image is already loaded, center immediately
+            if (arenaImage.complete) {
+                setTimeout(centerArena, 200);
+            } else {
+                // Wait for image to load, then center
+                arenaImage.addEventListener('load', () => {
+                    setTimeout(centerArena, 200);
+                });
+            }
         }
         
         // Center game setup image - focus on the center, not left edge
