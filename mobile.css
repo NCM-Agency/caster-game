@@ -102,7 +102,7 @@
         overflow-y: hidden !important;
         -webkit-overflow-scrolling: touch !important;
         scroll-snap-type: x mandatory !important;
-        scroll-padding-right: 42.5vw !important; /* Ensure proper snap alignment for last card */
+        scroll-padding-right: 7.5vw !important; /* Ensure proper snap alignment for last card */
         padding: 20px 0 50px !important;
         width: 100vw !important;
         margin-left: calc(-50vw + 50%) !important;
@@ -142,8 +142,14 @@
         margin-left: 7.5vw !important;
     }
     
-    .casters-grid .caster-card:last-child {
-        margin-right: 42.5vw !important; /* Provide enough space to center last card */
+    /* Targeted fix for 7th card (Devaedra) only - from bottom row needs extra margin */
+    .casters-grid .caster-card:nth-child(7) {
+        margin-right: 12.5vw !important; /* Extra margin for proper centering of last card from bottom row */
+    }
+    
+    /* Default margin for last card - but 7th card rule above will override this */
+    .casters-grid .caster-card:last-child:not(:nth-child(7)) {
+        margin-right: 7.5vw !important; /* Standard margin for other last cards */
     }
     
     /* Fix text on back of card - LARGER SIZES */
