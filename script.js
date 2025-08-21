@@ -219,23 +219,18 @@ document.querySelectorAll('.caster-card').forEach(card => {
             // Function to center the arena
             const centerArena = () => {
                 if (window.innerWidth <= 768) {
-                    // Force a reflow to ensure dimensions are correct
-                    arenaContent.style.display = 'block';
-                    
                     // Calculate center position
                     const totalWidth = arenaContent.scrollWidth;
                     const viewWidth = arenaContent.clientWidth;
                     const scrollAmount = (totalWidth - viewWidth) / 2;
                     
-                    // Apply the scroll
-                    arenaContent.scrollLeft = scrollAmount;
-                    
-                    console.log('Arena centering:', {
-                        totalWidth,
-                        viewWidth,
-                        scrollAmount,
-                        applied: arenaContent.scrollLeft
+                    // Use scrollTo which works more reliably than scrollLeft
+                    arenaContent.scrollTo({
+                        left: scrollAmount,
+                        behavior: 'instant'
                     });
+                    
+                    console.log('Arena centered to:', scrollAmount);
                 }
             };
             
@@ -287,7 +282,6 @@ document.querySelectorAll('.caster-card').forEach(card => {
             }, 100);
         }
     });
-}
 
 // Initialize premium particle effect
 window.addEventListener('load', () => {
