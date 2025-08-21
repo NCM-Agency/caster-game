@@ -533,6 +533,7 @@ console.log('🎮 Welcome to Caster! May your magic be powerful and your victori
 
 // Global variables to store the JSONP callbacks
 window.mailchimpCallback = function(data) {
+    console.log('📧 Modal Mailchimp callback received:', data);
     const modal = document.getElementById('vip-modal');
     const successMessage = modal.querySelector('.success-message');
     const errorMessage = modal.querySelector('.error-message');
@@ -581,6 +582,7 @@ window.mailchimpCallback = function(data) {
 
 // Footer form JSONP callback
 window.footerMailchimpCallback = function(data) {
+    console.log('📧 Footer Mailchimp callback received:', data);
     const form = document.getElementById('footer-vip-form');
     const successMessage = form.querySelector('.footer-success-message');
     const errorMessage = form.querySelector('.footer-error-message');

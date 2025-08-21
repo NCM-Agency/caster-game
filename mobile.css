@@ -40,7 +40,7 @@
     .arena-banner {
         width: auto !important;
         min-width: 100% !important;
-        height: auto !important;
+        height: 250px !important;
         object-fit: contain !important;
         object-position: center !important;
         margin: 0 !important;
@@ -279,13 +279,13 @@
     }
     
     .setup-image-large {
-        width: auto !important;
-        min-width: 100% !important;
+        width: 180% !important;
+        min-width: 180% !important;
         height: auto !important;
         max-width: none !important;
         display: block !important;
-        margin: 0 !important;
-        transform: none !important;
+        margin: 0 auto !important;
+        transform: translateX(-22%) !important;
         object-fit: contain !important;
         object-position: center center !important;
     }
