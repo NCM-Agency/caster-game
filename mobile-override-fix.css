@@ -114,22 +114,6 @@
         object-position: center center !important;
     }
     
-    /* Center arena image */
-    .arena-content {
-        display: flex !important;
-        justify-content: center !important;
-    }
-    
-    .arena-image-wrapper {
-        scroll-behavior: auto !important;
-        display: flex !important;
-        justify-content: center !important;
-    }
-    
-    .arena-banner {
-        object-position: center center !important;
-        margin: 0 auto !important;
-    }
     
     /* Add swipe indicator closer to cards */
     .casters-grid {
