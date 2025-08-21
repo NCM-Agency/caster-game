@@ -1121,6 +1121,7 @@ h3 { font-size: clamp(1.75rem, 3.5vw, 2.5rem); }
     display: flex;
     gap: var(--spacing-sm);
     flex-wrap: wrap;
+    align-items: center;
 }
 
 .form-input {
@@ -1153,6 +1154,11 @@ h3 { font-size: clamp(1.75rem, 3.5vw, 2.5rem); }
     background: linear-gradient(135deg, var(--bright-gold), var(--magical-gold));
     color: var(--deep-navy);
     font-weight: 700;
+    height: 56px;
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .btn-submit:hover {

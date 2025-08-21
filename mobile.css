@@ -279,13 +279,13 @@
     }
     
     .setup-image-large {
-        width: 180% !important;
-        min-width: 180% !important;
-        height: auto !important;
+        width: auto !important;
+        min-width: 150% !important;
+        height: 300px !important;
         max-width: none !important;
         display: block !important;
-        margin: 0 auto !important;
-        transform: translateX(-22%) !important;
+        margin: 0 !important;
+        transform: none !important;
         object-fit: contain !important;
         object-position: center center !important;
     }
@@ -359,9 +359,10 @@
         gap: 1rem !important;
     }
     
-    .modal-content .form-input,
-    #vip-modal .form-input,
-    .modal-form input {
+    /* Only show modal fields when modal is active */
+    .modal-overlay.active .modal-content .form-input,
+    .modal-overlay.active #vip-modal .form-input,
+    .modal-overlay.active .modal-form input {
         display: block !important;
         visibility: visible !important;
         opacity: 1 !important;
@@ -376,6 +377,14 @@
         -webkit-appearance: none !important;
         appearance: none !important;
         box-sizing: border-box !important;
+    }
+    
+    /* Ensure fields are hidden when modal is closed */
+    .modal-overlay:not(.active) .form-input,
+    .modal-overlay:not(.active) #vip-modal .form-input {
+        display: none !important;
+        visibility: hidden !important;
+        pointer-events: none !important;
     }
     
     .modal-form .form-input::placeholder {
