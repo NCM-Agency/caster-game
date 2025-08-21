@@ -607,63 +607,31 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    // Handle form submission with JSONP to stay on page
+    // Handle form submission - uses hidden iframe to stay on page
     form.addEventListener('submit', function(e) {
-        e.preventDefault(); // Prevent navigation
-        
+        // Don't prevent default - let it submit to iframe
         const submitBtn = this.querySelector('.btn-submit');
-        const formData = new FormData(this);
         
         // Show loading state
         submitBtn.disabled = true;
         submitBtn.innerHTML = '<span>Submitting...</span>';
         
-        // Build URL with form data
-        const params = new URLSearchParams();
-        for (let [key, value] of formData.entries()) {
-            params.append(key, value);
-        }
-        
-        // Create unique callback name
-        const callbackName = 'mailchimpCallback' + Date.now();
-        
-        // Setup callback
-        window[callbackName] = function(data) {
-            // Clean up
-            delete window[callbackName];
-            document.body.removeChild(script);
+        // After delay, assume success and close modal
+        setTimeout(() => {
+            closeModal();
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<span>Get VIP Access</span>';
+            form.reset();
             
-            // Handle response
-            if (data.result === 'success') {
-                // Success - close modal and reset
-                closeModal();
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = '<span>Get VIP Access</span>';
-                form.reset();
-                // Show success message
-                const successMessage = modal.querySelector('.success-message');
-                if (successMessage) {
-                    successMessage.classList.add('show');
-                    setTimeout(() => {
-                        successMessage.classList.remove('show');
-                    }, 3000);
-                }
-            } else {
-                // Error or already subscribed
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = '<span>Get VIP Access</span>';
-                if (data.msg && data.msg.includes('already subscribed')) {
-                    alert('You are already on the VIP list!');
-                } else {
-                    alert('Please try again.');
-                }
+            // Show success message
+            const successMessage = modal.querySelector('.success-message');
+            if (successMessage) {
+                successMessage.classList.add('show');
+                setTimeout(() => {
+                    successMessage.classList.remove('show');
+                }, 3000);
             }
-        };
-        
-        // Create and inject script
-        const script = document.createElement('script');
-        script.src = this.action + '&' + params.toString() + '&c=' + callbackName;
-        document.body.appendChild(script);
+        }, 2000);
     });
     
     console.log('📧 VIP Modal initialized successfully');
@@ -675,60 +643,28 @@ document.addEventListener('DOMContentLoaded', function() {
     
     if (footerForm) {
         footerForm.addEventListener('submit', function(e) {
-            e.preventDefault(); // Prevent navigation
-            
+            // Don't prevent default - let it submit to iframe
             const submitBtn = this.querySelector('.btn-submit');
-            const formData = new FormData(this);
             
             // Show loading state
             submitBtn.disabled = true;
             submitBtn.innerHTML = '<span>Submitting...</span>';
             
-            // Build URL with form data
-            const params = new URLSearchParams();
-            for (let [key, value] of formData.entries()) {
-                params.append(key, value);
-            }
-            
-            // Create unique callback name
-            const callbackName = 'footerMailchimpCallback' + Date.now();
-            
-            // Setup callback
-            window[callbackName] = function(data) {
-                // Clean up
-                delete window[callbackName];
-                document.body.removeChild(script);
+            // After delay, assume success and reset
+            setTimeout(() => {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<span>Get VIP Access</span>';
+                footerForm.reset();
                 
-                // Handle response
-                if (data.result === 'success') {
-                    // Success - reset form
-                    submitBtn.disabled = false;
-                    submitBtn.innerHTML = '<span>Get VIP Access</span>';
-                    footerForm.reset();
-                    // Show success message if exists
-                    const successMessage = footerForm.querySelector('.footer-success-message');
-                    if (successMessage) {
-                        successMessage.classList.add('show');
-                        setTimeout(() => {
-                            successMessage.classList.remove('show');
-                        }, 5000);
-                    }
-                } else {
-                    // Error or already subscribed
-                    submitBtn.disabled = false;
-                    submitBtn.innerHTML = '<span>Get VIP Access</span>';
-                    if (data.msg && data.msg.includes('already subscribed')) {
-                        alert('You are already on the VIP list!');
-                    } else {
-                        alert('Please try again.');
-                    }
+                // Show success message if exists
+                const successMessage = footerForm.querySelector('.footer-success-message');
+                if (successMessage) {
+                    successMessage.classList.add('show');
+                    setTimeout(() => {
+                        successMessage.classList.remove('show');
+                    }, 5000);
                 }
-            };
-            
-            // Create and inject script
-            const script = document.createElement('script');
-            script.src = footerForm.action + '&' + params.toString() + '&c=' + callbackName;
-            document.body.appendChild(script);
+            }, 2000);
         });
         
         console.log('📧 Footer VIP form initialized successfully');
