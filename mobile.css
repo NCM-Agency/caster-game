@@ -82,6 +82,9 @@
         display: block !important;
         width: auto !important;
         max-width: 100% !important;
+        color: #f4f1eb !important;  /* Match parchment color used in other sections */
+        font-size: 1.1rem !important;  /* Match other mobile text sections */
+        line-height: 1.6 !important;  /* Consistent with other sections */
     }
     
     /* CASTER CARDS - Single Horizontal Row */
