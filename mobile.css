@@ -44,7 +44,7 @@
         object-fit: contain !important;
         object-position: center !important;
         margin: 0 !important;
-        margin-bottom: 0 !important;
+        margin-bottom: 2rem !important;
         padding: 0 !important;
         box-shadow: none !important;
         display: block !important;
@@ -279,14 +279,15 @@
     }
     
     .setup-image-large {
-        width: 200% !important;
-        height: auto !important;
+        width: auto !important;
+        min-width: 200% !important;
+        height: 350px !important;
         max-width: none !important;
         display: block !important;
         margin: 0 !important;
         transform: none !important;
-        object-fit: cover !important;
-        object-position: left center !important;
+        object-fit: contain !important;
+        object-position: center !important;
     }
     
     /* Fix game components image */

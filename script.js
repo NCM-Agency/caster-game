@@ -531,229 +531,6 @@ console.log('🎮 Welcome to Caster! May your magic be powerful and your victori
 
 // ===== VIP MODAL FUNCTIONALITY =====
 
-// Global variables to store the JSONP callbacks
-window.mailchimpCallback = function(data) {
-    console.log('📧 Modal Mailchimp callback received:', data);
-    showDebugInfo(`Mailchimp Response: ${JSON.stringify(data)}`);
-    
-    const modal = document.getElementById('vip-modal');
-    const successMessage = modal.querySelector('.success-message');
-    const errorMessage = modal.querySelector('.error-message');
-    const submitBtn = modal.querySelector('.btn-submit');
-    
-    // Hide loading state
-    submitBtn.disabled = false;
-    submitBtn.innerHTML = '<span>Get VIP Access</span>';
-    
-    if (data.result === 'success') {
-        // Show success message
-        successMessage.classList.add('show');
-        errorMessage.classList.remove('show');
-        
-        // Reset form
-        document.getElementById('vip-form').reset();
-        
-        // Auto-close modal after 3 seconds
-        setTimeout(() => {
-            closeModal();
-            // Reset messages for next time
-            successMessage.classList.remove('show');
-        }, 3000);
-        
-        console.log('✅ Successfully subscribed to VIP list!');
-    } else {
-        // Show error message
-        errorMessage.classList.add('show');
-        successMessage.classList.remove('show');
-        
-        // More specific error handling
-        if (data.msg) {
-            const errorText = errorMessage.querySelector('p');
-            if (data.msg.includes('already subscribed')) {
-                errorText.textContent = 'This email is already on our VIP list!';
-            } else if (data.msg.includes('invalid email')) {
-                errorText.textContent = 'Please enter a valid email address.';
-            } else {
-                errorText.textContent = data.msg.replace(/\d+ - /, ''); // Remove Mailchimp error codes
-            }
-        }
-        
-        console.error('❌ Subscription failed:', data.msg);
-    }
-};
-
-// Footer form JSONP callback
-window.footerMailchimpCallback = function(data) {
-    console.log('📧 Footer Mailchimp callback received:', data);
-    const form = document.getElementById('footer-vip-form');
-    const successMessage = form.querySelector('.footer-success-message');
-    const errorMessage = form.querySelector('.footer-error-message');
-    const submitBtn = form.querySelector('.btn-submit');
-    
-    // Hide loading state
-    submitBtn.disabled = false;
-    submitBtn.innerHTML = '<span>Get VIP Access</span>';
-    
-    if (data.result === 'success') {
-        // Show success message
-        successMessage.classList.add('show');
-        errorMessage.classList.remove('show');
-        
-        // Reset form
-        form.reset();
-        
-        // Auto-hide success message after 5 seconds
-        setTimeout(() => {
-            successMessage.classList.remove('show');
-        }, 5000);
-        
-        console.log('✅ Footer form: Successfully subscribed to VIP list!');
-    } else {
-        // Show error message
-        errorMessage.classList.add('show');
-        successMessage.classList.remove('show');
-        
-        // More specific error handling
-        if (data.msg) {
-            const errorText = errorMessage.querySelector('p');
-            if (data.msg.includes('already subscribed')) {
-                errorText.textContent = 'This email is already on our VIP list!';
-            } else if (data.msg.includes('invalid email')) {
-                errorText.textContent = 'Please enter a valid email address.';
-            } else {
-                errorText.textContent = data.msg.replace(/\d+ - /, ''); // Remove Mailchimp error codes
-            }
-        }
-        
-        // Auto-hide error message after 8 seconds
-        setTimeout(() => {
-            errorMessage.classList.remove('show');
-        }, 8000);
-        
-        console.error('❌ Footer form subscription failed:', data.msg);
-    }
-};
-
-// Debug panel for mobile
-function showDebugInfo(info) {
-    let debugPanel = document.getElementById('debug-panel');
-    if (!debugPanel) {
-        debugPanel = document.createElement('div');
-        debugPanel.id = 'debug-panel';
-        debugPanel.style.cssText = 'position: fixed; bottom: 10px; left: 10px; right: 10px; background: rgba(0,0,0,0.9); color: #0f0; padding: 10px; font-size: 11px; z-index: 99999; max-height: 300px; overflow-y: auto; font-family: monospace; border: 1px solid #0f0;';
-        document.body.appendChild(debugPanel);
-        
-        // Add close button
-        const closeBtn = document.createElement('button');
-        closeBtn.textContent = 'X';
-        closeBtn.style.cssText = 'position: absolute; top: 5px; right: 5px; background: red; color: white; border: none; padding: 5px 10px; cursor: pointer;';
-        closeBtn.onclick = () => debugPanel.remove();
-        debugPanel.appendChild(closeBtn);
-    }
-    const timestamp = new Date().toLocaleTimeString();
-    const entry = document.createElement('div');
-    entry.style.borderBottom = '1px solid #333';
-    entry.style.marginBottom = '5px';
-    entry.innerHTML = `${timestamp}: ${info}`;
-    debugPanel.appendChild(entry);
-}
-
-// Function to submit modal form to Mailchimp using JSONP
-function submitToMailchimp(formData) {
-    // Debug: Show form data
-    showDebugInfo(`Modal Form Data: ${JSON.stringify(formData)}`);
-    
-    const baseUrl = 'https://media.us15.list-manage.com/subscribe/post-json';
-    const params = new URLSearchParams({
-        u: '227c9d3aa3744fbf2443ef518',
-        id: 'b8c91d7fd8',
-        c: 'mailchimpCallback',
-        tags: '715',
-        ...formData
-    });
-    
-    // Debug: Show URL being called
-    showDebugInfo(`URL: ${baseUrl}?${params.toString().substring(0, 100)}...`);
-    
-    // Create script element for JSONP
-    const script = document.createElement('script');
-    script.src = `${baseUrl}?${params}`;
-    script.async = true;
-    script.type = 'text/javascript';
-    
-    // Add more detailed error handling
-    script.onerror = function(e) {
-        showDebugInfo(`ERROR: Script failed - ${e.type || 'unknown error'}`);
-        showDebugInfo(`Attempted URL length: ${script.src.length} chars`);
-        showDebugInfo(`User Agent: ${navigator.userAgent}`);
-        
-        // Try alternative submission method for mobile
-        if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-            showDebugInfo('Mobile detected - attempting form redirect method');
-            // For mobile, try opening in new tab as fallback
-            const fallbackUrl = `https://media.us15.list-manage.com/subscribe/post?u=227c9d3aa3744fbf2443ef518&id=b8c91d7fd8&FNAME=${encodeURIComponent(formData.FNAME)}&LNAME=${encodeURIComponent(formData.LNAME)}&EMAIL=${encodeURIComponent(formData.EMAIL)}`;
-            showDebugInfo(`Fallback URL: ${fallbackUrl.substring(0, 50)}...`);
-        }
-        
-        // Handle network errors
-        const modal = document.getElementById('vip-modal');
-        const errorMessage = modal.querySelector('.error-message');
-        const submitBtn = modal.querySelector('.btn-submit');
-        
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = '<span>Get VIP Access</span>';
-        
-        errorMessage.classList.add('show');
-        console.error('❌ Network error during subscription');
-    };
-    
-    document.body.appendChild(script);
-    
-    // Cleanup script after use
-    setTimeout(() => {
-        if (script.parentNode) {
-            script.parentNode.removeChild(script);
-        }
-    }, 5000);
-}
-
-// Function to submit footer form to Mailchimp using JSONP
-function submitFooterToMailchimp(formData) {
-    const baseUrl = 'https://media.us15.list-manage.com/subscribe/post-json';
-    const params = new URLSearchParams({
-        u: '227c9d3aa3744fbf2443ef518',
-        id: 'b8c91d7fd8',
-        c: 'footerMailchimpCallback',
-        tags: '715',
-        ...formData
-    });
-    
-    // Create script element for JSONP
-    const script = document.createElement('script');
-    script.src = `${baseUrl}?${params}`;
-    script.onerror = function() {
-        // Handle network errors
-        const form = document.getElementById('footer-vip-form');
-        const errorMessage = form.querySelector('.footer-error-message');
-        const submitBtn = form.querySelector('.btn-submit');
-        
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = '<span>Get VIP Access</span>';
-        
-        errorMessage.classList.add('show');
-        console.error('❌ Footer form network error during subscription');
-    };
-    
-    document.body.appendChild(script);
-    
-    // Cleanup script after use
-    setTimeout(() => {
-        if (script.parentNode) {
-            script.parentNode.removeChild(script);
-        }
-    }, 5000);
-}
-
 // Function to show modal
 function showModal() {
     const modal = document.getElementById('vip-modal');
@@ -830,55 +607,24 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    // Handle form submission
+    // Handle form submission (simplified for standard POST)
     form.addEventListener('submit', function(e) {
-        e.preventDefault();
+        // Don't prevent default - let form submit normally
         
         const submitBtn = this.querySelector('.btn-submit');
-        const formData = new FormData(this);
-        
-        // Convert FormData to regular object
-        const data = {};
-        for (let [key, value] of formData.entries()) {
-            data[key] = value;
-        }
-        
-        // Debug: Show collected form data
-        showDebugInfo(`Form fields found: ${Object.keys(data).join(', ')}`);
-        showDebugInfo(`Values: FNAME="${data.FNAME}", LNAME="${data.LNAME}", EMAIL="${data.EMAIL}"`);
-        
-        // Basic validation
-        if (!data.FNAME || !data.LNAME || !data.EMAIL) {
-            showDebugInfo('VALIDATION FAILED: Missing fields');
-            const errorMessage = modal.querySelector('.error-message');
-            const errorText = errorMessage.querySelector('p');
-            errorText.textContent = 'Please fill in all fields.';
-            errorMessage.classList.add('show');
-            return;
-        }
-        
-        // Email validation
-        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailPattern.test(data.EMAIL)) {
-            const errorMessage = modal.querySelector('.error-message');
-            const errorText = errorMessage.querySelector('p');
-            errorText.textContent = 'Please enter a valid email address.';
-            errorMessage.classList.add('show');
-            return;
-        }
-        
-        // Hide any existing messages
-        const messages = modal.querySelectorAll('.success-message, .error-message');
-        messages.forEach(msg => msg.classList.remove('show'));
         
         // Show loading state
         submitBtn.disabled = true;
         submitBtn.innerHTML = '<span>Submitting...</span>';
         
-        // Submit to Mailchimp
-        submitToMailchimp(data);
-        
-        console.log('📧 Submitting VIP form:', { firstName: data.FNAME, lastName: data.LNAME, email: data.EMAIL.substring(0, 3) + '***' });
+        // Form will submit normally to Mailchimp (opens in new tab)
+        // Close modal after delay
+        setTimeout(() => {
+            closeModal();
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<span>Get VIP Access</span>';
+            form.reset();
+        }, 1500);
     });
     
     console.log('📧 VIP Modal initialized successfully');
@@ -890,54 +636,20 @@ document.addEventListener('DOMContentLoaded', function() {
     
     if (footerForm) {
         footerForm.addEventListener('submit', function(e) {
-            e.preventDefault();
+            // Don't prevent default - let form submit normally
             
             const submitBtn = this.querySelector('.btn-submit');
-            const formData = new FormData(this);
-            const successMessage = this.querySelector('.footer-success-message');
-            const errorMessage = this.querySelector('.footer-error-message');
-            
-            // Convert FormData to regular object
-            const data = {};
-            for (let [key, value] of formData.entries()) {
-                data[key] = value;
-            }
-            
-            // Basic validation
-            if (!data.FNAME || !data.LNAME || !data.EMAIL) {
-                const errorText = errorMessage.querySelector('p');
-                errorText.textContent = 'Please fill in all fields.';
-                errorMessage.classList.add('show');
-                successMessage.classList.remove('show');
-                return;
-            }
-            
-            // Email validation
-            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailPattern.test(data.EMAIL)) {
-                const errorText = errorMessage.querySelector('p');
-                errorText.textContent = 'Please enter a valid email address.';
-                errorMessage.classList.add('show');
-                successMessage.classList.remove('show');
-                return;
-            }
-            
-            // Hide any existing messages
-            successMessage.classList.remove('show');
-            errorMessage.classList.remove('show');
             
             // Show loading state
             submitBtn.disabled = true;
             submitBtn.innerHTML = '<span>Submitting...</span>';
             
-            // Submit to Mailchimp
-            submitFooterToMailchimp(data);
-            
-            console.log('📧 Submitting footer VIP form:', { 
-                firstName: data.FNAME, 
-                lastName: data.LNAME, 
-                email: data.EMAIL.substring(0, 3) + '***' 
-            });
+            // Reset button after delay
+            setTimeout(() => {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<span>Get VIP Access</span>';
+                footerForm.reset();
+            }, 1500);
         });
         
         console.log('📧 Footer VIP form initialized successfully');
