@@ -291,13 +291,19 @@ document.querySelectorAll('.caster-card').forEach(card => {
             }, 100);
         }
         
-        // Center first caster card
+        // Center first caster card - DISABLED to prevent auto-scroll on page load
+        // The scrollIntoView was causing the page to automatically scroll to the casters section
         const castersGrid = document.querySelector('.casters-grid');
         if (castersGrid) {
+            // Only center the grid scroll position, not the page scroll
             setTimeout(() => {
-                const firstCard = castersGrid.querySelector('.caster-card');
-                if (firstCard) {
-                    firstCard.scrollIntoView({ behavior: 'auto', inline: 'center', block: 'nearest' });
+                if (window.innerWidth <= 768) {
+                    // On mobile, just ensure proper horizontal centering within the grid
+                    const firstCard = castersGrid.querySelector('.caster-card');
+                    if (firstCard) {
+                        // Use scrollLeft instead of scrollIntoView to avoid page scroll
+                        castersGrid.scrollLeft = 0; // Start at beginning of horizontal scroll
+                    }
                 }
             }, 100);
         }
@@ -515,7 +521,7 @@ console.log('🎮 Welcome to Caster! May your magic be powerful and your victori
 
 // ===== VIP MODAL FUNCTIONALITY =====
 
-// Global variable to store the JSONP callback
+// Global variables to store the JSONP callbacks
 window.mailchimpCallback = function(data) {
     const modal = document.getElementById('vip-modal');
     const successMessage = modal.querySelector('.success-message');
@@ -563,7 +569,58 @@ window.mailchimpCallback = function(data) {
     }
 };
 
-// Function to submit form to Mailchimp using JSONP
+// Footer form JSONP callback
+window.footerMailchimpCallback = function(data) {
+    const form = document.getElementById('footer-vip-form');
+    const successMessage = form.querySelector('.footer-success-message');
+    const errorMessage = form.querySelector('.footer-error-message');
+    const submitBtn = form.querySelector('.btn-submit');
+    
+    // Hide loading state
+    submitBtn.disabled = false;
+    submitBtn.innerHTML = '<span>Get VIP Access</span>';
+    
+    if (data.result === 'success') {
+        // Show success message
+        successMessage.classList.add('show');
+        errorMessage.classList.remove('show');
+        
+        // Reset form
+        form.reset();
+        
+        // Auto-hide success message after 5 seconds
+        setTimeout(() => {
+            successMessage.classList.remove('show');
+        }, 5000);
+        
+        console.log('✅ Footer form: Successfully subscribed to VIP list!');
+    } else {
+        // Show error message
+        errorMessage.classList.add('show');
+        successMessage.classList.remove('show');
+        
+        // More specific error handling
+        if (data.msg) {
+            const errorText = errorMessage.querySelector('p');
+            if (data.msg.includes('already subscribed')) {
+                errorText.textContent = 'This email is already on our VIP list!';
+            } else if (data.msg.includes('invalid email')) {
+                errorText.textContent = 'Please enter a valid email address.';
+            } else {
+                errorText.textContent = data.msg.replace(/\d+ - /, ''); // Remove Mailchimp error codes
+            }
+        }
+        
+        // Auto-hide error message after 8 seconds
+        setTimeout(() => {
+            errorMessage.classList.remove('show');
+        }, 8000);
+        
+        console.error('❌ Footer form subscription failed:', data.msg);
+    }
+};
+
+// Function to submit modal form to Mailchimp using JSONP
 function submitToMailchimp(formData) {
     const baseUrl = 'https://media.us15.list-manage.com/subscribe/post-json';
     const params = new URLSearchParams({
@@ -587,6 +644,42 @@ function submitToMailchimp(formData) {
         
         errorMessage.classList.add('show');
         console.error('❌ Network error during subscription');
+    };
+    
+    document.body.appendChild(script);
+    
+    // Cleanup script after use
+    setTimeout(() => {
+        if (script.parentNode) {
+            script.parentNode.removeChild(script);
+        }
+    }, 5000);
+}
+
+// Function to submit footer form to Mailchimp using JSONP
+function submitFooterToMailchimp(formData) {
+    const baseUrl = 'https://media.us15.list-manage.com/subscribe/post-json';
+    const params = new URLSearchParams({
+        u: '227c9d3aa3744fbf2443ef518',
+        id: 'b8c91d7fd8',
+        c: 'footerMailchimpCallback',
+        ...formData
+    });
+    
+    // Create script element for JSONP
+    const script = document.createElement('script');
+    script.src = `${baseUrl}?${params}`;
+    script.onerror = function() {
+        // Handle network errors
+        const form = document.getElementById('footer-vip-form');
+        const errorMessage = form.querySelector('.footer-error-message');
+        const submitBtn = form.querySelector('.btn-submit');
+        
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<span>Get VIP Access</span>';
+        
+        errorMessage.classList.add('show');
+        console.error('❌ Footer form network error during subscription');
     };
     
     document.body.appendChild(script);
@@ -722,4 +815,64 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     console.log('📧 VIP Modal initialized successfully');
+});
+
+// ===== FOOTER FORM FUNCTIONALITY =====
+document.addEventListener('DOMContentLoaded', function() {
+    const footerForm = document.getElementById('footer-vip-form');
+    
+    if (footerForm) {
+        footerForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const submitBtn = this.querySelector('.btn-submit');
+            const formData = new FormData(this);
+            const successMessage = this.querySelector('.footer-success-message');
+            const errorMessage = this.querySelector('.footer-error-message');
+            
+            // Convert FormData to regular object
+            const data = {};
+            for (let [key, value] of formData.entries()) {
+                data[key] = value;
+            }
+            
+            // Basic validation
+            if (!data.FNAME || !data.LNAME || !data.EMAIL) {
+                const errorText = errorMessage.querySelector('p');
+                errorText.textContent = 'Please fill in all fields.';
+                errorMessage.classList.add('show');
+                successMessage.classList.remove('show');
+                return;
+            }
+            
+            // Email validation
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailPattern.test(data.EMAIL)) {
+                const errorText = errorMessage.querySelector('p');
+                errorText.textContent = 'Please enter a valid email address.';
+                errorMessage.classList.add('show');
+                successMessage.classList.remove('show');
+                return;
+            }
+            
+            // Hide any existing messages
+            successMessage.classList.remove('show');
+            errorMessage.classList.remove('show');
+            
+            // Show loading state
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span>Submitting...</span>';
+            
+            // Submit to Mailchimp
+            submitFooterToMailchimp(data);
+            
+            console.log('📧 Submitting footer VIP form:', { 
+                firstName: data.FNAME, 
+                lastName: data.LNAME, 
+                email: data.EMAIL.substring(0, 3) + '***' 
+            });
+        });
+        
+        console.log('📧 Footer VIP form initialized successfully');
+    }
 });

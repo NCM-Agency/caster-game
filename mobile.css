@@ -358,6 +358,13 @@
     .form-input {
         padding: 0.9rem 1rem !important;
         font-size: 1rem !important;
+        background: rgba(244, 241, 235, 0.95) !important;
+        color: var(--deep-navy) !important;
+        border: 2px solid var(--magical-gold) !important;
+    }
+    
+    .modal-form .form-input::placeholder {
+        color: rgba(26, 26, 46, 0.6) !important;
     }
     
     .btn-submit {
@@ -388,5 +395,48 @@
         width: 35px !important;
         height: 35px !important;
         font-size: 1.5rem !important;
+    }
+    
+    /* ===== FOOTER FORM MOBILE STYLES ===== */
+    .vip-form .form-group {
+        flex-direction: column !important;
+        gap: 1rem !important;
+    }
+    
+    .vip-form .form-input {
+        width: 100% !important;
+        min-width: unset !important;
+        flex: none !important;
+    }
+    
+    .footer-form-messages {
+        margin-top: 1rem !important;
+    }
+    
+    .footer-success-message,
+    .footer-error-message {
+        padding: 1rem !important;
+        gap: 0.8rem !important;
+        flex-direction: column !important;
+        text-align: center !important;
+    }
+    
+    .footer-success-message .success-icon,
+    .footer-error-message .error-icon {
+        width: 35px !important;
+        height: 35px !important;
+        font-size: 1.3rem !important;
+        margin: 0 auto !important;
+    }
+    
+    .footer-success-message .success-text h3,
+    .footer-error-message .error-text h3 {
+        font-size: 1.1rem !important;
+        margin-bottom: 0.3rem !important;
+    }
+    
+    .footer-success-message .success-text p,
+    .footer-error-message .error-text p {
+        font-size: 0.95rem !important;
     }
 }

@@ -359,13 +359,34 @@
             <h2 class="cta-title">Ready to Join the Battle?</h2>
             <p class="cta-subtitle">Get exclusive VIP access and be the first to know when Caster launches on Kickstarter!</p>
             
-            <!-- Netlify Form -->
-            <form name="vip-signup" method="POST" data-netlify="true" class="vip-form">
+            <!-- Footer VIP Form -->
+            <form id="footer-vip-form" class="vip-form">
                 <div class="form-group">
-                    <input type="email" name="email" placeholder="Enter your email" required class="form-input">
+                    <input type="text" name="FNAME" placeholder="First Name" required class="form-input">
+                    <input type="text" name="LNAME" placeholder="Last Name" required class="form-input">
+                    <input type="email" name="EMAIL" placeholder="Email Address" required class="form-input">
+                    <!-- Honeypot field -->
+                    <input type="text" name="b_227c9d3aa3744fbf2443ef518_b8c91d7fd8" style="position: absolute; left: -5000px;" tabindex="-1" aria-hidden="true">
                     <button type="submit" class="btn btn-submit premium-button">
                         <span>Get VIP Access</span>
                     </button>
+                </div>
+                <!-- Success/Error Message Containers -->
+                <div class="footer-form-messages">
+                    <div class="footer-success-message">
+                        <div class="success-icon">✓</div>
+                        <div class="success-text">
+                            <h3>Success!</h3>
+                            <p>You're now on the VIP list! Check your email for confirmation.</p>
+                        </div>
+                    </div>
+                    <div class="footer-error-message">
+                        <div class="error-icon">⚠</div>
+                        <div class="error-text">
+                            <h3>Oops!</h3>
+                            <p>Something went wrong. Please try again.</p>
+                        </div>
+                    </div>
                 </div>
             </form>
         </div>
