@@ -607,24 +607,43 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    // Handle form submission (simplified for standard POST)
+    // Handle form submission with AJAX to stay on page
     form.addEventListener('submit', function(e) {
-        // Don't prevent default - let form submit normally
+        e.preventDefault(); // Prevent navigation
         
         const submitBtn = this.querySelector('.btn-submit');
+        const formData = new FormData(this);
         
         // Show loading state
         submitBtn.disabled = true;
         submitBtn.innerHTML = '<span>Submitting...</span>';
         
-        // Form will submit normally to Mailchimp (opens in new tab)
-        // Close modal after delay
-        setTimeout(() => {
-            closeModal();
+        // Submit via fetch to stay on page
+        fetch(this.action, {
+            method: 'POST',
+            body: formData,
+            mode: 'no-cors' // Required for cross-origin Mailchimp
+        }).then(() => {
+            // Success - close modal and reset
+            setTimeout(() => {
+                closeModal();
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<span>Get VIP Access</span>';
+                form.reset();
+                // Show success message
+                const successMessage = modal.querySelector('.success-message');
+                if (successMessage) {
+                    successMessage.classList.add('show');
+                    setTimeout(() => {
+                        successMessage.classList.remove('show');
+                    }, 3000);
+                }
+            }, 1000);
+        }).catch(() => {
+            // Error - reset button
             submitBtn.disabled = false;
             submitBtn.innerHTML = '<span>Get VIP Access</span>';
-            form.reset();
-        }, 1500);
+        });
     });
     
     console.log('📧 VIP Modal initialized successfully');
@@ -636,20 +655,40 @@ document.addEventListener('DOMContentLoaded', function() {
     
     if (footerForm) {
         footerForm.addEventListener('submit', function(e) {
-            // Don't prevent default - let form submit normally
+            e.preventDefault(); // Prevent navigation
             
             const submitBtn = this.querySelector('.btn-submit');
+            const formData = new FormData(this);
             
             // Show loading state
             submitBtn.disabled = true;
             submitBtn.innerHTML = '<span>Submitting...</span>';
             
-            // Reset button after delay
-            setTimeout(() => {
+            // Submit via fetch to stay on page
+            fetch(this.action, {
+                method: 'POST',
+                body: formData,
+                mode: 'no-cors' // Required for cross-origin Mailchimp
+            }).then(() => {
+                // Success - reset form
+                setTimeout(() => {
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '<span>Get VIP Access</span>';
+                    footerForm.reset();
+                    // Show success message if exists
+                    const successMessage = footerForm.querySelector('.footer-success-message');
+                    if (successMessage) {
+                        successMessage.classList.add('show');
+                        setTimeout(() => {
+                            successMessage.classList.remove('show');
+                        }, 5000);
+                    }
+                }, 1000);
+            }).catch(() => {
+                // Error - reset button
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = '<span>Get VIP Access</span>';
-                footerForm.reset();
-            }, 1500);
+            });
         });
         
         console.log('📧 Footer VIP form initialized successfully');

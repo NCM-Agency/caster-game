@@ -339,6 +339,17 @@
         opacity: 1 !important;
     }
     
+    .modal-form .form-row {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 1rem !important;
+    }
+    
+    .modal-form .form-input {
+        width: 100% !important;
+        min-width: unset !important;
+    }
+    
     .footer-form-group {
         display: flex !important;
         flex-direction: column !important;
