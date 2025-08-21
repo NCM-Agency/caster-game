@@ -609,8 +609,22 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Handle form submission - uses hidden iframe to stay on page
     form.addEventListener('submit', function(e) {
-        // Don't prevent default - let it submit to iframe
         const submitBtn = this.querySelector('.btn-submit');
+        const theForm = this;
+        
+        // Check if all fields have values (mobile sometimes doesn't validate)
+        const fname = theForm.querySelector('input[name="FNAME"]').value;
+        const lname = theForm.querySelector('input[name="LNAME"]').value;
+        const email = theForm.querySelector('input[name="EMAIL"]').value;
+        
+        if (!fname || !lname || !email) {
+            alert('Please fill in all fields');
+            e.preventDefault();
+            return;
+        }
+        
+        // Debug alert to confirm submission
+        alert(`Submitting: ${fname} ${lname} - ${email}`);
         
         // Show loading state
         submitBtn.disabled = true;
@@ -621,7 +635,7 @@ document.addEventListener('DOMContentLoaded', function() {
             closeModal();
             submitBtn.disabled = false;
             submitBtn.innerHTML = '<span>Get VIP Access</span>';
-            form.reset();
+            theForm.reset();
             
             // Show success message
             const successMessage = modal.querySelector('.success-message');
