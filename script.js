@@ -607,7 +607,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    // Handle form submission with AJAX to stay on page
+    // Handle form submission with JSONP to stay on page
     form.addEventListener('submit', function(e) {
         e.preventDefault(); // Prevent navigation
         
@@ -618,14 +618,24 @@ document.addEventListener('DOMContentLoaded', function() {
         submitBtn.disabled = true;
         submitBtn.innerHTML = '<span>Submitting...</span>';
         
-        // Submit via fetch to stay on page
-        fetch(this.action, {
-            method: 'POST',
-            body: formData,
-            mode: 'no-cors' // Required for cross-origin Mailchimp
-        }).then(() => {
-            // Success - close modal and reset
-            setTimeout(() => {
+        // Build URL with form data
+        const params = new URLSearchParams();
+        for (let [key, value] of formData.entries()) {
+            params.append(key, value);
+        }
+        
+        // Create unique callback name
+        const callbackName = 'mailchimpCallback' + Date.now();
+        
+        // Setup callback
+        window[callbackName] = function(data) {
+            // Clean up
+            delete window[callbackName];
+            document.body.removeChild(script);
+            
+            // Handle response
+            if (data.result === 'success') {
+                // Success - close modal and reset
                 closeModal();
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = '<span>Get VIP Access</span>';
@@ -638,12 +648,22 @@ document.addEventListener('DOMContentLoaded', function() {
                         successMessage.classList.remove('show');
                     }, 3000);
                 }
-            }, 1000);
-        }).catch(() => {
-            // Error - reset button
-            submitBtn.disabled = false;
-            submitBtn.innerHTML = '<span>Get VIP Access</span>';
-        });
+            } else {
+                // Error or already subscribed
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<span>Get VIP Access</span>';
+                if (data.msg && data.msg.includes('already subscribed')) {
+                    alert('You are already on the VIP list!');
+                } else {
+                    alert('Please try again.');
+                }
+            }
+        };
+        
+        // Create and inject script
+        const script = document.createElement('script');
+        script.src = this.action + '&' + params.toString() + '&c=' + callbackName;
+        document.body.appendChild(script);
     });
     
     console.log('📧 VIP Modal initialized successfully');
@@ -664,14 +684,24 @@ document.addEventListener('DOMContentLoaded', function() {
             submitBtn.disabled = true;
             submitBtn.innerHTML = '<span>Submitting...</span>';
             
-            // Submit via fetch to stay on page
-            fetch(this.action, {
-                method: 'POST',
-                body: formData,
-                mode: 'no-cors' // Required for cross-origin Mailchimp
-            }).then(() => {
-                // Success - reset form
-                setTimeout(() => {
+            // Build URL with form data
+            const params = new URLSearchParams();
+            for (let [key, value] of formData.entries()) {
+                params.append(key, value);
+            }
+            
+            // Create unique callback name
+            const callbackName = 'footerMailchimpCallback' + Date.now();
+            
+            // Setup callback
+            window[callbackName] = function(data) {
+                // Clean up
+                delete window[callbackName];
+                document.body.removeChild(script);
+                
+                // Handle response
+                if (data.result === 'success') {
+                    // Success - reset form
                     submitBtn.disabled = false;
                     submitBtn.innerHTML = '<span>Get VIP Access</span>';
                     footerForm.reset();
@@ -683,12 +713,22 @@ document.addEventListener('DOMContentLoaded', function() {
                             successMessage.classList.remove('show');
                         }, 5000);
                     }
-                }, 1000);
-            }).catch(() => {
-                // Error - reset button
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = '<span>Get VIP Access</span>';
-            });
+                } else {
+                    // Error or already subscribed
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '<span>Get VIP Access</span>';
+                    if (data.msg && data.msg.includes('already subscribed')) {
+                        alert('You are already on the VIP list!');
+                    } else {
+                        alert('Please try again.');
+                    }
+                }
+            };
+            
+            // Create and inject script
+            const script = document.createElement('script');
+            script.src = footerForm.action + '&' + params.toString() + '&c=' + callbackName;
+            document.body.appendChild(script);
         });
         
         console.log('📧 Footer VIP form initialized successfully');
