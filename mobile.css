@@ -280,8 +280,8 @@
     
     .setup-image-large {
         width: auto !important;
-        min-width: 150% !important;
-        height: 300px !important;
+        min-width: 200% !important;
+        height: 400px !important;
         max-width: none !important;
         display: block !important;
         margin: 0 !important;

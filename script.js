@@ -534,6 +534,8 @@ console.log('🎮 Welcome to Caster! May your magic be powerful and your victori
 // Global variables to store the JSONP callbacks
 window.mailchimpCallback = function(data) {
     console.log('📧 Modal Mailchimp callback received:', data);
+    showDebugInfo(`Mailchimp Response: ${JSON.stringify(data)}`);
+    
     const modal = document.getElementById('vip-modal');
     const successMessage = modal.querySelector('.success-message');
     const errorMessage = modal.querySelector('.error-message');
@@ -632,8 +634,35 @@ window.footerMailchimpCallback = function(data) {
     }
 };
 
+// Debug panel for mobile
+function showDebugInfo(info) {
+    let debugPanel = document.getElementById('debug-panel');
+    if (!debugPanel) {
+        debugPanel = document.createElement('div');
+        debugPanel.id = 'debug-panel';
+        debugPanel.style.cssText = 'position: fixed; bottom: 10px; left: 10px; right: 10px; background: rgba(0,0,0,0.9); color: #0f0; padding: 10px; font-size: 11px; z-index: 99999; max-height: 300px; overflow-y: auto; font-family: monospace; border: 1px solid #0f0;';
+        document.body.appendChild(debugPanel);
+        
+        // Add close button
+        const closeBtn = document.createElement('button');
+        closeBtn.textContent = 'X';
+        closeBtn.style.cssText = 'position: absolute; top: 5px; right: 5px; background: red; color: white; border: none; padding: 5px 10px; cursor: pointer;';
+        closeBtn.onclick = () => debugPanel.remove();
+        debugPanel.appendChild(closeBtn);
+    }
+    const timestamp = new Date().toLocaleTimeString();
+    const entry = document.createElement('div');
+    entry.style.borderBottom = '1px solid #333';
+    entry.style.marginBottom = '5px';
+    entry.innerHTML = `${timestamp}: ${info}`;
+    debugPanel.appendChild(entry);
+}
+
 // Function to submit modal form to Mailchimp using JSONP
 function submitToMailchimp(formData) {
+    // Debug: Show form data
+    showDebugInfo(`Modal Form Data: ${JSON.stringify(formData)}`);
+    
     const baseUrl = 'https://media.us15.list-manage.com/subscribe/post-json';
     const params = new URLSearchParams({
         u: '227c9d3aa3744fbf2443ef518',
@@ -643,10 +672,14 @@ function submitToMailchimp(formData) {
         ...formData
     });
     
+    // Debug: Show URL being called
+    showDebugInfo(`URL: ${baseUrl}?${params.toString().substring(0, 100)}...`);
+    
     // Create script element for JSONP
     const script = document.createElement('script');
     script.src = `${baseUrl}?${params}`;
     script.onerror = function() {
+        showDebugInfo('ERROR: Script failed to load');
         // Handle network errors
         const modal = document.getElementById('vip-modal');
         const errorMessage = modal.querySelector('.error-message');
@@ -795,8 +828,13 @@ document.addEventListener('DOMContentLoaded', function() {
             data[key] = value;
         }
         
+        // Debug: Show collected form data
+        showDebugInfo(`Form fields found: ${Object.keys(data).join(', ')}`);
+        showDebugInfo(`Values: FNAME="${data.FNAME}", LNAME="${data.LNAME}", EMAIL="${data.EMAIL}"`);
+        
         // Basic validation
         if (!data.FNAME || !data.LNAME || !data.EMAIL) {
+            showDebugInfo('VALIDATION FAILED: Missing fields');
             const errorMessage = modal.querySelector('.error-message');
             const errorText = errorMessage.querySelector('p');
             errorText.textContent = 'Please fill in all fields.';

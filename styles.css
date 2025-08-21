@@ -1165,6 +1165,36 @@ h3 { font-size: clamp(1.75rem, 3.5vw, 2.5rem); }
     box-shadow: 0 10px 30px rgba(255, 230, 109, 0.5);
 }
 
+/* Footer form specific layout */
+.footer-form-group {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    gap: var(--spacing-sm);
+    align-items: center;
+}
+
+.footer-form-group .form-input-name:first-of-type {
+    grid-column: 1;
+    grid-row: 1;
+}
+
+.footer-form-group .form-input-name:last-of-type {
+    grid-column: 2;
+    grid-row: 1;
+}
+
+.footer-form-group .form-input-email {
+    grid-column: 1;
+    grid-row: 2;
+}
+
+.footer-form-group .footer-submit-btn {
+    grid-column: 2;
+    grid-row: 2;
+    width: 100%;
+}
+
 /* Footer */
 .footer {
     background: var(--deep-navy);
