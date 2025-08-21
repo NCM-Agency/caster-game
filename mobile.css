@@ -1,12 +1,97 @@
-/* MOBILE FIXES THAT ACTUALLY WORK */
+/* CONSOLIDATED MOBILE STYLES - COMPREHENSIVE FIXES */
 @media only screen and (max-width: 768px) {
     
-    /* CASTER CARDS - Single centered card with horizontal scroll */
-    .casters-section {
+    /* ARENA SECTION - SCROLLABLE WITHOUT CROPPING */
+    .arena-section {
+        padding: 40px 0 20px !important;
+        margin-top: 0 !important;
+    }
+    
+    .arena-section .section-title {
+        margin-bottom: 20px !important;
+        margin-top: 0 !important;
+        padding: 0 !important;
+    }
+    
+    .arena-content {
+        position: relative !important;
+        width: 100vw !important;
+        margin-left: calc(-50vw + 50%) !important;
+        overflow-x: auto !important;
+        overflow-y: hidden !important;
+        -webkit-overflow-scrolling: touch !important;
+        scroll-behavior: smooth !important;
+        border: none !important;
+        box-shadow: none !important;
+        height: auto !important;
+        min-height: 0 !important;
+        max-height: none !important;
+        padding: 0 !important;
+        display: block !important;
+    }
+    
+    /* Remove any pseudo-elements that might add lines */
+    .arena-content::after,
+    .arena-content::before {
+        display: none !important;
+    }
+    
+    .arena-content img.arena-banner,
+    .arena-banner {
+        width: auto !important;
+        min-width: 100% !important;
+        height: 300px !important;
+        object-fit: contain !important;
+        object-position: center !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        box-shadow: none !important;
+        display: block !important;
+        position: relative !important;
+        top: 0 !important;
+        vertical-align: top !important;
+    }
+    
+    /* Arena wrapper for proper scrolling */
+    .arena-image-wrapper {
+        overflow-x: auto !important;
+        overflow-y: hidden !important;
+        -webkit-overflow-scrolling: touch !important;
+        width: 100vw !important;
+        margin-left: calc(-50vw + 50%) !important;
+        scroll-behavior: smooth !important;
+        display: contents !important;
+        box-shadow: none !important;
+    }
+    
+    .arena-image-wrapper img {
+        width: auto !important;
+        min-width: 100% !important;
+        height: 300px !important;
+        max-width: none !important;
+        object-fit: contain !important;
+        object-position: center !important;
+    }
+    
+    /* Arena text - PROPERLY SEPARATED */
+    .arena-text,
+    p.arena-text {
+        margin: 20px 20px 0 20px !important;
+        text-align: center !important;
+        padding: 0 !important;
+        display: block !important;
+        width: auto !important;
+        max-width: 100% !important;
+    }
+    
+    /* CASTER CARDS - Single Horizontal Row */
+    .casters-section,
+    #casters {
         overflow: visible !important;
     }
     
     .casters-grid {
+        position: relative !important;
         display: flex !important;
         flex-direction: row !important;
         flex-wrap: nowrap !important;
@@ -14,50 +99,47 @@
         overflow-y: hidden !important;
         -webkit-overflow-scrolling: touch !important;
         scroll-snap-type: x mandatory !important;
-        gap: 15px !important;
         padding: 20px 0 50px !important;
-        /* Full width to allow cards to scroll off-screen */
         width: 100vw !important;
         margin-left: calc(-50vw + 50%) !important;
-        /* Remove any grid styling */
         grid-template-columns: unset !important;
         grid-template-rows: unset !important;
-        position: relative !important;
+        white-space: nowrap !important;
     }
     
     /* Flatten the two-row structure into single row */
     .casters-row,
     .casters-row.bottom {
         display: contents !important;
+        white-space: nowrap !important;
+        margin: 0 !important;
     }
     
-    /* Make cards large and centered one at a time */
+    /* Make cards uniform size and properly spaced */
     .caster-card,
     .caster-card.small,
     .caster-card.large {
-        flex: 0 0 90vw !important;
-        width: 90vw !important;
-        max-width: 400px !important;
-        height: 560px !important;
+        flex: 0 0 85vw !important;
+        width: 85vw !important;
+        min-width: 85vw !important;
+        max-width: 85vw !important;
+        height: auto !important;
+        aspect-ratio: 3/4 !important;
+        margin: 0 2.5vw !important;
         scroll-snap-align: center !important;
-        margin: 0 5vw !important;
-    }
-    
-    /* First and last card padding for centering */
-    .casters-grid .caster-card:first-child {
-        margin-left: 5vw !important;
-    }
-    
-    .casters-grid .caster-card:last-child {
-        /* Need enough margin to allow centering when scrolled to */
-        margin-right: calc(50vw - 45vw) !important;
-    }
-    
-    /* Fix card flip mechanism */
-    .caster-card {
         -webkit-tap-highlight-color: transparent !important;
         touch-action: manipulation !important;
         pointer-events: auto !important;
+        display: block !important;
+    }
+    
+    /* Center first and last cards properly */
+    .casters-grid .caster-card:first-child {
+        margin-left: 7.5vw !important;
+    }
+    
+    .casters-grid .caster-card:last-child {
+        margin-right: 7.5vw !important;
     }
     
     /* Fix text on back of card - LARGER SIZES */
@@ -95,95 +177,7 @@
         white-space: normal !important;
     }
     
-    /* FIX WHAT'S IN THE BOX BACKGROUND - CORRECT SELECTOR */
-    .components-section {
-        background-image: url('assets/Divine_v3.png') !important;
-        background-size: 500% auto !important;
-        background-position: center 10% !important;
-        background-repeat: no-repeat !important;
-        background-attachment: scroll !important;
-    }
-    
-    /* Fix game components image */
-    .components-overlay img,
-    .components-showcase img {
-        width: auto !important;
-        height: 250px !important;
-        max-width: none !important;
-        object-fit: cover !important;
-        object-position: center center !important;
-    }
-    
-    
-    /* Arena section - COMPLETELY FIXED */
-    .arena-section {
-        padding: 40px 0 20px !important;  /* Proper spacing from separator */
-        margin-top: 0 !important;
-    }
-    
-    .arena-section .section-title {
-        margin-bottom: 20px !important;  /* Small gap to image */
-        margin-top: 0 !important;
-        padding: 0 !important;
-    }
-    
-    /* Arena content - ONLY for the scrollable image container */
-    .arena-content {
-        margin: 0 -20px !important;  /* Extend beyond viewport edges */
-        border: none !important;
-        box-shadow: none !important;
-        height: auto !important;  /* Auto height based on image */
-        min-height: 0 !important;
-        max-height: none !important;
-        padding: 0 !important;
-        display: block !important;
-        overflow-x: auto !important;
-        overflow-y: hidden !important;
-        -webkit-overflow-scrolling: touch !important;
-    }
-    
-    /* Remove any pseudo-elements that might add lines */
-    .arena-content::after,
-    .arena-content::before {
-        display: none !important;
-    }
-    
-    /* Arena image - properly sized with NO gaps */
-    .arena-content img.arena-banner,
-    .arena-banner {
-        height: 315px !important;  /* 10% smaller than 350px */
-        width: 140% !important;     /* Slightly less wide than original 150% */
-        margin: 0 !important;       /* Remove ALL margins */
-        padding: 0 !important;      /* Remove ALL padding */
-        box-shadow: none !important;  /* Remove shadow from image */
-        display: block !important;  /* Ensure block display */
-        position: relative !important;
-        top: 0 !important;
-        vertical-align: top !important;  /* Prevent inline gaps */
-    }
-    
-    /* Remove wrapper if it exists */
-    .arena-image-wrapper {
-        display: contents !important;
-        box-shadow: none !important;
-    }
-    
-    /* Arena text - NOW PROPERLY SEPARATED */
-    .arena-text,
-    p.arena-text {
-        margin: 20px 20px 0 20px !important;  /* Proper margins all around */
-        text-align: center !important;  /* Center the text */
-        padding: 0 !important;
-        display: block !important;
-        width: auto !important;
-        max-width: 100% !important;
-    }
-    
-    /* Add swipe indicator closer to cards */
-    .casters-grid {
-        position: relative !important;
-    }
-    
+    /* Add swipe indicator */
     .casters-grid::after {
         content: '← Swipe for more →' !important;
         position: absolute !important;
@@ -200,17 +194,132 @@
         white-space: nowrap !important;
     }
     
-    @keyframes pulse {
-        0%, 100% { opacity: 0.8; }
-        50% { opacity: 0.4; }
+    /* WHAT'S IN THE BOX - Complete Fix */
+    .components-section,
+    #components {
+        background-image: url('assets/Divine_v3.png') !important;
+        background-size: 500% auto !important;
+        background-position: center 10% !important;
+        background-repeat: no-repeat !important;
+        background-attachment: scroll !important;
+        padding-top: 40px !important;
     }
     
-    /* Fix Show/Hide List functionality */
+    .components-section h2,
+    #components h2 {
+        margin-bottom: 20px !important;
+        padding-bottom: 0 !important;
+    }
+    
+    .components-hero {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 20px !important;
+        margin-top: 0 !important;
+        padding-top: 0 !important;
+    }
+    
     .components-overlay {
+        position: static !important;
+        margin: 0 auto 20px !important;
+        width: 90% !important;
+        max-width: none !important;
+        background: rgba(26, 26, 46, 0.95) !important;
+        border-radius: 10px !important;
+        padding: 20px !important;
+        order: 1 !important;
+        transform: none !important;
+        top: auto !important;
+        left: auto !important;
         transition: all 0.3s ease !important;
+    }
+    
+    .components-overlay h3 {
+        margin-top: 0 !important;
+        margin-bottom: 15px !important;
+    }
+    
+    .components-overlay .overlay-content {
+        max-height: none !important;
+        overflow: visible !important;
+    }
+    
+    /* Fix gap when collapsed */
+    .components-overlay.collapsed {
+        margin-bottom: 10px !important;
+        padding: 10px 20px !important;
     }
     
     .components-overlay.collapsed .overlay-content {
         display: none !important;
+    }
+    
+    .components-showcase {
+        order: 2 !important;
+        overflow-x: auto !important;
+        overflow-y: hidden !important;
+        -webkit-overflow-scrolling: touch !important;
+        width: 100vw !important;
+        margin-left: calc(-50vw + 50%) !important;
+        padding: 20px 0 !important;
+        scroll-behavior: smooth !important;
+    }
+    
+    .setup-image-large {
+        width: auto !important;
+        min-width: 100% !important;
+        height: auto !important;
+        max-width: none !important;
+        display: block !important;
+        margin: 0 !important;
+        transform: scale(1.5) !important;
+        transform-origin: center center !important;
+    }
+    
+    /* Fix game components image */
+    .components-overlay img,
+    .components-showcase img {
+        width: auto !important;
+        height: 250px !important;
+        max-width: none !important;
+        object-fit: cover !important;
+        object-position: center center !important;
+    }
+    
+    /* VIP BENEFITS - Center artifact */
+    .vip-content {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+    }
+    
+    .vip-left {
+        width: 100% !important;
+        display: flex !important;
+        justify-content: center !important;
+        margin-bottom: 30px !important;
+    }
+    
+    .artifact-card {
+        max-width: 250px !important;
+        margin: 0 auto !important;
+    }
+    
+    /* WHO WE ARE - Clickable Images */
+    .about-visual img, 
+    .creator-photo {
+        cursor: pointer !important;
+        transition: transform 0.3s ease !important;
+    }
+    
+    .about-visual img:hover,
+    .creator-photo:hover {
+        transform: scale(1.05) !important;
+    }
+    
+    /* Animation keyframes */
+    @keyframes pulse {
+        0%, 100% { opacity: 0.8; }
+        50% { opacity: 0.4; }
     }
 }
