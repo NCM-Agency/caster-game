@@ -252,8 +252,6 @@ document.querySelectorAll('.caster-card').forEach(card => {
                         left: scrollAmount,
                         behavior: 'instant'
                     });
-                    
-                    console.log('Arena centered to:', scrollAmount);
                 }
             };
             
@@ -311,6 +309,92 @@ document.querySelectorAll('.caster-card').forEach(card => {
             }, 100);
         }
     });
+
+// Form Security Enhancements
+function validateEmail(email) {
+    const re = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    return re.test(String(email).toLowerCase());
+}
+
+function validateName(name) {
+    // Allow letters, spaces, hyphens, and apostrophes
+    const re = /^[a-zA-Z\s\-']{2,50}$/;
+    return re.test(name);
+}
+
+function sanitizeInput(input) {
+    // Basic XSS prevention
+    const div = document.createElement('div');
+    div.textContent = input;
+    return div.innerHTML;
+}
+
+// Enhanced form validation for Mailchimp forms
+document.addEventListener('DOMContentLoaded', function() {
+    const forms = document.querySelectorAll('.validate');
+    
+    forms.forEach(form => {
+        form.addEventListener('submit', function(e) {
+            const fname = form.querySelector('input[name="FNAME"]');
+            const lname = form.querySelector('input[name="LNAME"]');
+            const email = form.querySelector('input[name="EMAIL"]');
+            const honeypot = form.querySelector('input[name="website_url"]');
+            
+            // Check honeypot field (bots will fill this, humans won't see it)
+            if (honeypot && honeypot.value !== '') {
+                e.preventDefault();
+                // Silently fail for bots
+                return false;
+            }
+            
+            let isValid = true;
+            let errors = [];
+            
+            // Validate first name
+            if (fname && !validateName(fname.value)) {
+                errors.push('Please enter a valid first name');
+                isValid = false;
+            }
+            
+            // Validate last name
+            if (lname && !validateName(lname.value)) {
+                errors.push('Please enter a valid last name');
+                isValid = false;
+            }
+            
+            // Validate email
+            if (email && !validateEmail(email.value)) {
+                errors.push('Please enter a valid email address');
+                isValid = false;
+            }
+            
+            // Check for empty fields
+            if (fname && fname.value.trim() === '') {
+                errors.push('First name is required');
+                isValid = false;
+            }
+            if (lname && lname.value.trim() === '') {
+                errors.push('Last name is required');
+                isValid = false;
+            }
+            if (email && email.value.trim() === '') {
+                errors.push('Email is required');
+                isValid = false;
+            }
+            
+            if (!isValid) {
+                e.preventDefault();
+                alert(errors.join('\n'));
+                return false;
+            }
+            
+            // Sanitize inputs before submission
+            if (fname) fname.value = sanitizeInput(fname.value);
+            if (lname) lname.value = sanitizeInput(lname.value);
+            if (email) email.value = sanitizeInput(email.value);
+        });
+    });
+});
 
 // Initialize premium particle effect
 window.addEventListener('load', () => {
@@ -530,7 +614,7 @@ if (!document.querySelector('#modalAnimations')) {
     document.head.appendChild(style);
 }
 
-console.log('🎮 Welcome to Caster! May your magic be powerful and your victories legendary!');
+// Production ready - console logs removed for security
 
 // ===== REMOVED VIP MODAL - NOW SCROLLS TO FOOTER FORM =====
 // All modal code removed - buttons now link directly to #footer-cta

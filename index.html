@@ -15,6 +15,9 @@
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="mobile.css">
     
+    <!-- Cookie Consent (loads BEFORE analytics to control them) -->
+    <script src="cookie-consent.js"></script>
+    
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-2ZGQ2N8TP9"></script>
     <script>
@@ -405,6 +408,8 @@
                     </div>
                     <div aria-hidden="true" style="position: absolute; left: -5000px;">
                         <input type="text" name="b_227c9d3aa3744fbf2443ef518_b8c91d7fd8" tabindex="-1" value="">
+                        <!-- Honeypot field for bot protection -->
+                        <input type="text" name="website_url" id="website_url" tabindex="-1" autocomplete="off" value="">
                     </div>
                 </form>
             </div>

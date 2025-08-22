@@ -1,0 +1,12 @@
+# Robots.txt for Caster Landing Page
+User-agent: *
+Allow: /
+Disallow: /editor.html
+Disallow: /editor-config.js
+Disallow: /node_modules/
+Disallow: /.git/
+Disallow: /package.json
+Disallow: /package-lock.json
+
+# Sitemap (add when available)
+# Sitemap: https://castergamedev.netlify.app/sitemap.xml

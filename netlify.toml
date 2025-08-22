@@ -1,0 +1,38 @@
+# Netlify Configuration File
+
+[build]
+  publish = "."
+
+# Security headers are in _headers file
+
+# Production context
+[context.production]
+  command = "echo 'Production build'"
+  
+  # Environment variables for production
+  [context.production.environment]
+    NODE_ENV = "production"
+
+# Redirect rules are in _redirects file
+
+# Form detection
+[build.processing]
+  skip_processing = false
+
+[build.processing.html]
+  pretty_urls = true
+
+# Rate limiting for forms (basic DDoS protection)
+[[plugins]]
+  package = "@netlify/plugin-emails"
+
+# Exclude files from deployment
+[build.ignore]
+  paths = [
+    "editor.html",
+    "editor-config.js",
+    "node_modules/**",
+    ".git/**",
+    "package-lock.json",
+    "README.md"
+  ]
