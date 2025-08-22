@@ -1974,26 +1974,26 @@ h3 { font-size: clamp(1.75rem, 3.5vw, 2.5rem); }
 
 #mc_embed_signup .button {
     width: 100%;
-    padding: 1.2rem 2.5rem;
-    background: linear-gradient(135deg, var(--accent-gold), #f4e4bc);
+    padding: 1rem 2rem;
+    background: linear-gradient(135deg, var(--magical-gold), var(--amber-orange)) !important;
     border: none;
-    border-radius: 8px;
-    color: var(--bg-dark);
+    border-radius: 50px !important;
+    color: var(--deep-navy) !important;
     font-family: 'Cinzel', serif;
-    font-size: 1.1rem;
-    font-weight: 600;
+    font-size: 0.95rem;
+    font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 1px;
     cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+    transition: all 0.4s ease;
+    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
     margin-top: 1rem;
 }
 
 #mc_embed_signup .button:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 25px rgba(212, 175, 55, 0.5);
-    background: linear-gradient(135deg, #f4e4bc, var(--accent-gold));
+    box-shadow: 0 6px 20px rgba(212, 175, 55, 0.6);
+    background: linear-gradient(135deg, var(--amber-orange), var(--magical-gold)) !important;
 }
 
 /* Footer form specific styles */

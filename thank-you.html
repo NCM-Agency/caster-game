@@ -10,14 +10,15 @@
     <style>
         /* Thank You Page Specific Styles */
         .thank-you-section {
-            min-height: 80vh;
+            min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             background: linear-gradient(135deg, rgba(75, 0, 130, 0.9), rgba(0, 0, 0, 0.95));
             position: relative;
             overflow: hidden;
-            padding: 4rem 1rem;
+            padding: 8rem 1rem 4rem;
+            margin-top: 60px;
         }
 
         .thank-you-section::before {
@@ -46,6 +47,7 @@
         .xok-character {
             position: relative;
             animation: mysticalFloat 6s ease-in-out infinite;
+            z-index: 1;
         }
 
         .xok-character img {
@@ -62,8 +64,9 @@
             transform: translate(-50%, -50%);
             width: 120%;
             height: 120%;
-            background: radial-gradient(circle, rgba(212, 175, 55, 0.3) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.2) 0%, transparent 60%);
             animation: pulse 3s ease-in-out infinite;
+            z-index: -1;
         }
 
         .thank-you-content {
@@ -73,10 +76,15 @@
         .thank-you-title {
             font-family: 'Cinzel', serif;
             font-size: 3rem;
-            color: var(--accent-gold);
+            background: linear-gradient(135deg, var(--magical-gold), var(--amber-orange));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
             margin-bottom: 1rem;
             text-shadow: 0 0 30px rgba(212, 175, 55, 0.5);
             line-height: 1.2;
+            font-weight: 700;
+            text-transform: uppercase;
         }
 
         .user-name {
@@ -101,7 +109,7 @@
         }
 
         .vip-benefits {
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(0, 0, 0, 0.7);
             border: 2px solid rgba(212, 175, 55, 0.3);
             border-radius: 12px;
             padding: 2rem;
@@ -110,9 +118,13 @@
 
         .vip-benefits h3 {
             font-family: 'Cinzel', serif;
-            color: var(--accent-gold);
+            background: linear-gradient(135deg, var(--magical-gold), var(--amber-orange));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
             margin-bottom: 1rem;
             font-size: 1.3rem;
+            font-weight: 600;
         }
 
         .vip-benefits ul {
@@ -121,10 +133,12 @@
         }
 
         .vip-benefits li {
-            color: var(--parchment);
+            color: #f5f5f5;
             padding: 0.5rem 0;
             padding-left: 2rem;
             position: relative;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1rem;
         }
 
         .vip-benefits li::before {
@@ -142,40 +156,42 @@
         }
 
         .btn-return {
-            padding: 1rem 2.5rem;
-            background: linear-gradient(135deg, var(--accent-gold), #f4e4bc);
+            padding: 0.75rem 2rem;
+            background: linear-gradient(135deg, var(--magical-gold), var(--amber-orange));
             border: none;
             border-radius: 50px;
-            color: var(--bg-dark);
+            color: var(--deep-navy);
             font-family: 'Cinzel', serif;
-            font-size: 1rem;
-            font-weight: 600;
+            font-size: 0.95rem;
+            font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 1px;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.4s ease;
             text-decoration: none;
             display: inline-block;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
         }
 
         .btn-return:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.4);
+            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.6);
+            background: linear-gradient(135deg, var(--amber-orange), var(--magical-gold));
         }
 
         .btn-secondary {
-            padding: 1rem 2.5rem;
+            padding: 0.75rem 2rem;
             background: transparent;
-            border: 2px solid var(--accent-gold);
+            border: 2px solid var(--magical-gold);
             border-radius: 50px;
-            color: var(--accent-gold);
+            color: var(--magical-gold);
             font-family: 'Cinzel', serif;
-            font-size: 1rem;
-            font-weight: 600;
+            font-size: 0.95rem;
+            font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 1px;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.4s ease;
             text-decoration: none;
             display: inline-block;
         }
@@ -183,6 +199,7 @@
         .btn-secondary:hover {
             background: rgba(212, 175, 55, 0.1);
             transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
         }
 
         @keyframes mysticalFloat {

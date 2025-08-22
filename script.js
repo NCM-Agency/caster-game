@@ -610,10 +610,25 @@ document.addEventListener('DOMContentLoaded', function() {
     // Close modal when Mailchimp form is submitted
     const mailchimpForm = document.getElementById('mc-embedded-subscribe-form');
     if (mailchimpForm) {
-        mailchimpForm.addEventListener('submit', function() {
+        mailchimpForm.addEventListener('submit', function(e) {
+            // Don't prevent default - let form submit normally
+            console.log('Modal form submitted');
+            
+            // On mobile, ensure form fields are filled
+            const firstName = this.querySelector('#mce-FNAME').value;
+            const lastName = this.querySelector('#mce-LNAME').value;
+            const email = this.querySelector('#mce-EMAIL').value;
+            
+            if (!firstName || !lastName || !email) {
+                e.preventDefault();
+                alert('Please fill in all fields');
+                return false;
+            }
+            
+            // Close modal after a delay
             setTimeout(() => {
                 closeModal();
-            }, 500); // Small delay to ensure form submission starts
+            }, 500);
         });
     }
     

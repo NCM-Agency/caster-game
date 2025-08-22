@@ -333,7 +333,9 @@
         50% { opacity: 0.4; }
     }
     
-    .modal-overlay.active .form-input {
+    .modal-overlay.active .form-input,
+    .modal-overlay.active #mc_embed_signup input[type="text"],
+    .modal-overlay.active #mc_embed_signup input[type="email"] {
         display: block !important;
         visibility: visible !important;
         opacity: 1 !important;
