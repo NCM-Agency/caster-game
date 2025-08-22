@@ -607,7 +607,15 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    // Mailchimp embedded form will handle its own submission
+    // Close modal when Mailchimp form is submitted
+    const mailchimpForm = document.getElementById('mc-embedded-subscribe-form');
+    if (mailchimpForm) {
+        mailchimpForm.addEventListener('submit', function() {
+            setTimeout(() => {
+                closeModal();
+            }, 500); // Small delay to ensure form submission starts
+        });
+    }
     
     console.log('📧 VIP Modal initialized successfully');
 });

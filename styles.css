@@ -1918,8 +1918,36 @@ h3 { font-size: clamp(1.75rem, 3.5vw, 2.5rem); }
     margin-bottom: 1rem;
 }
 
-#mc_embed_signup input[type="text"],
-#mc_embed_signup input[type="email"] {
+/* Modal form inputs - only visible when modal is active */
+.modal-overlay #mc_embed_signup input[type="text"],
+.modal-overlay #mc_embed_signup input[type="email"] {
+    display: none;
+    visibility: hidden;
+    opacity: 0;
+}
+
+.modal-overlay.active #mc_embed_signup input[type="text"],
+.modal-overlay.active #mc_embed_signup input[type="email"] {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    width: 100%;
+    padding: 1rem 1.5rem;
+    background: rgba(0, 0, 0, 0.5);
+    border: 2px solid rgba(212, 175, 55, 0.3);
+    border-radius: 8px;
+    color: #f5f5f5;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    font-family: 'Montserrat', sans-serif;
+}
+
+/* Footer form inputs - always visible */
+#mc_embed_signup_footer input[type="text"],
+#mc_embed_signup_footer input[type="email"] {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
     width: 100%;
     padding: 1rem 1.5rem;
     background: rgba(0, 0, 0, 0.5);
@@ -1983,9 +2011,25 @@ h3 { font-size: clamp(1.75rem, 3.5vw, 2.5rem); }
 
 #mc_embed_signup_footer .button {
     margin: 0;
-    padding: 1rem 2rem;
+    padding: 0.75rem 2rem;
     white-space: nowrap;
-    height: 56px;
+    height: 48px;
+    background: linear-gradient(135deg, var(--magical-gold), var(--amber-orange)) !important;
+    color: var(--deep-navy) !important;
+    border-radius: 50px !important;
+    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+    font-family: 'Cinzel', serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.4s ease;
+}
+
+#mc_embed_signup_footer .button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(212, 175, 55, 0.6);
+    background: linear-gradient(135deg, var(--amber-orange), var(--magical-gold)) !important;
 }
 
 /* Response messages */
