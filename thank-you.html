@@ -7,6 +7,33 @@
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="mobile.css">
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-2ZGQ2N8TP9"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-2ZGQ2N8TP9');
+    </script>
+    
+    <!-- Meta Pixel Code -->
+    <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '1057619196527131');
+    fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=1057619196527131&ev=PageView&noscript=1"
+    /></noscript>
+    <!-- End Meta Pixel Code -->
     <style>
         /* Thank You Page Specific Styles */
         .thank-you-section {
@@ -264,7 +291,7 @@
                 <li><a href="index.html#game" class="nav-link">Game</a></li>
                 <li><a href="index.html#casters" class="nav-link">Casters</a></li>
                 <li><a href="index.html#creators" class="nav-link">Creators</a></li>
-                <li><a href="index.html#vip" class="btn btn-primary nav-cta">Get VIP Access</a></li>
+                <li><a href="index.html#footer-cta" class="btn btn-primary nav-cta">Get VIP Access</a></li>
             </ul>
             <div class="nav-toggle">
                 <span></span>
@@ -381,6 +408,21 @@
 
         // Create particles periodically
         setInterval(createParticle, 500);
+        
+        // Track conversion with Meta Pixel and Google Analytics
+        if (typeof fbq !== 'undefined') {
+            fbq('track', 'CompleteRegistration', {
+                value: 0,
+                currency: 'USD'
+            });
+        }
+        
+        if (typeof gtag !== 'undefined') {
+            gtag('event', 'sign_up', {
+                'event_category': 'engagement',
+                'event_label': 'VIP List'
+            });
+        }
 
         // Add particle animation
         const style = document.createElement('style');

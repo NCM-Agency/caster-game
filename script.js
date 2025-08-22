@@ -79,10 +79,13 @@ const observer = new IntersectionObserver((entries) => {
     });
 }, observerOptions);
 
-// Add fade-in class to sections
+// Add fade-in class to sections (except legal content pages)
 document.querySelectorAll('section').forEach(section => {
-    section.classList.add('fade-in');
-    observer.observe(section);
+    // Skip animation for legal content pages
+    if (!section.classList.contains('legal-content')) {
+        section.classList.add('fade-in');
+        observer.observe(section);
+    }
 });
 
 // Premium subtle glow effect
