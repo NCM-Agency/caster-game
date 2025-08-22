@@ -22,17 +22,6 @@
 [build.processing.html]
   pretty_urls = true
 
-# Rate limiting for forms (basic DDoS protection)
-[[plugins]]
-  package = "@netlify/plugin-emails"
-
-# Exclude files from deployment
-[build.ignore]
-  paths = [
-    "editor.html",
-    "editor-config.js",
-    "node_modules/**",
-    ".git/**",
-    "package-lock.json",
-    "README.md"
-  ]
+# Note: File exclusion is handled via .gitignore and _redirects
+# Netlify automatically excludes node_modules and .git
+# Development files like editor.html are blocked via _redirects
