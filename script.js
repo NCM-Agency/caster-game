@@ -529,7 +529,9 @@ if (!document.querySelector('#modalAnimations')) {
 
 console.log('🎮 Welcome to Caster! May your magic be powerful and your victories legendary!');
 
-// ===== VIP MODAL FUNCTIONALITY =====
+// ===== REMOVED VIP MODAL - NOW SCROLLS TO FOOTER FORM =====
+// All modal code removed - buttons now link directly to #footer-cta
+/*
 
 // Function to show modal
 function showModal() {
@@ -636,3 +638,4 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // Mailchimp embedded form handles its own submission
+*/
