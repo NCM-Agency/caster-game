@@ -24,3 +24,6 @@ editor-config.js
 
 # Package lock files
 package-lock.json
+
+# Production-only files (different for dev vs prod)
+_redirects
