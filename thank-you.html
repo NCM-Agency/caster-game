@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to the VIP List - Caster</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="mobile.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        /* Thank You Page Specific Styles */
+        .thank-you-section {
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, rgba(75, 0, 130, 0.9), rgba(0, 0, 0, 0.95));
+            position: relative;
+            overflow: hidden;
+            padding: 4rem 1rem;
+        }
+
+        .thank-you-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('assets/magic-particles.png') center/cover;
+            opacity: 0.1;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .thank-you-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .xok-character {
+            position: relative;
+            animation: mysticalFloat 6s ease-in-out infinite;
+        }
+
+        .xok-character img {
+            width: 100%;
+            max-width: 400px;
+            height: auto;
+            filter: drop-shadow(0 20px 40px rgba(212, 175, 55, 0.3));
+        }
+
+        .xok-glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 120%;
+            height: 120%;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.3) 0%, transparent 70%);
+            animation: pulse 3s ease-in-out infinite;
+        }
+
+        .thank-you-content {
+            text-align: left;
+        }
+
+        .thank-you-title {
+            font-family: 'Cinzel', serif;
+            font-size: 3rem;
+            color: var(--accent-gold);
+            margin-bottom: 1rem;
+            text-shadow: 0 0 30px rgba(212, 175, 55, 0.5);
+            line-height: 1.2;
+        }
+
+        .user-name {
+            color: var(--parchment);
+            font-weight: 700;
+        }
+
+        .thank-you-subtitle {
+            font-family: 'Cinzel', serif;
+            font-size: 1.5rem;
+            color: var(--parchment);
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .thank-you-message {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.1rem;
+            color: rgba(244, 241, 235, 0.8);
+            line-height: 1.8;
+            margin-bottom: 2rem;
+        }
+
+        .vip-benefits {
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid rgba(212, 175, 55, 0.3);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .vip-benefits h3 {
+            font-family: 'Cinzel', serif;
+            color: var(--accent-gold);
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .vip-benefits ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .vip-benefits li {
+            color: var(--parchment);
+            padding: 0.5rem 0;
+            padding-left: 2rem;
+            position: relative;
+        }
+
+        .vip-benefits li::before {
+            content: '✦';
+            position: absolute;
+            left: 0;
+            color: var(--accent-gold);
+            font-size: 1.2rem;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .btn-return {
+            padding: 1rem 2.5rem;
+            background: linear-gradient(135deg, var(--accent-gold), #f4e4bc);
+            border: none;
+            border-radius: 50px;
+            color: var(--bg-dark);
+            font-family: 'Cinzel', serif;
+            font-size: 1rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-return:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.4);
+        }
+
+        .btn-secondary {
+            padding: 1rem 2.5rem;
+            background: transparent;
+            border: 2px solid var(--accent-gold);
+            border-radius: 50px;
+            color: var(--accent-gold);
+            font-family: 'Cinzel', serif;
+            font-size: 1rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(212, 175, 55, 0.1);
+            transform: translateY(-2px);
+        }
+
+        @keyframes mysticalFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.6; }
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .thank-you-container {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .thank-you-content {
+                text-align: center;
+            }
+
+            .xok-character {
+                order: -1;
+                margin-bottom: 2rem;
+            }
+
+            .xok-character img {
+                max-width: 300px;
+            }
+
+            .thank-you-title {
+                font-size: 2rem;
+            }
+
+            .thank-you-subtitle {
+                font-size: 1.2rem;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .btn-return, .btn-secondary {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-logo">
+                <a href="index.html">
+                    <img src="assets/Caster_Logo TM.png" alt="Caster" class="logo">
+                </a>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html#game" class="nav-link">Game</a></li>
+                <li><a href="index.html#casters" class="nav-link">Casters</a></li>
+                <li><a href="index.html#creators" class="nav-link">Creators</a></li>
+                <li><a href="index.html#vip" class="btn btn-primary nav-cta">Get VIP Access</a></li>
+            </ul>
+            <div class="nav-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Thank You Section -->
+    <section class="thank-you-section">
+        <div class="thank-you-container">
+            <div class="xok-character">
+                <div class="xok-glow"></div>
+                <img src="assets/xok_character.png" alt="Xok the Time Weaver">
+            </div>
+            
+            <div class="thank-you-content">
+                <h1 class="thank-you-title">
+                    Welcome to the Inner Circle<span class="user-name" id="userName"></span>
+                </h1>
+                <p class="thank-you-subtitle">The fates have aligned in your favor</p>
+                
+                <p class="thank-you-message">
+                    Xok, Keeper of Time, has witnessed your pledge. You are now among the chosen few who will shape the destiny of the arena before all others.
+                </p>
+
+                <div class="vip-benefits">
+                    <h3>Your VIP Privileges Await:</h3>
+                    <ul>
+                        <li>48-hour early access when we launch</li>
+                        <li>Exclusive behind-the-scenes content</li>
+                        <li>Special Kickstarter pricing</li>
+                        <li>Limited edition rewards</li>
+                        <li>Your name in the Book of Founders</li>
+                    </ul>
+                </div>
+
+                <p class="thank-you-message">
+                    <strong>Check your email</strong> for a confirmation from the Council. Great battles await, and you'll be the first to know when the arena opens.
+                </p>
+
+                <div class="action-buttons">
+                    <a href="index.html" class="btn-return">Return to the Arena</a>
+                    <a href="index.html#casters" class="btn-secondary">Meet the Casters</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-links">
+                    <a href="#" class="footer-link">Privacy Policy</a>
+                    <a href="#" class="footer-link">Terms of Use</a>
+                    <a href="#" class="footer-link">Contact</a>
+                </div>
+                <p class="footer-copyright">© 2025 Not Corrupt Games. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Capture URL parameters from Mailchimp
+        function getUrlParameter(name) {
+            name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+            var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+            var results = regex.exec(location.search);
+            return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+        }
+
+        // Try to get user's name from URL parameters
+        const firstName = getUrlParameter('FNAME');
+        const lastName = getUrlParameter('LNAME');
+        const email = getUrlParameter('EMAIL');
+        
+        // Display personalized greeting if we have the name
+        const userNameElement = document.getElementById('userName');
+        if (firstName) {
+            userNameElement.textContent = ', ' + firstName;
+        }
+
+        // Mobile menu toggle
+        const navToggle = document.querySelector('.nav-toggle');
+        const navMenu = document.querySelector('.nav-menu');
+
+        navToggle.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+            navToggle.classList.toggle('active');
+        });
+
+        // Add magical particle effects
+        function createParticle() {
+            const particle = document.createElement('div');
+            particle.className = 'magic-particle';
+            particle.style.cssText = `
+                position: fixed;
+                width: 4px;
+                height: 4px;
+                background: var(--accent-gold);
+                border-radius: 50%;
+                pointer-events: none;
+                opacity: 0;
+                animation: particleFloat 4s ease-out;
+                left: ${Math.random() * 100}%;
+                top: ${Math.random() * 100}%;
+            `;
+            document.body.appendChild(particle);
+            
+            setTimeout(() => particle.remove(), 4000);
+        }
+
+        // Create particles periodically
+        setInterval(createParticle, 500);
+
+        // Add particle animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes particleFloat {
+                0% { opacity: 0; transform: translateY(0) scale(0); }
+                20% { opacity: 1; transform: translateY(-20px) scale(1); }
+                100% { opacity: 0; transform: translateY(-100px) scale(0); }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
