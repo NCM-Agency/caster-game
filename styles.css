@@ -403,7 +403,7 @@ h3 { font-size: clamp(1.75rem, 3.5vw, 2.5rem); }
     left: 0;
     right: 0;
     bottom: 0;
-    /*background: linear-gradient(135deg, rgba(46, 125, 125, 0.87), rgba(212, 175, 55, 0.84));*/
+    background: linear-gradient(135deg, rgba(46, 125, 125, 0.87), rgba(212, 175, 55, 0.84));
     z-index: 1;
 }
 
