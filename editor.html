@@ -306,6 +306,9 @@
             setTimeout(() => {
                 showNotification('💡 TIP: Drag blocks from left panel to add sections', false);
             }, 3000);
+            
+            // Add background image helper
+            setupBackgroundImageHelper();
         });
         
         // Functions for toolbar
@@ -479,6 +482,52 @@
                 console.error('Error loading site:', error);
                 showNotification('Error loading current site', true);
             }
+        }
+        
+        // Helper to make background images easier to edit
+        function setupBackgroundImageHelper() {
+            // When a component is selected
+            editor.on('component:selected', (component) => {
+                // Check if it has a background image
+                const style = component.getStyle();
+                if (style.background || style['background-image']) {
+                    // Add a custom trait for easy background image editing
+                    const traits = component.get('traits');
+                    const hasBgTrait = traits.where({ name: 'background-image' }).length > 0;
+                    
+                    if (!hasBgTrait) {
+                        component.addTrait({
+                            type: 'text',
+                            label: 'Background Image',
+                            name: 'background-image',
+                            placeholder: 'e.g., assets/Banner_1.png',
+                            changeProp: 1
+                        });
+                        
+                        // Update the trait value
+                        const currentBg = style['background-image'] || style.background || '';
+                        const match = currentBg.match(/url\(['"]?([^'")]+)['"]?\)/);
+                        if (match) {
+                            component.setTrait('background-image', match[1]);
+                        }
+                    }
+                }
+            });
+            
+            // When the trait changes, update the style
+            editor.on('component:update:traits', (component) => {
+                const bgImageTrait = component.getTrait('background-image');
+                if (bgImageTrait) {
+                    const value = bgImageTrait.get('value');
+                    if (value) {
+                        component.setStyle({
+                            'background-image': `url('${value}')`,
+                            'background-size': 'cover',
+                            'background-position': 'center'
+                        });
+                    }
+                }
+            });
         }
         
         function addCasterBlocks() {
