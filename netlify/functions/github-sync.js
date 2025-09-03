@@ -37,7 +37,7 @@ exports.handler = async (event, context) => {
     };
 
     // Step 1: Get current file content and SHA
-    const fileUrl = `${githubApi}/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/Website/index.html?ref=${GITHUB_BRANCH}`;
+    const fileUrl = `${githubApi}/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/index.html?ref=${GITHUB_BRANCH}`;
     
     const currentFileResponse = await fetch(fileUrl, { headers });
     
@@ -80,7 +80,7 @@ exports.handler = async (event, context) => {
     const contentBase64 = Buffer.from(updatedHtml).toString('base64');
 
     // Step 4: Update the file on GitHub
-    const updateUrl = `${githubApi}/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/Website/index.html`;
+    const updateUrl = `${githubApi}/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/index.html`;
     
     const updatePayload = {
       message: `${message} (via GrapesJS editor)`,
