@@ -183,7 +183,7 @@
     <!-- Load GrapesJS from CDN -->
     <script src="https://unpkg.com/grapesjs@0.22.12/dist/grapes.min.js"></script>
     <script src="https://unpkg.com/grapesjs-preset-webpage@1.0.3/dist/index.js"></script>
-    <script src="https://unpkg.com/grapesjs-blocks-basic@1.0.2/dist/index.js"></script>
+    <!-- Removed grapesjs-blocks-basic as it's included in preset-webpage -->
     
     <!-- Load Cloudinary Integration -->
     <script src="editor-cloudinary.js"></script>
@@ -269,8 +269,7 @@
                 ]
             },
             plugins: [
-                'grapesjs-preset-webpage',
-                'grapesjs-blocks-basic',
+                'grapesjs-preset-webpage'
             ],
             pluginsOpts: {
                 'grapesjs-preset-webpage': {

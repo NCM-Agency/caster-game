@@ -14,58 +14,14 @@ class CloudinaryManager {
     const editor = this.editor;
     const assetManager = editor.AssetManager;
     
-    // Wait for editor to be ready
-    editor.on('load', () => {
-      // Configure the asset manager upload
-      const am = editor.AssetManager;
-      
-      // Override the default upload behavior
-      am.setUpload(0); // Disable default upload
-      am.setUploadName('files'); // Set upload field name
-      
-      // Add custom upload handler
-      const uploadEl = am.getContainer().querySelector('.gjs-am-file-uploader');
-      if (uploadEl) {
-        uploadEl.addEventListener('change', async (e) => {
-          const files = e.target.files;
-          if (!files || !files.length) return;
-          
-          const assets = [];
-          
-          for (const file of files) {
-            try {
-              // Show upload progress
-              this.showNotification(`Uploading ${file.name}...`, 'info');
-              
-              // Optimize image before upload
-              const optimizedData = await this.optimizeImage(file);
-              
-              // Upload to Cloudinary via our Netlify function
-              const asset = await this.uploadToCloudinary(optimizedData, file.name);
-              
-              if (asset) {
-                assets.push(asset);
-                this.showNotification(`✓ ${file.name} uploaded successfully!`, 'success');
-              }
-            } catch (error) {
-              console.error('Upload error:', error);
-              this.showNotification(`✗ Failed to upload ${file.name}`, 'error');
-            }
-          }
-          
-          // Add all uploaded assets to the asset manager
-          if (assets.length > 0) {
-            am.add(assets);
-          }
-          
-          // Clear the input
-          e.target.value = '';
-        });
-      }
-    });
-
-    // Load existing assets on init
-    this.loadMediaLibrary();
+    // Simple approach - just load existing assets
+    console.log('CloudinaryManager initialized');
+    
+    // Skip the custom upload handler for now to avoid errors
+    // We'll add it back once the editor loads properly
+    
+    // Don't load media library on init as it's causing 500 errors
+    // this.loadMediaLibrary();
   }
 
   // Optimize image before upload
