@@ -171,7 +171,6 @@
     <div id="custom-toolbar" style="display: none;">
         <button class="toolbar-btn" onclick="clearCanvas()">🗑️ Clear</button>
         <button class="toolbar-btn" onclick="showCode()">👁️ View Code</button>
-        <button class="toolbar-btn" onclick="editBackgrounds()">🖼️ Backgrounds</button>
         <button class="toolbar-btn" onclick="toggleFullscreen()">⛶ Fullscreen</button>
         <button class="toolbar-btn" onclick="undoChange()">↶ Undo</button>
         <button class="toolbar-btn" onclick="redoChange()">↷ Redo</button>
@@ -342,123 +341,6 @@
             } else {
                 document.exitFullscreen();
             }
-        }
-        
-        // Edit background images for sections
-        function editBackgrounds() {
-            const modal = editor.Modal;
-            
-            // Find all sections with backgrounds
-            const components = editor.DomComponents.getWrapper().find('section');
-            
-            let backgroundSections = [];
-            components.forEach(comp => {
-                const classes = comp.getClasses().join(' ');
-                const style = comp.getStyle();
-                let currentBg = '';
-                
-                // Check for background in styles.css (by class name)
-                if (classes.includes('hero')) {
-                    currentBg = 'styles.css: hero section background';
-                    backgroundSections.push({
-                        name: 'Hero Section',
-                        component: comp,
-                        cssClass: 'hero',
-                        currentBg: currentBg
-                    });
-                } else if (classes.includes('arena-section')) {
-                    backgroundSections.push({
-                        name: 'Arena Section', 
-                        component: comp,
-                        cssClass: 'arena-section',
-                        currentBg: 'None set'
-                    });
-                } else if (style.background || style['background-image']) {
-                    // Has inline background
-                    const bg = style['background-image'] || style.background || '';
-                    const match = bg.match(/url\(['"]?([^'")]+)['"]?\)/);
-                    currentBg = match ? match[1] : 'Custom background';
-                    backgroundSections.push({
-                        name: classes || 'Section',
-                        component: comp,
-                        currentBg: currentBg
-                    });
-                }
-            });
-            
-            // Create form for editing backgrounds
-            let formHtml = `
-                <div style="padding: 20px; max-height: 500px; overflow-y: auto;">
-                    <h3 style="color: #d4af37; margin-bottom: 20px;">Edit Section Backgrounds</h3>
-                    <p style="color: #fff; margin-bottom: 20px;">Change background images for each section:</p>
-            `;
-            
-            backgroundSections.forEach((section, index) => {
-                formHtml += `
-                    <div style="margin-bottom: 20px; padding: 15px; background: #2a2a4e; border-radius: 8px;">
-                        <label style="color: #d4af37; display: block; margin-bottom: 10px; font-weight: bold;">
-                            ${section.name}
-                        </label>
-                        <p style="color: #8b4a9c; font-size: 12px; margin-bottom: 10px;">
-                            Current: ${section.currentBg}
-                        </p>
-                        <select id="bg-select-${index}" style="width: 100%; padding: 8px; background: #1a1a2e; color: #fff; border: 1px solid #8b4a9c; border-radius: 4px;">
-                            <option value="">Keep current</option>
-                            <option value="none">Remove background</option>
-                            <option value="assets/Banner_1.png">Arena Banner</option>
-                            <option value="assets/Artifact_color.png">Artifact</option>
-                            <option value="assets/Demonic_v3.png">Demonic Spell</option>
-                            <option value="assets/Divine_v3.png">Divine Spell</option>
-                            <option value="assets/Elemental_v3.png">Elemental Spell</option>
-                            <option value="assets/Enchantment_v3.png">Enchantment Spell</option>
-                            <option value="assets/Naming_v3.png">Naming Spell</option>
-                            <option value="assets/Necromancy_v3.png">Necromancy Spell</option>
-                            <option value="assets/Temporal_v3.png">Temporal Spell</option>
-                        </select>
-                    </div>
-                `;
-            });
-            
-            formHtml += `
-                <button onclick="applyBackgrounds()" style="background: #d4af37; color: #1a1a2e; padding: 10px 20px; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; margin-top: 20px;">
-                    Apply Changes
-                </button>
-            </div>
-            `;
-            
-            modal.setTitle('Background Image Editor');
-            modal.setContent(formHtml);
-            modal.open();
-            
-            // Store sections for apply function
-            window.tempBackgroundSections = backgroundSections;
-        }
-        
-        // Apply background changes
-        window.applyBackgrounds = function() {
-            const sections = window.tempBackgroundSections;
-            
-            sections.forEach((section, index) => {
-                const select = document.getElementById(`bg-select-${index}`);
-                if (select && select.value) {
-                    if (select.value === 'none') {
-                        section.component.setStyle({
-                            'background': 'none',
-                            'background-image': 'none'
-                        });
-                    } else {
-                        section.component.setStyle({
-                            'background-image': `url('${select.value}')`,
-                            'background-size': 'cover',
-                            'background-position': 'center',
-                            'background-repeat': 'no-repeat'
-                        });
-                    }
-                }
-            });
-            
-            editor.Modal.close();
-            showNotification('✓ Backgrounds updated!', false);
         }
         
         function undoChange() {

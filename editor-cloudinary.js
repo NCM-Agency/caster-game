@@ -1,4 +1,4 @@
-// Cloudinary Integration for GrapesJS - No Dependencies!
+// Cloudinary Integration for GrapesJS - Direct Upload
 // This file handles all Cloudinary operations for the visual editor
 
 class CloudinaryManager {
@@ -7,6 +7,7 @@ class CloudinaryManager {
     this.cloudName = 'dztstxsnd';
     this.uploadPreset = 'caster-unsigned';
     this.setupAssetManager();
+    this.setupDragAndDrop();
   }
 
   // Initialize the asset manager
@@ -18,187 +19,208 @@ class CloudinaryManager {
     
     // Set up custom upload when asset manager opens
     editor.on('run:open-assets', () => {
-      // Add upload handler after a short delay to ensure DOM is ready
       setTimeout(() => {
+        // Find or create upload button
         const modal = editor.Modal;
         const container = modal.getContentEl();
-        const uploadInput = container.querySelector('input[type="file"]');
+        let uploadZone = container.querySelector('.gjs-am-assets-header');
         
-        if (uploadInput && !uploadInput.hasAttribute('data-cloudinary')) {
-          uploadInput.setAttribute('data-cloudinary', 'true');
-          uploadInput.addEventListener('change', async (e) => {
-            const files = e.target.files;
-            if (!files || !files.length) return;
-            
-            for (const file of files) {
-              try {
-                this.showNotification(`Uploading ${file.name}...`, 'info');
-                
-                // For now, just add as base64 (we'll add Cloudinary back later)
-                const reader = new FileReader();
-                reader.onload = (event) => {
-                  assetManager.add({
-                    src: event.target.result,
-                    name: file.name
-                  });
-                  this.showNotification(`✓ ${file.name} added!`, 'success');
-                };
-                reader.readAsDataURL(file);
-              } catch (error) {
-                console.error('Upload error:', error);
-                this.showNotification(`✗ Failed to add ${file.name}`, 'error');
-              }
-            }
-            
-            // Clear input
+        if (!uploadZone) {
+          uploadZone = container.querySelector('.gjs-am-assets');
+        }
+        
+        if (uploadZone && !uploadZone.querySelector('.cloudinary-upload-zone')) {
+          // Create a better upload interface
+          const uploadDiv = document.createElement('div');
+          uploadDiv.className = 'cloudinary-upload-zone';
+          uploadDiv.style.cssText = `
+            border: 2px dashed #d4af37;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            margin: 10px;
+            cursor: pointer;
+            background: rgba(212, 175, 55, 0.1);
+            transition: all 0.3s ease;
+          `;
+          uploadDiv.innerHTML = `
+            <div style="color: #d4af37; font-weight: bold; margin-bottom: 10px;">
+              📤 Click or Drag Images Here to Upload to Cloudinary
+            </div>
+            <div style="color: #8b4a9c; font-size: 12px;">
+              Images will be optimized and hosted permanently
+            </div>
+            <input type="file" multiple accept="image/*" style="display: none;" />
+          `;
+          
+          const fileInput = uploadDiv.querySelector('input');
+          
+          // Click to upload
+          uploadDiv.addEventListener('click', () => fileInput.click());
+          
+          // Drag and drop
+          uploadDiv.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            uploadDiv.style.background = 'rgba(212, 175, 55, 0.3)';
+          });
+          
+          uploadDiv.addEventListener('dragleave', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            uploadDiv.style.background = 'rgba(212, 175, 55, 0.1)';
+          });
+          
+          uploadDiv.addEventListener('drop', async (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            uploadDiv.style.background = 'rgba(212, 175, 55, 0.1)';
+            const files = e.dataTransfer.files;
+            await this.handleFileUpload(files);
+          });
+          
+          // File input change
+          fileInput.addEventListener('change', async (e) => {
+            await this.handleFileUpload(e.target.files);
             e.target.value = '';
           });
+          
+          // Insert at the top
+          uploadZone.insertBefore(uploadDiv, uploadZone.firstChild);
         }
-      }, 100);
+      }, 200);
     });
   }
-
-  // Optimize image before upload
-  async optimizeImage(file) {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
+  
+  // Setup drag and drop for the entire canvas
+  setupDragAndDrop() {
+    const editor = this.editor;
+    
+    // Allow dragging images directly onto the canvas
+    editor.on('load', () => {
+      const canvas = editor.Canvas.getBody();
       
-      reader.onload = (e) => {
-        const img = new Image();
-        
-        img.onload = () => {
-          // Create canvas for optimization
-          const canvas = document.createElement('canvas');
-          const ctx = canvas.getContext('2d');
-          
-          // Calculate optimal dimensions
-          const MAX_WIDTH = 2000;
-          const MAX_HEIGHT = 2000;
-          let width = img.width;
-          let height = img.height;
-          
-          // Resize if needed
-          if (width > height) {
-            if (width > MAX_WIDTH) {
-              height = Math.round(height * MAX_WIDTH / width);
-              width = MAX_WIDTH;
-            }
-          } else {
-            if (height > MAX_HEIGHT) {
-              width = Math.round(width * MAX_HEIGHT / height);
-              height = MAX_HEIGHT;
-            }
-          }
-          
-          // Draw optimized image
-          canvas.width = width;
-          canvas.height = height;
-          ctx.drawImage(img, 0, 0, width, height);
-          
-          // Convert to base64
-          const dataUrl = canvas.toDataURL(file.type || 'image/jpeg', 0.9);
-          resolve({
-            data: dataUrl,
-            width: width,
-            height: height
-          });
-        };
-        
-        img.onerror = () => reject(new Error('Failed to load image'));
-        img.src = e.target.result;
-      };
-      
-      reader.onerror = () => reject(new Error('Failed to read file'));
-      reader.readAsDataURL(file);
-    });
-  }
-
-  // Upload to Cloudinary via Netlify Function
-  async uploadToCloudinary(imageData, filename) {
-    try {
-      // Detect folder based on filename
-      const folder = this.detectFolder(filename);
-      
-      // Call our Netlify function
-      const response = await fetch('/.netlify/functions/cloudinary-upload', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          image: imageData.data,
-          filename: filename,
-          folder: folder
-        })
+      canvas.addEventListener('dragover', (e) => {
+        // Check if dragging files
+        if (e.dataTransfer.types.includes('Files')) {
+          e.preventDefault();
+          e.dataTransfer.dropEffect = 'copy';
+        }
       });
       
-      if (!response.ok) {
-        throw new Error('Upload failed');
-      }
-      
-      const result = await response.json();
-      
-      // Return asset object for GrapesJS
-      return {
-        src: result.url,
-        type: 'image',
-        name: filename,
-        width: result.width,
-        height: result.height,
-        thumbnail: result.thumbnail
-      };
-      
-    } catch (error) {
-      console.error('Cloudinary upload error:', error);
-      throw error;
-    }
-  }
-
-  // Load existing media library
-  async loadMediaLibrary() {
-    try {
-      this.showNotification('Loading media library...', 'info');
-      
-      const response = await fetch('/.netlify/functions/cloudinary-list');
-      
-      if (response.ok) {
-        const data = await response.json();
-        
-        if (data.assets && data.assets.length > 0) {
-          // Add all existing assets to asset manager
-          const formattedAssets = data.assets.map(asset => ({
-            src: asset.src,
-            type: 'image',
-            name: asset.name,
-            width: asset.width,
-            height: asset.height,
-            thumbnail: asset.thumbnail
-          }));
+      canvas.addEventListener('drop', async (e) => {
+        // Check if dropping files
+        if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+          e.preventDefault();
+          e.stopPropagation();
           
-          this.editor.AssetManager.add(formattedAssets);
-          this.showNotification(`Loaded ${data.assets.length} images`, 'success');
-        } else {
-          this.showNotification('Media library is empty', 'info');
+          const files = Array.from(e.dataTransfer.files).filter(file => 
+            file.type.startsWith('image/')
+          );
+          
+          if (files.length > 0) {
+            // Upload to Cloudinary
+            const uploadedImages = await this.handleFileUpload(files);
+            
+            // Add images to the drop location
+            if (uploadedImages && uploadedImages.length > 0) {
+              const component = editor.getSelected();
+              
+              uploadedImages.forEach(img => {
+                // If a component is selected, try to set its src
+                if (component && component.get('type') === 'image') {
+                  component.set('src', img.src);
+                } else {
+                  // Otherwise add as new image component at drop location
+                  editor.addComponents(`<img src="${img.src}" style="max-width: 100%;" />`);
+                }
+              });
+              
+              this.showNotification('✓ Images added to canvas!', 'success');
+            }
+          }
         }
-      }
-    } catch (error) {
-      console.error('Failed to load media library:', error);
-      this.showNotification('Could not load media library', 'warning');
-    }
+      });
+    });
   }
-
-  // Detect folder based on filename
-  detectFolder(filename) {
-    const name = filename.toLowerCase();
+  
+  // Handle file uploads
+  async handleFileUpload(files) {
+    if (!files || !files.length) return [];
     
-    if (name.includes('hero')) return 'heroes';
-    if (name.includes('card')) return 'characters';
-    if (name.includes('bg') || name.includes('background')) return 'backgrounds';
-    if (name.includes('team') || name.includes('img_')) return 'team';
-    if (name.includes('banner')) return 'banners';
-    if (name.includes('logo')) return 'logos';
+    const assetManager = this.editor.AssetManager;
+    const uploadedImages = [];
     
-    return 'misc';
+    for (const file of files) {
+      try {
+        this.showNotification(`Uploading ${file.name} to Cloudinary...`, 'info');
+        
+        // Direct upload to Cloudinary using unsigned preset
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('upload_preset', this.uploadPreset);
+        formData.append('folder', 'caster-website');
+        
+        const response = await fetch(
+          `https://api.cloudinary.com/v1_1/${this.cloudName}/image/upload`,
+          {
+            method: 'POST',
+            body: formData
+          }
+        );
+        
+        if (response.ok) {
+          const data = await response.json();
+          
+          // Create optimized URL with Cloudinary transformations
+          const optimizedUrl = data.secure_url.replace(
+            '/upload/',
+            '/upload/q_auto,f_auto,w_2000/'
+          );
+          
+          const imageAsset = {
+            src: optimizedUrl,
+            name: file.name,
+            type: 'image'
+          };
+          
+          // Add to asset manager
+          assetManager.add(imageAsset);
+          uploadedImages.push(imageAsset);
+          
+          this.showNotification(`✓ ${file.name} uploaded successfully!`, 'success');
+        } else {
+          throw new Error('Upload failed');
+        }
+      } catch (error) {
+        console.error('Upload error:', error);
+        
+        // Fallback to base64 if Cloudinary fails
+        this.showNotification(`⚠️ Cloudinary failed, using local storage for ${file.name}`, 'warning');
+        
+        const base64 = await this.fileToBase64(file);
+        const imageAsset = {
+          src: base64,
+          name: file.name,
+          type: 'image'
+        };
+        
+        assetManager.add(imageAsset);
+        uploadedImages.push(imageAsset);
+      }
+    }
+    
+    return uploadedImages;
+  }
+  
+  // Convert file to base64
+  fileToBase64(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = (e) => resolve(e.target.result);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
   }
 
   // Show notification to user
@@ -240,34 +262,6 @@ class CloudinaryManager {
     setTimeout(() => {
       notif.style.display = 'none';
     }, 3000);
-  }
-
-  // Direct upload to Cloudinary (client-side for unsigned preset)
-  async directUpload(file) {
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('upload_preset', this.uploadPreset);
-    formData.append('folder', `caster-website/${this.detectFolder(file.name)}`);
-    
-    try {
-      const response = await fetch(
-        `https://api.cloudinary.com/v1_1/${this.cloudName}/image/upload`,
-        {
-          method: 'POST',
-          body: formData
-        }
-      );
-      
-      if (!response.ok) {
-        throw new Error('Direct upload failed');
-      }
-      
-      return await response.json();
-    } catch (error) {
-      console.error('Direct upload error:', error);
-      // Fallback to Netlify function
-      return null;
-    }
   }
 }
 
