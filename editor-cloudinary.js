@@ -14,14 +14,48 @@ class CloudinaryManager {
     const editor = this.editor;
     const assetManager = editor.AssetManager;
     
-    // Simple approach - just load existing assets
     console.log('CloudinaryManager initialized');
     
-    // Skip the custom upload handler for now to avoid errors
-    // We'll add it back once the editor loads properly
-    
-    // Don't load media library on init as it's causing 500 errors
-    // this.loadMediaLibrary();
+    // Set up custom upload when asset manager opens
+    editor.on('run:open-assets', () => {
+      // Add upload handler after a short delay to ensure DOM is ready
+      setTimeout(() => {
+        const modal = editor.Modal;
+        const container = modal.getContentEl();
+        const uploadInput = container.querySelector('input[type="file"]');
+        
+        if (uploadInput && !uploadInput.hasAttribute('data-cloudinary')) {
+          uploadInput.setAttribute('data-cloudinary', 'true');
+          uploadInput.addEventListener('change', async (e) => {
+            const files = e.target.files;
+            if (!files || !files.length) return;
+            
+            for (const file of files) {
+              try {
+                this.showNotification(`Uploading ${file.name}...`, 'info');
+                
+                // For now, just add as base64 (we'll add Cloudinary back later)
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                  assetManager.add({
+                    src: event.target.result,
+                    name: file.name
+                  });
+                  this.showNotification(`✓ ${file.name} added!`, 'success');
+                };
+                reader.readAsDataURL(file);
+              } catch (error) {
+                console.error('Upload error:', error);
+                this.showNotification(`✗ Failed to add ${file.name}`, 'error');
+              }
+            }
+            
+            // Clear input
+            e.target.value = '';
+          });
+        }
+      }, 100);
+    });
   }
 
   // Optimize image before upload

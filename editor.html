@@ -300,7 +300,12 @@
         editor.on('load', () => {
             document.getElementById('loading').style.display = 'none';
             document.getElementById('custom-toolbar').style.display = 'flex';
-            showNotification('Visual Editor Ready with Cloudinary! Upload images to persist them.', false);
+            showNotification('Editor Ready! Double-click text to edit, click images to change them.', false);
+            
+            // Add help text
+            setTimeout(() => {
+                showNotification('💡 TIP: Drag blocks from left panel to add sections', false);
+            }, 3000);
         });
         
         // Functions for toolbar
