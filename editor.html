@@ -185,6 +185,9 @@
     <script src="https://unpkg.com/grapesjs-preset-webpage@1.0.3/dist/index.js"></script>
     <script src="https://unpkg.com/grapesjs-blocks-basic@1.0.2/dist/index.js"></script>
     
+    <!-- Load Cloudinary Integration -->
+    <script src="editor-cloudinary.js"></script>
+    
     <script>
         // Initialize GrapesJS
         const editor = grapesjs.init({
@@ -285,6 +288,9 @@
             }
         });
         
+        // Initialize Cloudinary Integration
+        const cloudinaryManager = new CloudinaryManager(editor);
+        
         // Load the current site
         loadCurrentSite();
         
@@ -295,7 +301,7 @@
         editor.on('load', () => {
             document.getElementById('loading').style.display = 'none';
             document.getElementById('custom-toolbar').style.display = 'flex';
-            showNotification('Visual Editor Ready! Start designing...', false);
+            showNotification('Visual Editor Ready with Cloudinary! Upload images to persist them.', false);
         });
         
         // Functions for toolbar
