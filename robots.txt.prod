@@ -1,0 +1,13 @@
+# PRODUCTION robots.txt
+User-agent: *
+Allow: /
+Disallow: /editor
+Disallow: /.netlify
+Disallow: /netlify
+Disallow: /404.html
+
+# Sitemap location (create this later for SEO)
+Sitemap: https://notcorruptgames.com/sitemap.xml
+
+# Crawl delay for politeness
+Crawl-delay: 1

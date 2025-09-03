@@ -2043,6 +2043,16 @@ h3 { font-size: clamp(1.75rem, 3.5vw, 2.5rem); }
     padding: 1rem;
     margin-top: 1rem;
     text-align: center;
+    /* Hide when empty - won't affect Mailchimp functionality */
+    display: none;
+}
+
+/* Show only when they have content (Mailchimp adds text on success/error) */
+#mce-error-response:not(:empty),
+#mce-success-response:not(:empty),
+#mce-error-response-footer:not(:empty),
+#mce-success-response-footer:not(:empty) {
+    display: block;
 }
 
 #mce-success-response,
@@ -2061,6 +2071,14 @@ h3 { font-size: clamp(1.75rem, 3.5vw, 2.5rem); }
 #mc_embed_signup div.indicates-required,
 #mc_embed_signup label,
 #mc_embed_signup h2 {
+    display: none !important;
+}
+
+/* Hide honeypot fields (bot protection) */
+#iycz5g,
+[aria-hidden="true"]#iycz5g {
+    position: absolute !important;
+    left: -5000px !important;
     display: none !important;
 }
 

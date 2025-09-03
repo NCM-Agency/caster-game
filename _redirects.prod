@@ -1,0 +1,28 @@
+# PRODUCTION REDIRECTS
+
+# Force HTTPS for final domain
+http://notcorruptgames.com/* https://notcorruptgames.com/:splat 301!
+http://www.notcorruptgames.com/* https://notcorruptgames.com/:splat 301!
+
+# Redirect Netlify subdomain to main domain (UPDATE WITH YOUR NETLIFY URL)
+https://YOUR-PROD-SITE.netlify.app/* https://notcorruptgames.com/:splat 301!
+
+# Block ALL development and editor files
+/editor.html /404.html 404!
+/editor-cloudinary.js /404.html 404!
+/editor-config.js /404.html 404!
+/package.json /404.html 404!
+/package-lock.json /404.html 404!
+/.git/* /404.html 404!
+/.gitignore /404.html 404!
+/netlify/functions/* /404.html 404!
+/.netlify/* /404.html 404!
+/_headers.prod /404.html 404!
+/_redirects.prod /404.html 404!
+/robots.txt.prod /404.html 404!
+/build-for-production.bat /404.html 404!
+
+# Redirect old/common URLs
+/home / 301
+/index / 301
+/index.html / 301
