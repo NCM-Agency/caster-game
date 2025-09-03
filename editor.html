@@ -349,6 +349,9 @@
             
             // Get the complete HTML structure
             const bodyContent = editor.getHtml();
+            const css = editor.getCss();
+            const js = editor.getJs();
+            
             const html = `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -356,6 +359,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Caster - Award-Winning Fantasy Board Game | Coming to Kickstarter</title>
     <meta name="description" content="Harness arcane powers in Caster, an award-winning fast-paced set collection card game. Get VIP access for exclusive Kickstarter benefits!">
+    
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Caster - Award-Winning Fantasy Board Game">
+    <meta property="og:description" content="Harness arcane powers in Caster. Get VIP access for exclusive Kickstarter benefits!">
+    <meta property="og:image" content="https://notcorruptgames.com/assets/caster_social_card.png">
+    <meta property="og:url" content="https://notcorruptgames.com">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Caster - Award-Winning Fantasy Board Game">
+    <meta name="twitter:description" content="Harness arcane powers in Caster. Get VIP access for exclusive Kickstarter benefits!">
+    <meta name="twitter:image" content="https://notcorruptgames.com/assets/caster_social_card.png">
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -389,11 +405,37 @@
 </body>
 </html>`;
             
-            // Save to localStorage for now (you'll connect to GitHub API)
+            // Save to localStorage as backup
             localStorage.setItem('caster-site-html', html);
-            localStorage.setItem('caster-site-css', editor.getCss());
+            localStorage.setItem('caster-site-css', css);
             
-            showNotification('Saved successfully! (Currently to local storage - GitHub integration coming)', false);
+            try {
+                // Call the Netlify function to sync with GitHub
+                const response = await fetch('/.netlify/functions/github-sync', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        html: html,
+                        css: '', // CSS is already in styles.css
+                        js: '', // JS is already in script.js
+                        message: 'Update from GrapesJS visual editor'
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok && result.success) {
+                    showNotification('✅ Saved to GitHub successfully!', false);
+                    console.log('GitHub commit:', result.commit);
+                } else {
+                    throw new Error(result.error || 'Failed to save to GitHub');
+                }
+            } catch (error) {
+                console.error('GitHub sync error:', error);
+                showNotification('⚠️ Saved locally only. GitHub sync failed: ' + error.message, true);
+            }
         }
         
         function showNotification(message, isError = false) {
