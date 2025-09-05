@@ -2055,14 +2055,16 @@ h3 { font-size: clamp(1.75rem, 3.5vw, 2.5rem); }
     display: block;
 }
 
-#mce-success-response,
-#mce-success-response-footer {
+/* Apply success styles only when not empty */
+#mce-success-response:not(:empty),
+#mce-success-response-footer:not(:empty) {
     border: 1px solid rgba(76, 175, 80, 0.5);
     color: #4caf50;
 }
 
-#mce-error-response,
-#mce-error-response-footer {
+/* Apply error styles only when not empty */
+#mce-error-response:not(:empty),
+#mce-error-response-footer:not(:empty) {
     border: 1px solid rgba(244, 67, 54, 0.5);
     color: #f44336;
 }
