@@ -35,7 +35,14 @@
     'https://connect.facebook.net/en_US/fbevents.js');
     fbq('init', '1057619196527131');
     fbq('track', 'PageView');
-    // Track Lead conversion event for email signup
+    // Track CompleteRegistration for email signup (standard Facebook event)
+    fbq('track', 'CompleteRegistration', {
+      content_name: 'VIP List Signup',
+      content_category: 'Email Signup',
+      value: 0,
+      currency: 'USD'
+    });
+    // Also track as Lead for backup
     fbq('track', 'Lead', {
       content_name: 'VIP List Signup',
       content_category: 'Email Signup'

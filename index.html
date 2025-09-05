@@ -27,6 +27,11 @@
     <!-- Stylesheets -->
     <link rel="stylesheet" href="styles.css">
     
+    <!-- Test if external scripts load -->
+    <script>
+    console.log('Testing external script loading...');
+    </script>
+    
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-PV0XW2MF69"></script>
     <script>
@@ -39,16 +44,34 @@
     
     <!-- Meta Pixel Code -->
     <script>
+    console.log('Meta Pixel: Starting initialization');
     !function(f,b,e,v,n,t,s)
-    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    {if(f.fbq){console.log('Meta Pixel: fbq already exists, skipping');return;}
+    n=f.fbq=function(){n.callMethod?
     n.callMethod.apply(n,arguments):n.queue.push(arguments)};
     if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
     n.queue=[];t=b.createElement(e);t.async=!0;
-    t.src=v;s=b.getElementsByTagName(e)[0];
-    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    t.src=v;
+    console.log('Meta Pixel: Creating script element with src:', v);
+    s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s);
+    console.log('Meta Pixel: Script element inserted into DOM');
+    // Check if script actually exists in DOM
+    setTimeout(function() {
+        var scripts = document.querySelectorAll('script[src*="fbevents"]');
+        console.log('Meta Pixel: Found fbevents.js scripts in DOM:', scripts.length);
+        if(scripts.length > 0) {
+            console.log('Meta Pixel: Script src is:', scripts[0].src);
+        }
+    }, 100);
+    }(window, document,'script',
     'https://connect.facebook.net/en_US/fbevents.js');
+    console.log('Meta Pixel: fbq function created, initializing pixel');
     fbq('init', '1057619196527131');
+    console.log('Meta Pixel: Pixel initialized, tracking PageView');
     fbq('track', 'PageView');
+    console.log('Meta Pixel: PageView tracked');
+    console.log('Meta Pixel: window.fbq exists?', typeof window.fbq);
     </script>
     <noscript><img height="1" width="1" style="display:none"
     src="https://www.facebook.com/tr?id=1057619196527131&ev=PageView&noscript=1"
