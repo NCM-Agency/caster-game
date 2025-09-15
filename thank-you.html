@@ -438,13 +438,8 @@
         // Create particles periodically
         setInterval(createParticle, 500);
         
-        // Track conversion with Meta Pixel and Google Analytics
-        if (typeof fbq !== 'undefined') {
-            fbq('track', 'CompleteRegistration', {
-                value: 0,
-                currency: 'USD'
-            });
-        }
+        // Track conversion with Google Analytics only (Meta Pixel already fires in head)
+        // Removed duplicate fbq('track', 'CompleteRegistration') to fix double-counting
         
         if (typeof gtag !== 'undefined') {
             gtag('event', 'sign_up', {
