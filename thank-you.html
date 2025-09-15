@@ -15,12 +15,7 @@
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
       gtag('config', 'G-PV0XW2MF69');
-      // Track conversion event for VIP signup
-      gtag('event', 'conversion', {
-        'send_to': 'G-PV0XW2MF69/signup',
-        'value': 1.0,
-        'currency': 'USD'
-      });
+      // Conversion tracking moved to bottom script to avoid duplication
     </script>
     
     <!-- Meta Pixel Code -->
@@ -438,13 +433,17 @@
         // Create particles periodically
         setInterval(createParticle, 500);
         
-        // Track conversion with Google Analytics only (Meta Pixel already fires in head)
-        // Removed duplicate fbq('track', 'CompleteRegistration') to fix double-counting
+        // Track conversion with Google Analytics (consolidated here to avoid duplication)
+        // Meta Pixel CompleteRegistration already fires once in head
         
         if (typeof gtag !== 'undefined') {
-            gtag('event', 'sign_up', {
+            // Single conversion event for VIP signup
+            gtag('event', 'conversion', {
+                'send_to': 'G-PV0XW2MF69/signup',
+                'value': 1.0,
+                'currency': 'USD',
                 'event_category': 'engagement',
-                'event_label': 'VIP List'
+                'event_label': 'VIP List Signup'
             });
         }
 
