@@ -329,6 +329,21 @@ function sanitizeInput(input) {
     return div.innerHTML;
 }
 
+// reCAPTCHA callback when user completes it
+function onRecaptchaComplete() {
+    // Enable submit button when reCAPTCHA is completed
+    const submitBtn = document.querySelector('#mc-embedded-subscribe-footer');
+    if (submitBtn) {
+        submitBtn.classList.remove('disabled-until-recaptcha');
+        // Remove any visual indication that button is disabled
+        submitBtn.style.opacity = '1';
+        submitBtn.style.cursor = 'pointer';
+    }
+}
+
+// Make it globally available for reCAPTCHA callback
+window.onRecaptchaComplete = onRecaptchaComplete;
+
 // Enhanced form validation with reCAPTCHA and better bot protection
 document.addEventListener('DOMContentLoaded', function() {
     const forms = document.querySelectorAll('.validate');
@@ -401,16 +416,31 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             }
 
-            // Check reCAPTCHA if it exists on the page
+            // Check reCAPTCHA - REQUIRED
+            let recaptchaValid = false;
             if (typeof grecaptcha !== 'undefined' && document.querySelector('.g-recaptcha')) {
                 try {
                     const recaptchaResponse = grecaptcha.getResponse();
-                    if (!recaptchaResponse) {
-                        errors.push('Please complete the "I\'m not a robot" verification');
-                        isValid = false;
+                    if (recaptchaResponse && recaptchaResponse.length > 0) {
+                        recaptchaValid = true;
                     }
                 } catch (err) {
                     console.warn('reCAPTCHA check failed:', err);
+                }
+            }
+
+            // Always require reCAPTCHA if it exists on page
+            if (!recaptchaValid && document.querySelector('.g-recaptcha')) {
+                errors.push('Please complete the "I\'m not a robot" verification');
+                isValid = false;
+
+                // Prevent form submission even if other validation passes
+                e.preventDefault();
+
+                // Scroll to reCAPTCHA if needed
+                const recaptchaElement = document.querySelector('.g-recaptcha');
+                if (recaptchaElement) {
+                    recaptchaElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 }
             }
 
