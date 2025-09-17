@@ -27,11 +27,6 @@
     <!-- Stylesheets -->
     <link rel="stylesheet" href="styles.css">
     
-    <!-- Test if external scripts load -->
-    <script>
-    console.log('Testing external script loading...');
-    </script>
-    
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-PV0XW2MF69"></script>
     <script>
@@ -41,37 +36,22 @@
 
       gtag('config', 'G-PV0XW2MF69');
     </script>
+
+    <!-- Google reCAPTCHA v2 -->
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     
     <!-- Meta Pixel Code -->
     <script>
-    console.log('Meta Pixel: Starting initialization');
     !function(f,b,e,v,n,t,s)
-    {if(f.fbq){console.log('Meta Pixel: fbq already exists, skipping');return;}
-    n=f.fbq=function(){n.callMethod?
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
     n.callMethod.apply(n,arguments):n.queue.push(arguments)};
     if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
     n.queue=[];t=b.createElement(e);t.async=!0;
-    t.src=v;
-    console.log('Meta Pixel: Creating script element with src:', v);
-    s=b.getElementsByTagName(e)[0];
-    s.parentNode.insertBefore(t,s);
-    console.log('Meta Pixel: Script element inserted into DOM');
-    // Check if script actually exists in DOM
-    setTimeout(function() {
-        var scripts = document.querySelectorAll('script[src*="fbevents"]');
-        console.log('Meta Pixel: Found fbevents.js scripts in DOM:', scripts.length);
-        if(scripts.length > 0) {
-            console.log('Meta Pixel: Script src is:', scripts[0].src);
-        }
-    }, 100);
-    }(window, document,'script',
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
     'https://connect.facebook.net/en_US/fbevents.js');
-    console.log('Meta Pixel: fbq function created, initializing pixel');
     fbq('init', '1057619196527131');
-    console.log('Meta Pixel: Pixel initialized, tracking PageView');
     fbq('track', 'PageView');
-    console.log('Meta Pixel: PageView tracked');
-    console.log('Meta Pixel: window.fbq exists?', typeof window.fbq);
     </script>
     <noscript><img height="1" width="1" style="display:none"
     src="https://www.facebook.com/tr?id=1057619196527131&ev=PageView&noscript=1"
@@ -125,7 +105,7 @@
                         Sick of screens, we decided to bring our love of world-building and gameplay to in-person 
                         tabletop experiences that foster meaningful connections through friendly competition. 
                         We're real people that want to make cool stuff with creators we love. Come play with us!
-                    </p></div><div class="about-gallery"><div class="gallery-card magic-card"><img src="assets/IMG_5741.JPG" alt="Team playtesting" class="gallery-image"/><div class="gallery-overlay"><span>Playtesting Sessions</span></div></div><div class="gallery-card magic-card featured"><img src="assets/IMG_5773.JPG" alt="Team gathering" class="gallery-image"/><div class="gallery-overlay"><span>Team Gatherings</span></div></div><div class="gallery-card magic-card"><img src="assets/IMG_5783.JPG" alt="Game development" class="gallery-image"/><div class="gallery-overlay"><span>Game Development</span></div></div></div></div></div></section><!-- Final CTA Section --><section id="footer-cta" class="final-cta"><div class="section-separator"></div><div class="cta-background"></div><div class="container"><h2 class="cta-title">Ready to Join the Battle?</h2><p class="cta-subtitle">Get exclusive VIP access and be the first to know when Caster launches on Kickstarter!</p><!-- Footer VIP Form --><div id="mc_embed_signup_footer" class="footer-form-wrapper"><form action="https://media.us15.list-manage.com/subscribe/post?u=227c9d3aa3744fbf2443ef518&id=b8c91d7fd8&f_id=00fbc2e1f0" method="post" id="mc-embedded-subscribe-form-footer" name="mc-embedded-subscribe-form" target="_self" class="validate footer-mailchimp-form"><div class="mc-footer-fields"><input type="text" name="FNAME" id="mce-FNAME-footer" required placeholder="First Name" class="required text footer-input"/><input type="text" name="LNAME" id="mce-LNAME-footer" required placeholder="Last Name" class="required text footer-input"/><input type="email" name="EMAIL" id="mce-EMAIL-footer" required placeholder="Email Address" class="required email footer-input"/><input type="submit" name="subscribe" id="mc-embedded-subscribe-footer" value="Get VIP Access" class="button premium-button footer-submit-btn"/></div><div hidden><input type="hidden" name="tags" value="715"/><input type="hidden" name="REDIRECT" value="https://castergamedev.netlify.app/thank-you.html"/></div><div id="mce-responses-footer" class="clear foot"><div id="mce-error-response-footer" class="response"></div><div id="mce-success-response-footer" class="response"></div></div><div aria-hidden="true" id="iycz5g"><input type="text" name="b_227c9d3aa3744fbf2443ef518_b8c91d7fd8" tabindex="-1" value=""/><!-- Honeypot field for bot protection --><input type="text" name="website_url" id="website_url" tabindex="-1" autocomplete="off" value=""/></div></form></div></div></section><!-- Footer --><footer class="footer"><div class="container"><div class="footer-content"><div class="footer-links"><a href="/privacy" class="footer-link">Privacy Policy</a><a href="/terms" class="footer-link">Terms of Use</a><a href="mailto:games@notcorruptmedia.com" class="footer-link">Contact</a></div><p class="footer-copyright">© 2025 Not Corrupt Games. All rights reserved.</p></div></div></footer><!-- Scripts --><!-- Mailchimp Validation Script --><!-- Netlify Identity Redirect --></body>
+                    </p></div><div class="about-gallery"><div class="gallery-card magic-card"><img src="assets/IMG_5741.JPG" alt="Team playtesting" class="gallery-image"/><div class="gallery-overlay"><span>Playtesting Sessions</span></div></div><div class="gallery-card magic-card featured"><img src="assets/IMG_5773.JPG" alt="Team gathering" class="gallery-image"/><div class="gallery-overlay"><span>Team Gatherings</span></div></div><div class="gallery-card magic-card"><img src="assets/IMG_5783.JPG" alt="Game development" class="gallery-image"/><div class="gallery-overlay"><span>Game Development</span></div></div></div></div></div></section><!-- Final CTA Section --><section id="footer-cta" class="final-cta"><div class="section-separator"></div><div class="cta-background"></div><div class="container"><h2 class="cta-title">Ready to Join the Battle?</h2><p class="cta-subtitle">Get exclusive VIP access and be the first to know when Caster launches on Kickstarter!</p><!-- Footer VIP Form --><div id="mc_embed_signup_footer" class="footer-form-wrapper"><form id="mc-embedded-subscribe-form-footer" class="validate footer-mailchimp-form"><div class="mc-footer-fields"><input type="text" name="FNAME" id="mce-FNAME-footer" required placeholder="First Name" class="required text footer-input"/><input type="text" name="LNAME" id="mce-LNAME-footer" required placeholder="Last Name" class="required text footer-input"/><input type="email" name="EMAIL" id="mce-EMAIL-footer" required placeholder="Email Address" class="required email footer-input"/><!-- reCAPTCHA widget --><div class="g-recaptcha" data-sitekey="6LdOlcwrAAAAAN-vOyUkVjbJD1E_RJHoXSXVZeMm" data-theme="dark"></div><input type="submit" name="subscribe" id="mc-embedded-subscribe-footer" value="Get VIP Access" class="button premium-button footer-submit-btn"/></div><div id="mce-responses-footer" class="clear foot"><div id="mce-error-response-footer" class="response"></div><div id="mce-success-response-footer" class="response"></div></div><!-- Honeypot field for bot protection --><div aria-hidden="true" style="position: absolute; left: -5000px;"><input type="text" name="website_url" id="website_url" tabindex="-1" autocomplete="off" value=""/></div></form></div></div></section><!-- Footer --><footer class="footer"><div class="container"><div class="footer-content"><div class="footer-links"><a href="/privacy" class="footer-link">Privacy Policy</a><a href="/terms" class="footer-link">Terms of Use</a><a href="mailto:games@notcorruptmedia.com" class="footer-link">Contact</a></div><p class="footer-copyright">© 2025 Not Corrupt Games. All rights reserved.</p></div></div></footer><!-- Scripts --><!-- Mailchimp Validation Script --><!-- Netlify Identity Redirect --></body>
     
     <!-- Scripts -->
     <script src="script.js"></script>

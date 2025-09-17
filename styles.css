@@ -2004,6 +2004,20 @@ h3 { font-size: clamp(1.75rem, 3.5vw, 2.5rem); }
     align-items: center;
 }
 
+/* reCAPTCHA styling */
+.g-recaptcha {
+    margin: 1rem 0;
+    transform-origin: left center;
+}
+
+/* Dark theme for reCAPTCHA (fallback if data-theme doesn't work) */
+.g-recaptcha > div {
+    filter: invert(0.9) hue-rotate(180deg) !important;
+    background: rgba(26, 26, 46, 0.8) !important;
+    border-radius: 8px;
+    padding: 2px;
+}
+
 #mc_embed_signup_footer input[type="text"],
 #mc_embed_signup_footer input[type="email"] {
     margin: 0;
@@ -2089,9 +2103,15 @@ h3 { font-size: clamp(1.75rem, 3.5vw, 2.5rem); }
     #mc_embed_signup_footer .mc-footer-fields {
         grid-template-columns: 1fr;
     }
-    
+
     #mc_embed_signup_footer .button {
         width: 100%;
+    }
+
+    /* Scale down reCAPTCHA on mobile */
+    .g-recaptcha {
+        transform: scale(0.9);
+        transform-origin: center;
     }
     
     #mc_embed_signup .mc-field-group {
