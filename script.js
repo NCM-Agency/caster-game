@@ -329,28 +329,38 @@ function sanitizeInput(input) {
     return div.innerHTML;
 }
 
-// Enhanced form validation with reCAPTCHA
+// Enhanced form validation with reCAPTCHA and better bot protection
 document.addEventListener('DOMContentLoaded', function() {
-    const footerForm = document.getElementById('mc-embedded-subscribe-form-footer');
+    const forms = document.querySelectorAll('.validate');
 
-    if (footerForm) {
-        footerForm.addEventListener('submit', async function(e) {
-            e.preventDefault();
+    // Enhanced name validation to block bot patterns
+    function validateNameEnhanced(name) {
+        // Basic format check
+        if (!/^[a-zA-Z\s\-']{2,50}$/.test(name)) return false;
 
-            const fname = this.querySelector('input[name="FNAME"]');
-            const lname = this.querySelector('input[name="LNAME"]');
-            const email = this.querySelector('input[name="EMAIL"]');
-            const honeypot = this.querySelector('input[name="website_url"]');
-            const submitBtn = this.querySelector('#mc-embedded-subscribe-footer');
-            const errorDiv = this.querySelector('#mce-error-response-footer');
-            const successDiv = this.querySelector('#mce-success-response-footer');
+        // Must contain at least one vowel
+        if (!/[aeiouAEIOU]/.test(name)) return false;
 
-            // Clear previous messages
-            if (errorDiv) errorDiv.textContent = '';
-            if (successDiv) successDiv.textContent = '';
+        // Block strings with too many consecutive consonants
+        if (/[bcdfghjklmnpqrstvwxyz]{5,}/i.test(name)) return false;
 
-            // Check honeypot field
+        // Block obvious random strings
+        const lowerName = name.toLowerCase();
+        if (lowerName.length > 6 && !/[aeiou].*[aeiou]/i.test(lowerName)) return false;
+
+        return true;
+    }
+
+    forms.forEach(form => {
+        form.addEventListener('submit', function(e) {
+            const fname = form.querySelector('input[name="FNAME"]');
+            const lname = form.querySelector('input[name="LNAME"]');
+            const email = form.querySelector('input[name="EMAIL"]');
+            const honeypot = form.querySelector('input[name="website_url"]');
+
+            // Check honeypot field (bots will fill this)
             if (honeypot && honeypot.value !== '') {
+                e.preventDefault();
                 // Silently fail for bots
                 return false;
             }
@@ -358,114 +368,66 @@ document.addEventListener('DOMContentLoaded', function() {
             let isValid = true;
             let errors = [];
 
-            // Validate first name
-            if (fname && !validateName(fname.value)) {
-                errors.push('Please enter a valid first name');
-                isValid = false;
+            // Validate first name with enhanced validation
+            if (fname) {
+                if (fname.value.trim() === '') {
+                    errors.push('First name is required');
+                    isValid = false;
+                } else if (!validateNameEnhanced(fname.value)) {
+                    errors.push('Please enter a valid first name (no random characters)');
+                    isValid = false;
+                }
             }
 
-            // Validate last name
-            if (lname && !validateName(lname.value)) {
-                errors.push('Please enter a valid last name');
-                isValid = false;
+            // Validate last name with enhanced validation
+            if (lname) {
+                if (lname.value.trim() === '') {
+                    errors.push('Last name is required');
+                    isValid = false;
+                } else if (!validateNameEnhanced(lname.value)) {
+                    errors.push('Please enter a valid last name (no random characters)');
+                    isValid = false;
+                }
             }
 
             // Validate email
-            if (email && !validateEmail(email.value)) {
-                errors.push('Please enter a valid email address');
-                isValid = false;
+            if (email) {
+                if (email.value.trim() === '') {
+                    errors.push('Email is required');
+                    isValid = false;
+                } else if (!validateEmail(email.value)) {
+                    errors.push('Please enter a valid email address');
+                    isValid = false;
+                }
             }
 
-            // Check for empty fields
-            if (fname && fname.value.trim() === '') {
-                errors.push('First name is required');
-                isValid = false;
-            }
-            if (lname && lname.value.trim() === '') {
-                errors.push('Last name is required');
-                isValid = false;
-            }
-            if (email && email.value.trim() === '') {
-                errors.push('Email is required');
-                isValid = false;
-            }
-
-            // Check reCAPTCHA
-            const recaptchaResponse = grecaptcha.getResponse();
-            if (!recaptchaResponse) {
-                errors.push('Please complete the reCAPTCHA verification');
-                isValid = false;
+            // Check reCAPTCHA if it exists on the page
+            if (typeof grecaptcha !== 'undefined' && document.querySelector('.g-recaptcha')) {
+                try {
+                    const recaptchaResponse = grecaptcha.getResponse();
+                    if (!recaptchaResponse) {
+                        errors.push('Please complete the "I\'m not a robot" verification');
+                        isValid = false;
+                    }
+                } catch (err) {
+                    console.warn('reCAPTCHA check failed:', err);
+                }
             }
 
             if (!isValid) {
-                if (errorDiv) {
-                    errorDiv.textContent = errors.join('. ');
-                    errorDiv.style.display = 'block';
-                } else {
-                    alert(errors.join('\n'));
-                }
+                e.preventDefault();
+                alert(errors.join('\n'));
                 return false;
             }
 
-            // Disable submit button
-            submitBtn.disabled = true;
-            submitBtn.value = 'Submitting...';
+            // Sanitize inputs before submission
+            if (fname) fname.value = sanitizeInput(fname.value);
+            if (lname) lname.value = sanitizeInput(lname.value);
+            if (email) email.value = sanitizeInput(email.value);
 
-            try {
-                // Submit through our Netlify function
-                const response = await fetch('/.netlify/functions/mailchimp-subscribe', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        firstName: sanitizeInput(fname.value),
-                        lastName: sanitizeInput(lname.value),
-                        email: sanitizeInput(email.value),
-                        recaptchaToken: recaptchaResponse,
-                        honeypot: honeypot ? honeypot.value : ''
-                    })
-                });
-
-                const result = await response.json();
-
-                if (response.ok && result.success) {
-                    // Success
-                    if (successDiv) {
-                        successDiv.textContent = 'Thank you for subscribing! Check your email for confirmation.';
-                        successDiv.style.display = 'block';
-                    }
-
-                    // Reset form
-                    this.reset();
-                    grecaptcha.reset();
-
-                    // Redirect after delay
-                    setTimeout(() => {
-                        window.location.href = '/thank-you.html';
-                    }, 2000);
-                } else {
-                    // Error
-                    if (errorDiv) {
-                        errorDiv.textContent = result.error || 'Subscription failed. Please try again.';
-                        errorDiv.style.display = 'block';
-                    }
-                    grecaptcha.reset();
-                }
-            } catch (error) {
-                console.error('Submission error:', error);
-                if (errorDiv) {
-                    errorDiv.textContent = 'Network error. Please try again.';
-                    errorDiv.style.display = 'block';
-                }
-                grecaptcha.reset();
-            } finally {
-                // Re-enable submit button
-                submitBtn.disabled = false;
-                submitBtn.value = 'Get VIP Access';
-            }
+            // Form will submit normally to Mailchimp
         });
-    }
+    });
 });
 
 // Initialize premium particle effect
