@@ -329,136 +329,74 @@ function sanitizeInput(input) {
     return div.innerHTML;
 }
 
-// reCAPTCHA callback when user completes it
-function onRecaptchaComplete() {
-    // Enable submit button when reCAPTCHA is completed
-    const submitBtn = document.querySelector('#mc-embedded-subscribe-footer');
-    if (submitBtn) {
-        submitBtn.classList.remove('disabled-until-recaptcha');
-        // Remove any visual indication that button is disabled
-        submitBtn.style.opacity = '1';
-        submitBtn.style.cursor = 'pointer';
-    }
-}
+// Note: onRecaptchaComplete is now defined in index.html before reCAPTCHA loads
 
-// Make it globally available for reCAPTCHA callback
-window.onRecaptchaComplete = onRecaptchaComplete;
+// Simple reCAPTCHA validation - RUN IMMEDIATELY
+(function() {
+    // Attach handler as soon as DOM is interactive
+    function attachRecaptchaValidation() {
+        const form = document.querySelector('#mc-embedded-subscribe-form-footer');
 
-// Enhanced form validation with reCAPTCHA and better bot protection
-document.addEventListener('DOMContentLoaded', function() {
-    const forms = document.querySelectorAll('.validate');
+        if (!form) {
+            // Try again in 100ms if form not found
+            setTimeout(attachRecaptchaValidation, 100);
+            return;
+        }
 
-    // Enhanced name validation to block bot patterns
-    function validateNameEnhanced(name) {
-        // Basic format check
-        if (!/^[a-zA-Z\s\-']{2,50}$/.test(name)) return false;
-
-        // Must contain at least one vowel
-        if (!/[aeiouAEIOU]/.test(name)) return false;
-
-        // Block strings with too many consecutive consonants
-        if (/[bcdfghjklmnpqrstvwxyz]{5,}/i.test(name)) return false;
-
-        // Block obvious random strings
-        const lowerName = name.toLowerCase();
-        if (lowerName.length > 6 && !/[aeiou].*[aeiou]/i.test(lowerName)) return false;
-
-        return true;
-    }
-
-    forms.forEach(form => {
+        // Use capture phase (true) to intercept BEFORE any bubble handlers
         form.addEventListener('submit', function(e) {
-            const fname = form.querySelector('input[name="FNAME"]');
-            const lname = form.querySelector('input[name="LNAME"]');
-            const email = form.querySelector('input[name="EMAIL"]');
-            const honeypot = form.querySelector('input[name="website_url"]');
-
-            // Check honeypot field (bots will fill this)
-            if (honeypot && honeypot.value !== '') {
-                e.preventDefault();
-                // Silently fail for bots
-                return false;
-            }
-
-            let isValid = true;
-            let errors = [];
-
-            // Validate first name with enhanced validation
-            if (fname) {
-                if (fname.value.trim() === '') {
-                    errors.push('First name is required');
-                    isValid = false;
-                } else if (!validateNameEnhanced(fname.value)) {
-                    errors.push('Please enter a valid first name (no random characters)');
-                    isValid = false;
-                }
-            }
-
-            // Validate last name with enhanced validation
-            if (lname) {
-                if (lname.value.trim() === '') {
-                    errors.push('Last name is required');
-                    isValid = false;
-                } else if (!validateNameEnhanced(lname.value)) {
-                    errors.push('Please enter a valid last name (no random characters)');
-                    isValid = false;
-                }
-            }
-
-            // Validate email
-            if (email) {
-                if (email.value.trim() === '') {
-                    errors.push('Email is required');
-                    isValid = false;
-                } else if (!validateEmail(email.value)) {
-                    errors.push('Please enter a valid email address');
-                    isValid = false;
-                }
-            }
-
-            // Check reCAPTCHA - REQUIRED
+            // Check if reCAPTCHA is completed
             let recaptchaValid = false;
-            if (typeof grecaptcha !== 'undefined' && document.querySelector('.g-recaptcha')) {
+
+            if (typeof grecaptcha !== 'undefined') {
                 try {
-                    const recaptchaResponse = grecaptcha.getResponse();
-                    if (recaptchaResponse && recaptchaResponse.length > 0) {
+                    const response = grecaptcha.getResponse();
+                    if (response && response.length > 0) {
                         recaptchaValid = true;
                     }
                 } catch (err) {
-                    console.warn('reCAPTCHA check failed:', err);
+                    // reCAPTCHA not ready - block submission
+                    recaptchaValid = false;
                 }
             }
 
-            // Always require reCAPTCHA if it exists on page
-            if (!recaptchaValid && document.querySelector('.g-recaptcha')) {
-                errors.push('Please complete the "I\'m not a robot" verification');
-                isValid = false;
+            // Also check global flag
+            if (window.recaptchaCompleted === true) {
+                recaptchaValid = true;
+            }
 
-                // Prevent form submission even if other validation passes
+            // If reCAPTCHA not completed, STOP EVERYTHING
+            if (!recaptchaValid) {
                 e.preventDefault();
+                e.stopImmediatePropagation(); // Stop all other handlers
+                e.stopPropagation();
 
-                // Scroll to reCAPTCHA if needed
+                alert('Please complete the "I\'m not a robot" verification');
+
+                // Highlight reCAPTCHA
                 const recaptchaElement = document.querySelector('.g-recaptcha');
                 if (recaptchaElement) {
                     recaptchaElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    recaptchaElement.style.border = '2px solid red';
+                    setTimeout(() => {
+                        recaptchaElement.style.border = '';
+                    }, 3000);
                 }
-            }
 
-            if (!isValid) {
-                e.preventDefault();
-                alert(errors.join('\n'));
                 return false;
             }
 
-            // Sanitize inputs before submission
-            if (fname) fname.value = sanitizeInput(fname.value);
-            if (lname) lname.value = sanitizeInput(lname.value);
-            if (email) email.value = sanitizeInput(email.value);
+            // Let form submit normally if reCAPTCHA is valid
+        }, true); // TRUE = capture phase, runs BEFORE bubble phase
+    }
 
-            // Form will submit normally to Mailchimp
-        });
-    });
-});
+    // Start trying to attach immediately
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', attachRecaptchaValidation);
+    } else {
+        attachRecaptchaValidation();
+    }
+})();
 
 // Initialize premium particle effect
 window.addEventListener('load', () => {
