@@ -11,6 +11,11 @@ http://www.notcorruptgames.com/* https://www.notcorruptgames.com/:splat 301!
 /.git/* /404.html 404
 /.gitignore /404.html 404
 
+# Language routing
+/br   /br/index.html   200
+/pt   /br/index.html   200
+/pt-br /br/index.html  200
+
 # Redirect old URLs if any
 /home / 301
 /index / 301
